@@ -3,7 +3,13 @@ import 'package:flutterfrontend/models/journal.dart';
 
 class JournalProvider with ChangeNotifier {
   List<Journal> _journals = [
-    Journal("1", "Tomorrow will be awesome for me", DateTime.now()),
+    Journal(
+        "1",
+        "Tomorrow will be awesome for me, "
+            "I can't even begin to think how i would have learned so much in programming to be this good."
+            "I know am gonna stand out in this career. I just gotta keep pushing everyday. "
+            "I will never Stop no matter what happens",
+        DateTime.now()),
     Journal("2", "I have started serious work on Dart and Flutter",
         DateTime.now().add(Duration(days: 10))),
     Journal("3", "Am so grateful for everything ",
