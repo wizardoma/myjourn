@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class JournalList extends StatelessWidget {
   @override
@@ -33,7 +34,8 @@ class JournalList extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    "19",
+                                    DateFormat('d')
+                                        .format(journals.journals[index].time),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline3
@@ -43,7 +45,8 @@ class JournalList extends StatelessWidget {
                                     width: 5,
                                   ),
                                   Text(
-                                    "FEB",
+                                    DateFormat('MMM')
+                                        .format(journals.journals[index].time),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline1
@@ -55,7 +58,8 @@ class JournalList extends StatelessWidget {
                                     width: 5,
                                   ),
                                   Text(
-                                    "FRIDAY",
+                                    DateFormat('EEEE')
+                                        .format(journals.journals[index].time),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline2
@@ -66,7 +70,8 @@ class JournalList extends StatelessWidget {
                                 ],
                               ),
                               Text(
-                                "2021",
+                                DateFormat('y')
+                                    .format(journals.journals[index].time),
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline2
@@ -83,7 +88,8 @@ class JournalList extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "08:24 pm",
+                                DateFormat('jm')
+                                    .format(journals.journals[index].time),
                                 style: Theme.of(context).textTheme.headline3,
                               ),
                               SizedBox(
@@ -91,9 +97,10 @@ class JournalList extends StatelessWidget {
                               ),
                               Text(
                                 journals.journals[index].body,
-                                style: Theme.of(context).textTheme.headline1.copyWith(
-                                  fontWeight: FontWeight.w400
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    .copyWith(fontWeight: FontWeight.w400),
                               )
                             ],
                           ),
