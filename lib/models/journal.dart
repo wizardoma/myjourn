@@ -7,6 +7,8 @@ class Journal {
 
   String get id => _id;
 
+  String get body => _body;
+
   set id(String value) {
     _id = value;
   }

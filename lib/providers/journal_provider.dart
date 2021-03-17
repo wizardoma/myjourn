@@ -32,6 +32,10 @@ class JournalProvider with ChangeNotifier {
     return [..._journals];
   }
 
+  get size {
+    return _journals.length;
+  }
+
   void addJournal(Journal journal) {
     this._journals.add(journal);
   }
@@ -47,6 +51,5 @@ class JournalProvider with ChangeNotifier {
     }
 
     journal.body = body;
-    addJournal(journal);
   }
 }

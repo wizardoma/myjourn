@@ -14,7 +14,9 @@ var theme = ThemeData(
     ),
     // For textStyles that emulates the primarySwatch Color
     headline3: TextStyle(
-      color: Colors.purple
+      color: Colors.deepPurple,
+      fontSize: 17,
+      fontWeight: FontWeight.bold
     ),
     headline4: TextStyle(
       color: Colors.white,
