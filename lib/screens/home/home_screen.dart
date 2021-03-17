@@ -29,7 +29,9 @@ class HomeScreen extends StatelessWidget {
           ],
           bottom: TabBar(
             tabs: [
-              Padding(padding: EdgeInsets.symmetric(vertical: 13), child: Text("HOME")),
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 13),
+                  child: Text("HOME")),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 13),
                 child: Text("CALENDER"),
@@ -42,7 +44,11 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: [JournalList(), CalenderScreen(), MoreScreen()],
+          children: [
+            JournalList(),
+            CalenderScreen(),
+            MoreScreen(),
+          ],
         ),
       ),
     );
