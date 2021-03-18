@@ -43,7 +43,11 @@ class JournalProvider with ChangeNotifier {
   }
 
   Journal findById(String id) {
-    return _journals.firstWhere((element) => element.id == id);
+    try {
+      return _journals.firstWhere((element) => element.id == id);}
+      catch (e){
+      return null;
+    }
   }
 
   void addJournal(Journal journal) {
