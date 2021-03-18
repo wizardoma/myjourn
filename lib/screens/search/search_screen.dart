@@ -9,7 +9,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  bool isTyping = false;
+  bool hasContent = false;
   TextEditingController searchController;
 
   @override
@@ -29,12 +29,12 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          if (isTyping)
+          if (hasContent)
             IconButton(
                 icon: Icon(Icons.clear),
                 onPressed: () {
                   setState(() {
-                    isTyping = false;
+                    hasContent = false;
                     searchController.clear();
                   });
                 })
@@ -45,11 +45,11 @@ class _SearchScreenState extends State<SearchScreen> {
           onChanged: (val) {
             if (val==null || val.isNotEmpty) {
             setState(() {
-              isTyping = true;
+              hasContent = true;
             });}
             else {
               setState(() {
-                isTyping = false;
+                hasContent = false;
               });
             }
           },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
+import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +44,12 @@ class ViewJournalScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("MyJourn"),
         actions: [
-          IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+          IconButton(icon: Icon(Icons.edit), onPressed: () {
+            Navigator.of(context).pushNamed(NewJournalScreen.routeName, arguments: {
+              "isNew": false,
+              "journal": journal
+            });
+          }),
           IconButton(icon: Icon(Icons.print), onPressed: () {}),
           IconButton(
               icon: Icon(Icons.delete),

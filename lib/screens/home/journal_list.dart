@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/journal_list_item.dart';
+import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
 import 'package:provider/provider.dart';
 
 class JournalList extends StatelessWidget {
@@ -9,7 +10,9 @@ class JournalList extends StatelessWidget {
     final journals = Provider.of<JournalProvider>(context);
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(NewJournalScreen.routeName,arguments: {"isNew" : true});
+          },
           child: Icon(Icons.add),
         ),
         body: journals.size == 0
