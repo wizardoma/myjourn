@@ -8,7 +8,7 @@ class JournalProvider with ChangeNotifier {
         "Tomorrow will be awesome for me, "
             "I can't even begin to think how i would have learned so much in programming to be this good."
             "I know am gonna stand out in this career. I just gotta keep pushing everyday. "
-            "I will never Stop no matter what happens",
+            "I will never Stop no matter what happens. This is the heart and mentality of a warrior",
         DateTime.now()),
     Journal("2", "I have started serious work on Dart and Flutter",
         DateTime.now().add(Duration(days: 10))),
