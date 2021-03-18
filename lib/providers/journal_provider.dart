@@ -48,6 +48,7 @@ class JournalProvider with ChangeNotifier {
 
   void deleteJournal(String id) {
     this._journals.removeWhere((element) => element.id == id);
+    notifyListeners();
   }
 
   void editJournal(String id, String body) {

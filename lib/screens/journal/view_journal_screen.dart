@@ -1,9 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
+import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ViewJournalScreen extends StatelessWidget {
   static const routeName = "/viewJournal";
+
+  void deleteJournal(String id, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(15),
+            content: Text("Do you want to delete this note?"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text("CANCEL")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text("DELETE"))
+            ],
+          );
+        }).then((value) {
+          print(value);
+      if (value) {
+        Provider.of<JournalProvider>(context, listen: false)
+            .deleteJournal(id);
+        Navigator.of(context).pop();}
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +45,9 @@ class ViewJournalScreen extends StatelessWidget {
         actions: [
           IconButton(icon: Icon(Icons.edit), onPressed: () {}),
           IconButton(icon: Icon(Icons.print), onPressed: () {}),
-          IconButton(icon: Icon(Icons.delete), onPressed: () {}),
+          IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => deleteJournal(journal.id, context)),
         ],
       ),
       body: Container(
