@@ -12,6 +12,7 @@ class NewJournalScreen extends StatefulWidget {
 class _NewJournalScreenState extends State<NewJournalScreen> {
   TextEditingController bodyController;
   bool hasContent;
+  Function(String id, BuildContext context) deleteJournal;
 
   @override
   void dispose() {
@@ -29,9 +30,34 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     if (pageArgs["isNew"]) {
       return Journal(DateTime.now().toString(), "", DateTime.now());
     } else {
+      deleteJournal = pageArgs["delete"] as Function;
       print((pageArgs["journal"] as Journal).time);
       return pageArgs["journal"] as Journal;
     }
+  }
+
+  void discardChanges(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text("Do you want to discard the changes?"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text("CANCEL")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: Text("DISCARD")),
+            ],
+          );
+        }).then((value) {
+      if (value) Navigator.pop(context);
+    });
   }
 
   @override
@@ -70,7 +96,10 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                   Icons.delete,
                   color: Colors.grey,
                 ),
-                onPressed: () {})
+                onPressed: () {
+                  deleteJournal(journal.id, context);
+//                  Navigator.pop(context,true);
+                })
         ],
       ),
       body: SafeArea(
@@ -176,9 +205,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IconButton(
-                      onPressed: () {
-
-                      },
+                      onPressed: () => discardChanges(context),
                       icon: Icon(
                         Icons.clear,
                         color: Colors.grey,

@@ -47,7 +47,12 @@ class ViewJournalScreen extends StatelessWidget {
           IconButton(icon: Icon(Icons.edit), onPressed: () {
             Navigator.of(context).pushNamed(NewJournalScreen.routeName, arguments: {
               "isNew": false,
-              "journal": journal
+              "journal": journal,
+              "delete" : deleteJournal
+            }).then((value) {
+              if (Provider.of<JournalProvider>(context).findById(journal.id) == null){
+                Navigator.pop(context);
+              }
             });
           }),
           IconButton(icon: Icon(Icons.print), onPressed: () {}),

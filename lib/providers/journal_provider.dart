@@ -42,6 +42,10 @@ class JournalProvider with ChangeNotifier {
     return _journals.length;
   }
 
+  Journal findById(String id) {
+    return _journals.firstWhere((element) => element.id == id);
+  }
+
   void addJournal(Journal journal) {
     this._journals.add(journal);
   }
