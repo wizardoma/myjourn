@@ -31,8 +31,9 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
       return Journal(DateTime.now().toString(), "", DateTime.now());
     } else {
       deleteJournal = pageArgs["delete"] as Function;
-      print((pageArgs["journal"] as Journal).time);
-      return pageArgs["journal"] as Journal;
+      var journal = pageArgs["journal"] as Journal;
+      bodyController.text = journal.body;
+      return journal;
     }
   }
 
@@ -177,6 +178,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                           cursorColor: Theme.of(context).accentColor,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
+                          controller: bodyController,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(10),
