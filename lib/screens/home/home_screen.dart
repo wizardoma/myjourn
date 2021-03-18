@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutterfrontend/screens/calender/calender_screen.dart';
 import 'package:flutterfrontend/screens/home/journal_list.dart';
 import 'package:flutterfrontend/screens/more/more_screen.dart';
+import 'package:flutterfrontend/screens/search/search_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = "/home";
+
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,9 @@ class HomeScreen extends StatelessWidget {
             child: Text("MYJOURN"),
           ),
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(SearchScreen.routeName);
+            },
             icon: Icon(Icons.search),
           ),
           actions: [
