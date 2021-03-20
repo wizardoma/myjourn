@@ -13,10 +13,32 @@ class CalenderScreen extends StatefulWidget {
 
 class _CalenderScreenState extends State<CalenderScreen> {
   List<Journal> dayJournals;
+  List<Journal> allJournals;
   bool dayHasJournal = false;
+  bool hasInitialized = false;
   String formattedDate = DateFormat("dd MMMM y").format(DateTime.now());
+  Map<DateTime, List<dynamic>> events = {};
   DateTime selectedDate = DateTime.now();
   CalendarController _calendarController;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!hasInitialized) {
+      setState(() {
+        allJournals =
+            Provider.of<JournalProvider>(context, listen: false).journals;
+        allJournals.forEach((e) {
+          events.putIfAbsent(
+              e.time,
+              () => allJournals
+                  .where((element) => areDatesEqual(e.time, element.time))
+                  .toList());
+        });
+        hasInitialized = true;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -43,23 +65,23 @@ class _CalenderScreenState extends State<CalenderScreen> {
                 Material(
                   elevation: 4,
                   child: TableCalendar(
+                    events: events,
                     onDaySelected: (DateTime datetime, _, __) {
                       setState(() {
                         this.selectedDate = datetime;
-                        formattedDate =DateFormat("dd MMMM y").format(selectedDate);
-                        List<Journal> journals = Provider.of<JournalProvider>(context,listen: false).journals;
-                        var list = journals.where((element) {
+                        formattedDate =
+                            DateFormat("dd MMMM y").format(selectedDate);
+
+                        var list = allJournals.where((element) {
                           return areDatesEqual(datetime, element.time);
                         }).toList();
                         if (list.length == 0) {
                           dayHasJournal = false;
                           dayJournals = [];
-                        }
-                        else {
+                        } else {
                           dayHasJournal = true;
                           dayJournals = list;
                         }
-
                       });
                     },
                     builders: CalendarBuilders(),
@@ -81,9 +103,10 @@ class _CalenderScreenState extends State<CalenderScreen> {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(5),
-                    child: Text("${dayJournals.length} ${dayJournals.length == 1 ? 'Story' : 'Stories'} Found",
-                        style:
-                            TextStyle(color: Colors.grey.shade400, fontSize: 18)),
+                    child: Text(
+                        "${dayJournals.length} ${dayJournals.length == 1 ? 'Story' : 'Stories'} Found",
+                        style: TextStyle(
+                            color: Colors.grey.shade400, fontSize: 18)),
                   ),
                   ListView.builder(
                     shrinkWrap: true,
@@ -93,7 +116,6 @@ class _CalenderScreenState extends State<CalenderScreen> {
                         JournalListItem(dayJournals[index]),
                   )
                 ],
-
               ),
             if (!dayHasJournal)
               Container(
@@ -146,9 +168,10 @@ class _CalenderScreenState extends State<CalenderScreen> {
                             !isAfterNow()
                                 ? "Safeguard your memory on $formattedDate"
                                 : "Plan your $formattedDate",
-                            style: Theme.of(context).textTheme.headline1.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.headline1.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                             textAlign: TextAlign.center,
                           ),
                         )
@@ -164,12 +187,12 @@ class _CalenderScreenState extends State<CalenderScreen> {
   }
 
   bool isAfterNow() {
-
-    var after = selectedDate.isAfter(DateTime.now());
-    print(after);
-    return after;
+    return selectedDate.isAfter(DateTime.now());
   }
-  bool areDatesEqual(DateTime first, DateTime second){
-    return first.year == second.year && first.month == second.month && first.day == second.day;
+
+  bool areDatesEqual(DateTime first, DateTime second) {
+    return first.year == second.year &&
+        first.month == second.month &&
+        first.day == second.day;
   }
 }
