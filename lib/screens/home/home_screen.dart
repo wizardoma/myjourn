@@ -3,10 +3,10 @@ import 'package:flutterfrontend/screens/calender/calender_screen.dart';
 import 'package:flutterfrontend/screens/home/journal_list.dart';
 import 'package:flutterfrontend/screens/more/more_screen.dart';
 import 'package:flutterfrontend/screens/search/search_screen.dart';
+import 'package:flutterfrontend/screens/settings/settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = "/home";
-
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +24,19 @@ class HomeScreen extends StatelessWidget {
             icon: Icon(Icons.search),
           ),
           actions: [
-            DropdownButton(icon: Icon(Icons.more_vert), items: [
-              DropdownMenuItem(
-                child: Text("Search"),
-                onTap: () {},
-              )
-            ])
+            PopupMenuButton(
+                padding: EdgeInsets.all(0),
+                onSelected: (_) {
+                  Navigator.pushNamed(context, SettingsScreen.routeName);
+                },
+                itemBuilder: (context) {
+                  return {"Setting"}.map((e) {
+                    return PopupMenuItem(
+                      child: Text(e),
+                      value: e,
+                    );
+                  }).toList();
+                })
           ],
           bottom: TabBar(
             tabs: [
