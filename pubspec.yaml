@@ -26,6 +26,7 @@ dependencies:
   provider: ^5.0.0
   intl: ^0.17.0
   settings_ui: ^0.6.0
+  table_calendar: ^2.3.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
