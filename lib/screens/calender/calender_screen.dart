@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/journal_list_item.dart';
+import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -93,7 +94,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
                   right: 20,
                   child: FloatingActionButton(
                     child: Icon(Icons.add),
-                    onPressed: () {},
+                    onPressed: createNewJournal,
                   ),
                 ),
               ],
@@ -136,46 +137,52 @@ class _CalenderScreenState extends State<CalenderScreen> {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     var width = constraints.maxWidth;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Stack(
-                          clipBehavior: Clip.none,
+                    return GestureDetector(
+                      onTap: createNewJournal,
+                      child: Container(
+                        width: width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Container(
-                              width: width * 0.3,
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: !isAfterNow()
-                                      ? Colors.green
-                                      : Colors.lightGreen,
-                                  shape: BoxShape.circle,
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Container(
+                                  width: width * 0.3,
+                                  child: Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      color: !isAfterNow()
+                                          ? Colors.green
+                                          : Colors.lightGreen,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Positioned(
+                                    bottom: -8,
+                                    child: Image.asset(!isAfterNow()
+                                        ? "assets/logos/lock.png"
+                                        : "assets/logos/compose.png")),
+                              ],
                             ),
-                            Positioned(
-                                bottom: -8,
-                                child: Image.asset(!isAfterNow()
-                                    ? "assets/logos/lock.png"
-                                    : "assets/logos/compose.png")),
+                            Container(
+                              width: width * 0.6,
+                              child: Text(
+                                !isAfterNow()
+                                    ? "Safeguard your memory on $formattedDate"
+                                    : "Plan your $formattedDate",
+                                style:
+                                    Theme.of(context).textTheme.headline1.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
                           ],
                         ),
-                        Container(
-                          width: width * 0.6,
-                          child: Text(
-                            !isAfterNow()
-                                ? "Safeguard your memory on $formattedDate"
-                                : "Plan your $formattedDate",
-                            style:
-                                Theme.of(context).textTheme.headline1.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      ],
+                      ),
                     );
                   },
                 ),
@@ -194,5 +201,13 @@ class _CalenderScreenState extends State<CalenderScreen> {
     return first.year == second.year &&
         first.month == second.month &&
         first.day == second.day;
+  }
+
+  void createNewJournal() {
+
+    Navigator.pushNamed(context, NewJournalScreen.routeName, arguments: {
+      "isNew": true,
+      "date": selectedDate,
+    });
   }
 }

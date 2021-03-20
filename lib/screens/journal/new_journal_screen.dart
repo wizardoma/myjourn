@@ -239,7 +239,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
 
   Journal generateJournal(Map<String, Object> pageArgs) {
     if (pageArgs["isNew"]) {
-      return Journal(DateTime.now().toString(), "", DateTime.now());
+      var date = pageArgs["date"] == null ? DateTime.now() : pageArgs["date"];
+      return Journal( DateTime.now().toString(), "",date);
     } else {
       deleteJournal = pageArgs["delete"] as Function;
       var journal = pageArgs["journal"] as Journal;
