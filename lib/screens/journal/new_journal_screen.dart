@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
+import 'package:flutterfrontend/providers/journal_provider.dart';
+import 'package:flutterfrontend/screens/home/home_screen.dart';
+import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class NewJournalScreen extends StatefulWidget {
   static const routeName = "/newJournal";
@@ -11,8 +15,25 @@ class NewJournalScreen extends StatefulWidget {
 
 class _NewJournalScreenState extends State<NewJournalScreen> {
   TextEditingController bodyController;
-  bool hasContent;
+  bool hasContent = false;
   Function(String id, BuildContext context) deleteJournal;
+  Journal journal;
+  bool isNewJournal;
+  bool hasBuilt = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!hasBuilt) {
+      setState(() {
+        var pageArgs =
+            ModalRoute.of(context).settings.arguments as Map<String, Object>;
+        isNewJournal = pageArgs["isNew"];
+        journal = generateJournal(pageArgs);
+        hasBuilt = true;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -26,58 +47,12 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     bodyController = TextEditingController();
   }
 
-  Journal generateJournal(Map<String, Object> pageArgs) {
-    if (pageArgs["isNew"]) {
-      return Journal(DateTime.now().toString(), "", DateTime.now());
-    } else {
-      deleteJournal = pageArgs["delete"] as Function;
-      var journal = pageArgs["journal"] as Journal;
-      bodyController.text = journal.body;
-      return journal;
-    }
-  }
-
-  void discardChanges(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text("Do you want to discard the changes?"),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Text("CANCEL")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  child: Text("DISCARD")),
-            ],
-          );
-        }).then((value) {
-      if (value) Navigator.pop(context);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    var pageArgs =
-        ModalRoute.of(context).settings.arguments as Map<String, Object>;
-    var isNewJournal = pageArgs["isNew"];
-    var journal = generateJournal(pageArgs);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.grey,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: checkForLeadingAppBarContent(),
         title: Text(
           "Write",
           style: TextStyle(color: Colors.grey),
@@ -178,6 +153,19 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                           cursorColor: Theme.of(context).accentColor,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
+                          onChanged: (val) {
+                            if (val == null || val.isEmpty) {
+                              setState(() {
+                                hasContent = false;
+//                                bodyController.text = val;
+                              });
+                            } else {
+                              setState(() {
+//                                bodyController.text = val;
+                                hasContent = true;
+                              });
+                            }
+                          },
                           controller: bodyController,
                           decoration: InputDecoration(
                               border: InputBorder.none,
@@ -228,5 +216,79 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
         ),
       ),
     );
+  }
+
+  Widget checkForLeadingAppBarContent() {
+    return hasContent
+        ? IconButton(
+            icon: Icon(
+              Icons.check_circle,
+              size: 35,
+              color: Colors.green,
+            ),
+            onPressed: saveJournal,
+          )
+        : IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.grey,
+            ),
+            onPressed: () => Navigator.pop(context),
+          );
+  }
+
+  Journal generateJournal(Map<String, Object> pageArgs) {
+    if (pageArgs["isNew"]) {
+      return Journal(DateTime.now().toString(), "", DateTime.now());
+    } else {
+      deleteJournal = pageArgs["delete"] as Function;
+      var journal = pageArgs["journal"] as Journal;
+      bodyController.text = journal.body;
+      hasContent = true;
+      return journal;
+    }
+  }
+
+  void discardChanges(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text("Do you want to discard the changes?"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text("CANCEL")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: Text("DISCARD")),
+            ],
+          );
+        }).then((value) {
+      if (value) Navigator.pop(context);
+    });
+  }
+
+  void saveJournal() {
+    String id = journal.id;
+    String body = bodyController.text;
+    DateTime time = isNewJournal ? DateTime.now() : journal.time;
+
+    Journal savedJournal = Journal(id, body, time);
+
+    var journalProvider = Provider.of<JournalProvider>(context, listen: false);
+    if (isNewJournal) {
+      journalProvider.addJournal(savedJournal);
+    } else {
+      journalProvider.editJournal(savedJournal.id, savedJournal.body);
+    }
+
+    Navigator.pushReplacementNamed(context, ViewJournalScreen.routeName,
+        arguments:{ "journal": savedJournal,
+        "screen": HomeScreen.routeName});
   }
 }

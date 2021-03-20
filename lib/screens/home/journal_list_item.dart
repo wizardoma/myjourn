@@ -63,31 +63,33 @@ class JournalListItem extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            height: 120,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  DateFormat('jm').format(journal.time),
-                  style: Theme.of(context).textTheme.headline3,
-                ),
-                SizedBox(
-                  height: 3,
-                ),
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () => viewJournal(context),
-                    child: Text(
-                      journal.body.toString().characters.take(110).toString(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1
-                          .copyWith(fontSize: 18, fontWeight: FontWeight.w400),
+          GestureDetector(
+            onTap: () => viewJournal(context),
+            child: Container(
+              width: double.infinity,
+              height: 120,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.transparent)
+              ),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      DateFormat('jm').format(journal.time),
+                      style: Theme.of(context).textTheme.headline3,
                     ),
-                  ),
-                )
-              ],
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Flexible(
+                      child: Text(
+                        journal.body.toString().characters.take(110).toString(),
+                        style: Theme.of(context).textTheme.headline1.copyWith(
+                            fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ],
+                ),
             ),
           ),
         ],
@@ -97,6 +99,6 @@ class JournalListItem extends StatelessWidget {
 
   void viewJournal(BuildContext context) {
     Navigator.of(context)
-        .pushNamed(ViewJournalScreen.routeName, arguments: journal);
+        .pushNamed(ViewJournalScreen.routeName, arguments: {"journal": journal});;
   }
 }

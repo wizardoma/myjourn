@@ -39,10 +39,19 @@ class ViewJournalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final journal = ModalRoute.of(context).settings.arguments as Journal;
+    var pageRoute = ModalRoute.of(context).settings.arguments as Map<String, Object>;
+    final journal = pageRoute["journal"] as Journal;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("MyJourn"),
+        leading: IconButton(
+          icon:  Icon(Icons.arrow_back),
+          onPressed: (){
+            String screen = pageRoute["screen"];
+            screen !=null ? Navigator.popAndPushNamed(context,screen) : Navigator.pop(context);
+          },
+        ) ,
         actions: [
           IconButton(icon: Icon(Icons.edit), onPressed: () {
             Navigator.of(context).pushNamed(NewJournalScreen.routeName, arguments: {
