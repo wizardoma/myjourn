@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -37,7 +36,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
               Material(
                 elevation: 4,
                 child: TableCalendar(
-                  onDaySelected: (DateTime datetime,_,__) {
+                  onDaySelected: (DateTime datetime, _, __) {
                     setState(() {
                       this.selectedDate = datetime;
                     });
@@ -69,19 +68,20 @@ class _CalenderScreenState extends State<CalenderScreen> {
             ),
           if (!dayHasJournal)
             Container(
-
-              margin: const EdgeInsets.symmetric(vertical: 40),
-              padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 1,
-                    spreadRadius: 1
-                  )
-                ]
+              margin: const EdgeInsets.symmetric(
+                vertical: 40,
               ),
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 15,
+              ),
+              decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 1,
+                  spreadRadius: 1,
+                )
+              ]),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   var width = constraints.maxWidth;
@@ -92,32 +92,38 @@ class _CalenderScreenState extends State<CalenderScreen> {
                         clipBehavior: Clip.none,
                         children: [
                           Container(
-                            width: width*0.3,
+                            width: width * 0.3,
                             child: Container(
                               width: 100,
                               height: 100,
-
                               decoration: BoxDecoration(
-                                color: Colors.green,
+                                color: !isAfterNow()
+                                    ? Colors.green
+                                    : Colors.lightGreen,
                                 shape: BoxShape.circle,
                               ),
                             ),
                           ),
                           Positioned(
                               bottom: -8,
-                              child: Image.asset("assets/logos/lock.png")),
+                              child: Image.asset(!isAfterNow()
+                                  ? "assets/logos/lock.png"
+                                  : "assets/logos/compose.png")),
                         ],
                       ),
                       Container(
-                        width: width*0.6,
-                        child: Text("Safeguard your memory on  ${DateFormat("dd MMMM y").format(selectedDate)}"
-                          , style: Theme.of(context).textTheme.headline1.copyWith(
-                            fontWeight: FontWeight.bold,
-
-                          ),
-                        textAlign: TextAlign.center,),
+                        width: width * 0.6,
+                        child: Text(
+                          !isAfterNow()
+                              ? "Safeguard your memory on"
+                              : "Plan your" +
+                                  " ${DateFormat("dd MMMM y").format(selectedDate)}",
+                          style: Theme.of(context).textTheme.headline1.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
                       )
-
                     ],
                   );
                 },
@@ -126,5 +132,9 @@ class _CalenderScreenState extends State<CalenderScreen> {
         ],
       ),
     );
+  }
+
+  bool isAfterNow() {
+    return selectedDate.isAfter(DateTime.now());
   }
 }

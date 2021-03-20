@@ -51,6 +51,7 @@ flutter:
   assets:
     - assets/logos/facebook.png
     - assets/logos/lock.png
+    - assets/logos/compose.png
     - assets/logos/instagram.png
     - assets/logos/twitter.png
     - assets/logos/google.png
