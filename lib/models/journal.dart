@@ -1,9 +1,9 @@
 class Journal {
   String _id;
   String _body;
-  DateTime _time;
+  DateTime _date;
 
-  Journal(this._id, this._body, this._time);
+  Journal(this._id, this._body, this._date);
 
   String get id => _id;
 
@@ -17,9 +17,9 @@ class Journal {
     this._body = body;
   }
 
-  DateTime get time => _time;
+  DateTime get time => _date;
 
   set time(DateTime value) {
-    _time = value;
+    _date = value;
   }
 }
