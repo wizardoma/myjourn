@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutterfrontend/models/journal.dart';
+import 'package:flutterfrontend/providers/journal_provider.dart';
+import 'package:flutterfrontend/screens/home/journal_list_item.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalenderScreen extends StatefulWidget {
@@ -8,7 +12,9 @@ class CalenderScreen extends StatefulWidget {
 }
 
 class _CalenderScreenState extends State<CalenderScreen> {
+  List<Journal> dayJournals;
   bool dayHasJournal = false;
+  String formattedDate = DateFormat("dd MMMM y").format(DateTime.now());
   DateTime selectedDate = DateTime.now();
   CalendarController _calendarController;
 
@@ -26,115 +32,144 @@ class _CalenderScreenState extends State<CalenderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      child: Column(
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Material(
-                elevation: 4,
-                child: TableCalendar(
-                  onDaySelected: (DateTime datetime, _, __) {
-                    setState(() {
-                      this.selectedDate = datetime;
-                    });
-                  },
-                  builders: CalendarBuilders(),
-                  calendarController: _calendarController,
-                ),
-              ),
-              Positioned(
-                bottom: -10,
-                right: 20,
-                child: FloatingActionButton(
-                  child: Icon(Icons.add),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          ),
-          if (dayHasJournal)
-            Column(
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
               children: [
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text("1 Story Found",
-                      style:
-                          TextStyle(color: Colors.grey.shade400, fontSize: 18)),
+                Material(
+                  elevation: 4,
+                  child: TableCalendar(
+                    onDaySelected: (DateTime datetime, _, __) {
+                      setState(() {
+                        this.selectedDate = datetime;
+                        formattedDate =DateFormat("dd MMMM y").format(selectedDate);
+                        List<Journal> journals = Provider.of<JournalProvider>(context,listen: false).journals;
+                        var list = journals.where((element) {
+                          return areDatesEqual(datetime, element.time);
+                        }).toList();
+                        if (list.length == 0) {
+                          dayHasJournal = false;
+                          dayJournals = [];
+                        }
+                        else {
+                          dayHasJournal = true;
+                          dayJournals = list;
+                        }
+
+                      });
+                    },
+                    builders: CalendarBuilders(),
+                    calendarController: _calendarController,
+                  ),
+                ),
+                Positioned(
+                  bottom: -10,
+                  right: 20,
+                  child: FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () {},
+                  ),
                 ),
               ],
             ),
-          if (!dayHasJournal)
-            Container(
-              margin: const EdgeInsets.symmetric(
-                vertical: 40,
+            if (dayHasJournal)
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Text("${dayJournals.length} ${dayJournals.length == 1 ? 'Story' : 'Stories'} Found",
+                        style:
+                            TextStyle(color: Colors.grey.shade400, fontSize: 18)),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    itemCount: dayJournals.length,
+                    itemBuilder: (context, index) =>
+                        JournalListItem(dayJournals[index]),
+                  )
+                ],
+
               ),
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 15,
-              ),
-              decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 1,
-                  spreadRadius: 1,
-                )
-              ]),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  var width = constraints.maxWidth;
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Container(
-                            width: width * 0.3,
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: !isAfterNow()
-                                    ? Colors.green
-                                    : Colors.lightGreen,
-                                shape: BoxShape.circle,
+            if (!dayHasJournal)
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 40,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 1,
+                    spreadRadius: 1,
+                  )
+                ]),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    var width = constraints.maxWidth;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              width: width * 0.3,
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: !isAfterNow()
+                                      ? Colors.green
+                                      : Colors.lightGreen,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                              bottom: -8,
-                              child: Image.asset(!isAfterNow()
-                                  ? "assets/logos/lock.png"
-                                  : "assets/logos/compose.png")),
-                        ],
-                      ),
-                      Container(
-                        width: width * 0.6,
-                        child: Text(
-                          !isAfterNow()
-                              ? "Safeguard your memory on"
-                              : "Plan your" +
-                                  " ${DateFormat("dd MMMM y").format(selectedDate)}",
-                          style: Theme.of(context).textTheme.headline1.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                          textAlign: TextAlign.center,
+                            Positioned(
+                                bottom: -8,
+                                child: Image.asset(!isAfterNow()
+                                    ? "assets/logos/lock.png"
+                                    : "assets/logos/compose.png")),
+                          ],
                         ),
-                      )
-                    ],
-                  );
-                },
-              ),
-            )
-        ],
+                        Container(
+                          width: width * 0.6,
+                          child: Text(
+                            !isAfterNow()
+                                ? "Safeguard your memory on $formattedDate"
+                                : "Plan your $formattedDate",
+                            style: Theme.of(context).textTheme.headline1.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              )
+          ],
+        ),
       ),
     );
   }
 
   bool isAfterNow() {
-    return selectedDate.isAfter(DateTime.now());
+
+    var after = selectedDate.isAfter(DateTime.now());
+    print(after);
+    return after;
+  }
+  bool areDatesEqual(DateTime first, DateTime second){
+    return first.year == second.year && first.month == second.month && first.day == second.day;
   }
 }
