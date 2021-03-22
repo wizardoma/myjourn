@@ -35,10 +35,9 @@ class _CalenderScreenState extends State<CalenderScreen> {
               () => allJournals
                   .where((element) => areDatesEqual(e.time, element.time))
                   .toList());
-
         });
         hasInitialized = true;
-        dayJournals =getDayJournals(DateTime.now());
+        dayJournals = getDayJournals(DateTime.now());
         dayHasJournal = dayJournals.length > 0;
       });
     }
@@ -72,11 +71,19 @@ class _CalenderScreenState extends State<CalenderScreen> {
                     events: events,
                     onDaySelected: (DateTime datetime, _, __) {
                       setState(() {
-                        this.selectedDate = datetime;
+                        var today = DateTime.now().toLocal();
+                        this.selectedDate = DateTime(
+                          datetime.year,
+                          datetime.month,
+                          datetime.day,
+                          today.hour,
+                          today.minute,
+                          today.second,
+                        );
                         formattedDate =
                             DateFormat("dd MMMM y").format(selectedDate);
 
-                        var list = getDayJournals(datetime);
+                        var list = getDayJournals(selectedDate);
                         if (list.length == 0) {
                           dayHasJournal = false;
                           dayJournals = [];
@@ -174,10 +181,12 @@ class _CalenderScreenState extends State<CalenderScreen> {
                                 !isAfterNow()
                                     ? "Safeguard your memory on $formattedDate"
                                     : "Plan your $formattedDate",
-                                style:
-                                    Theme.of(context).textTheme.headline1.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                 textAlign: TextAlign.center,
                               ),
                             )
@@ -205,14 +214,13 @@ class _CalenderScreenState extends State<CalenderScreen> {
   }
 
   void createNewJournal() {
-
     Navigator.pushNamed(context, NewJournalScreen.routeName, arguments: {
       "isNew": true,
       "date": selectedDate,
     });
   }
 
-  List<Journal> getDayJournals(DateTime dateTime){
+  List<Journal> getDayJournals(DateTime dateTime) {
     return allJournals.where((element) {
       return areDatesEqual(dateTime, element.time);
     }).toList();
