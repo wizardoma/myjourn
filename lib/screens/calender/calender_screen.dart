@@ -110,6 +110,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
             ),
             if (dayHasJournal)
               Column(
+
                 children: [
                   Padding(
                     padding: EdgeInsets.all(5),

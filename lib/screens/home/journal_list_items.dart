@@ -13,6 +13,8 @@ class JournalListItems extends StatelessWidget with JournalUtils {
   Widget build(BuildContext context) {
     var mappedJournals = listToMapView(_journals);
     return ListView.separated(
+      shrinkWrap: true,
+      physics: ScrollPhysics(),
       separatorBuilder: (context, index) {
         return Divider(
           thickness: 2,
