@@ -29,7 +29,6 @@ class ViewJournalScreen extends StatelessWidget {
             ],
           );
         }).then((value) {
-      print(value);
       if (value) {
         Provider.of<JournalProvider>(context, listen: false).deleteJournal(id);
         Navigator.of(context).pop();

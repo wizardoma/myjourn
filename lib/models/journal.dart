@@ -30,6 +30,7 @@ class Journal {
 
   static Map<String, dynamic> toMap(Journal journal) {
     return {
+      "id" : journal.id,
       "body": journal.body,
       "date": journal._date.millisecondsSinceEpoch,
     };

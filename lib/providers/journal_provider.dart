@@ -71,6 +71,7 @@ class JournalProvider with ChangeNotifier {
 
   Future<bool> editJournal(Journal journal) async{
     int result = await JournalRepository.instance.update(Journal.toMap(journal));
+    print("result of updating is: $result");
     await fetchJournals();
     notifyListeners();
     return databaseOpWasSuccessful(result);
@@ -79,7 +80,6 @@ class JournalProvider with ChangeNotifier {
   Future<List<Journal>> fetchJournals() async {
     var allJournals = await JournalRepository.instance.all();
     var journalList = allJournals.map((e) {
-      print("Fetched Maps: ${Journal.fromMap(e).toString()}");
       return Journal.fromMap(e);
     }).toList();
     _dbJournals = journalList;

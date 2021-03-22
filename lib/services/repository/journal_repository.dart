@@ -55,6 +55,7 @@ class JournalRepository {
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int id = row[_columnId];
+    print("row id ${row[_columnId]}");
     return await db.update(_table, row, where: '$_columnId = ?', whereArgs: [id]);
   }
 
