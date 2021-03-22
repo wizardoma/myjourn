@@ -291,7 +291,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   Future<void> saveJournal() async {
     int id = journal.id;
     String body = bodyController.text;
-    DateTime time = isNewJournal ? DateTime.now().toLocal() : journal.time;
+    DateTime time = journal.time;
 
     Journal savedJournal = Journal(id, body, time);
 
