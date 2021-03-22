@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
-import 'package:flutterfrontend/screens/home/journal_list_item.dart';
+import 'package:flutterfrontend/screens/home/journal_list_items.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
-import 'package:flutterfrontend/util/journal_util.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -13,7 +12,7 @@ class CalenderScreen extends StatefulWidget {
   _CalenderScreenState createState() => _CalenderScreenState();
 }
 
-class _CalenderScreenState extends State<CalenderScreen> with JournalUtils {
+class _CalenderScreenState extends State<CalenderScreen> {
   List<Journal> dayJournals = [];
   Map<DateTime, List<Journal>> mappedJournals;
   List<Journal> allJournals = [];
@@ -119,13 +118,7 @@ class _CalenderScreenState extends State<CalenderScreen> with JournalUtils {
                         style: TextStyle(
                             color: Colors.grey.shade400, fontSize: 18)),
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    itemCount: listToMapView(dayJournals).length,
-                    itemBuilder: (context, index) => JournalListItem(
-                        listToMapView(dayJournals).values.elementAt(index)),
-                  )
+                  JournalListItems(dayJournals),
                 ],
               ),
             if (!dayHasJournal)
