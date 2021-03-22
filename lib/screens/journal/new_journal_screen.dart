@@ -90,29 +90,28 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 70,
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  DateFormat('d').format(journal.time),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline3
-                                      .copyWith(fontSize: 50),
-                                ),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                GestureDetector(
-                                  onTap: () => openDatePicker(context),
-                                  child: Container(
+                      GestureDetector(
+                        onTap: () => openDatePicker(context),
+                        child: Container(
+                          height: 70,
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    DateFormat('d').format(journal.time),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline3
+                                        .copyWith(fontSize: 50),
+                                  ),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Container(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -142,47 +141,49 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                       ],
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Icon(
-                                    Icons.edit,
-                                    size: 15,
-                                    color: Colors.grey,
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Icon(
+                                      Icons.edit,
+                                      size: 15,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              GestureDetector(
+                                onTap: () => openTimePicker(context),
+                                child: Container(
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        child: Text(
+                                          DateFormat('jm').format(journal.time),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 6,
+                                      ),
+                                      Container(
+                                        child: Icon(
+                                          Icons.edit,
+                                          size: 15,
+                                          color: Colors.grey,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                            Spacer(),
-                            GestureDetector(
-                              onTap: () => openTimePicker(context),
-                              child: Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      child: Text(
-                                        DateFormat('jm').format(journal.time),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3,
-                                      ),
-                                    ),
-                                    SizedBox(width: 6,),
-                                    Container(
-                                      child: Icon(
-                                        Icons.edit,
-                                        size: 15,
-                                        color: Colors.grey,
-                                      ),
-                                    )
-                                  ],
-                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       Container(
@@ -359,8 +360,11 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
       return;
     }
     setState(() {
-      journal = Journal(journal.id, journal.body, DateTime(date.year, date.month, date.day,
-          journal.time.hour, journal.time.minute, journal.time.second));
+      journal = Journal(
+          journal.id,
+          journal.body,
+          DateTime(date.year, date.month, date.day, journal.time.hour,
+              journal.time.minute, journal.time.second));
     });
   }
 
@@ -371,8 +375,11 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
       return;
     }
     setState(() {
-      journal = Journal(journal.id, journal.body, DateTime(journal.time.year, journal.time.month,
-          journal.time.month, time.hour, time.minute, journal.time.second));
+      journal = Journal(
+          journal.id,
+          journal.body,
+          DateTime(journal.time.year, journal.time.month, journal.time.month,
+              time.hour, time.minute, journal.time.second));
     });
   }
 }
