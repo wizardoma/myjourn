@@ -30,8 +30,16 @@ class ViewJournalScreen extends StatelessWidget {
           );
         }).then((value) {
       if (value) {
-        Provider.of<JournalProvider>(context, listen: false).deleteJournal(id);
-        Navigator.of(context).pop();
+        return Provider.of<JournalProvider>(context, listen: false).deleteJournal(id);
+      }
+    }).then((result) {
+      if(!result) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("An error occurred deleting this journal"))
+        );
+      }
+      else {
+        Navigator.pop(context);
       }
     });
   }
