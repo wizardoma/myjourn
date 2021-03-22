@@ -4,14 +4,14 @@ import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
 import 'package:intl/intl.dart';
 
 class JournalListItem extends StatelessWidget {
-  final Journal journal;
+  final List<Journal> journals;
 
-  JournalListItem(this.journal);
+  JournalListItem(this.journals);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+//      height: 200,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       width: double.infinity,
       child: Column(
@@ -25,7 +25,7 @@ class JournalListItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      DateFormat('d').format(journal.time),
+                      DateFormat('d').format(journals[0].time),
                       style: Theme.of(context)
                           .textTheme
                           .headline3
@@ -35,7 +35,7 @@ class JournalListItem extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      DateFormat('MMM').format(journal.time),
+                      DateFormat('MMM').format(journals[0].time),
                       style: Theme.of(context)
                           .textTheme
                           .headline1
@@ -45,7 +45,7 @@ class JournalListItem extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      DateFormat('EEEE').format(journal.time),
+                      DateFormat('EEEE').format(journals[0].time),
                       style: Theme.of(context)
                           .textTheme
                           .headline2
@@ -54,7 +54,7 @@ class JournalListItem extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  DateFormat('y').format(journal.time),
+                  DateFormat('y').format(journals[0].time),
                   style: Theme.of(context)
                       .textTheme
                       .headline2
@@ -63,42 +63,56 @@ class JournalListItem extends StatelessWidget {
               ],
             ),
           ),
-          GestureDetector(
-            onTap: () => viewJournal(context),
-            child: Container(
-              width: double.infinity,
-              height: 120,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.transparent)
-              ),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      DateFormat('jm').format(journal.time),
-                      style: Theme.of(context).textTheme.headline3,
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: journals.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () => viewJournal(context, journals[index]),
+                  child: Container(
+                    width: double.infinity,
+                    height: 120,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.transparent)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          DateFormat('jm').format(journals[index].time),
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        Flexible(
+                          child: Text(
+                            journals[index]
+                                .body
+                                .toString()
+                                .characters
+                                .take(110)
+                                .toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1
+                                .copyWith(
+                                    fontSize: 18, fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Flexible(
-                      child: Text(
-                        journal.body.toString().characters.take(110).toString(),
-                        style: Theme.of(context).textTheme.headline1.copyWith(
-                            fontSize: 18, fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                  ],
-                ),
-            ),
-          ),
+                  ),
+                );
+              }),
         ],
       ),
     );
   }
 
-  void viewJournal(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed(ViewJournalScreen.routeName, arguments: {"journal": journal});;
+  void viewJournal(BuildContext context, Journal journal) {
+    Navigator.of(context).pushNamed(ViewJournalScreen.routeName,
+        arguments: {"journal": journal});
+
   }
 }

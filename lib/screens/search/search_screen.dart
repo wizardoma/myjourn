@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/journal_list_item.dart';
+import 'package:flutterfrontend/util/journal_util.dart';
 import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class SearchScreen extends StatefulWidget {
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen> with JournalUtils {
   List<Journal> searchResults = [];
   bool hasContent = false;
   bool hasSearched = false;
@@ -80,9 +81,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: Text("No Search found"),
                   )
                 : ListView.builder(
-                    itemCount: searchResults.length,
+                    itemCount: listToMapView(searchResults).length,
                     itemBuilder: (context, int index) {
-                      return JournalListItem(searchResults[index]);
+                      return JournalListItem(
+                          listToMapView(searchResults).values.elementAt(index));
                     }));
   }
 
