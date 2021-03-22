@@ -87,7 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void searchJournals(String query) {
-    if (query == null || query.isEmpty){
+    if (query == null || query.isEmpty) {
       return;
     }
     setState(() {

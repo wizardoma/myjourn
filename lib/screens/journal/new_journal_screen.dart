@@ -27,10 +27,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     if (!hasBuilt) {
       setState(() {
         var pageArgs =
-        ModalRoute
-            .of(context)
-            .settings
-            .arguments as Map<String, Object>;
+            ModalRoute.of(context).settings.arguments as Map<String, Object>;
         isNewJournal = pageArgs["isNew"];
         journal = generateJournal(pageArgs);
         hasBuilt = true;
@@ -98,59 +95,92 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+
                           children: [
                             Row(
                               children: [
                                 Text(
                                   DateFormat('d').format(journal.time),
-                                  style: Theme
-                                      .of(context)
+                                  style: Theme.of(context)
                                       .textTheme
                                       .headline3
                                       .copyWith(fontSize: 50),
                                 ),
                                 SizedBox(
-                                  width: 5,
+                                  width: 6,
+                                ),
+                                GestureDetector(
+                                  onTap: () => openDatePicker(context),
+                                  child: Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          DateFormat('EEEE')
+                                              .format(journal.time),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline2
+                                              .copyWith(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600),
+                                        ),
+                                        Text(
+                                          DateFormat("MMMM")
+                                              .format(journal.time),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline1
+                                              .copyWith(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 6,
                                 ),
                                 Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        DateFormat('EEEE').format(journal.time),
-                                        style: Theme
-                                            .of(context)
-                                            .textTheme
-                                            .headline2
-                                            .copyWith(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        DateFormat("MMMM").format(journal.time),
-                                        style: Theme
-                                            .of(context)
-                                            .textTheme
-                                            .headline1
-                                            .copyWith(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600),
-                                      )
-                                    ],
+                                  alignment: Alignment.topLeft,
+                                  child: Icon(
+                                    Icons.edit,
+                                    size: 15,
+                                    color: Colors.grey,
                                   ),
                                 ),
                               ],
                             ),
                             Spacer(),
-                            Text(
-                              DateFormat('jm').format(journal.time),
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .headline3,
+                            GestureDetector(
+                              onTap: () => openTimePicker(context),
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        DateFormat('jm').format(journal.time),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3,
+                                      ),
+                                    ),
+                                    SizedBox(width: 6,),
+                                    Container(
+                                      child: Icon(
+                                        Icons.edit,
+                                        size: 15,
+                                        color: Colors.grey,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -159,9 +189,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                         margin: EdgeInsets.only(top: 30),
                         child: TextField(
                           style: TextStyle(fontSize: 17),
-                          cursorColor: Theme
-                              .of(context)
-                              .accentColor,
+                          cursorColor: Theme.of(context).accentColor,
                           autofocus: true,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
@@ -233,28 +261,26 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   Widget checkForLeadingAppBarContent() {
     return hasContent
         ? IconButton(
-      icon: Icon(
-        Icons.check_circle,
-        size: 35,
-        color: Colors.green,
-      ),
-      onPressed: saveJournal,
-    )
+            icon: Icon(
+              Icons.check_circle,
+              size: 35,
+              color: Colors.green,
+            ),
+            onPressed: saveJournal,
+          )
         : IconButton(
-      icon: Icon(
-        Icons.arrow_back,
-        color: Colors.grey,
-      ),
-      onPressed: () => Navigator.pop(context),
-    );
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.grey,
+            ),
+            onPressed: () => Navigator.pop(context),
+          );
   }
 
   Journal generateJournal(Map<String, Object> pageArgs) {
     if (pageArgs["isNew"]) {
       var date = pageArgs["date"] == null ? DateTime.now() : pageArgs["date"];
-      return Journal(DateTime
-          .now()
-          .millisecondsSinceEpoch, "", date);
+      return Journal(DateTime.now().millisecondsSinceEpoch, "", date);
     } else {
       deleteJournal = pageArgs["delete"] as Function;
       var journal = pageArgs["journal"] as Journal;
@@ -315,13 +341,38 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
 
   void viewJournalAfterSave(BuildContext context, Journal savedJournal) {
     Navigator.pushReplacementNamed(context, ViewJournalScreen.routeName,
-        arguments: { "journal": savedJournal,
-          "screen": HomeScreen.routeName});
+        arguments: {"journal": savedJournal, "screen": HomeScreen.routeName});
   }
 
   void showErrorMessage(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("There was an error saving this journal"))
-    );
+        SnackBar(content: Text("There was an error saving this journal")));
+  }
+
+  void openDatePicker(BuildContext context) async {
+    var date = await showDatePicker(
+        context: context,
+        initialDate: journal.time,
+        firstDate: DateTime(2010),
+        lastDate: DateTime(DateTime.now().year + 3));
+    if (date == null) {
+      return;
+    }
+    setState(() {
+      journal = Journal(journal.id, journal.body, DateTime(date.year, date.month, date.day,
+          journal.time.hour, journal.time.minute, journal.time.second));
+    });
+  }
+
+  void openTimePicker(BuildContext context) async {
+    var time = await showTimePicker(
+        context: context, initialTime: TimeOfDay.fromDateTime(journal.time));
+    if (time == null) {
+      return;
+    }
+    setState(() {
+      journal = Journal(journal.id, journal.body, DateTime(journal.time.year, journal.time.month,
+          journal.time.month, time.hour, time.minute, journal.time.second));
+    });
   }
 }
