@@ -19,7 +19,7 @@ class JournalRepository {
   static Database _database;
 
   Future<Database> get database async {
-    if (_database != null) return database;
+    if (_database != null) return _database;
     _database = await _initDatabase();
     return _database;
   }
@@ -35,7 +35,7 @@ class JournalRepository {
     CREATE TABLE $_table (
     $_columnId INTEGER PRIMARY KEY,
     $_columnBody TEXT NOT NULL,
-    $_columnDate INTEGER NOT NULL 
+    $_columnDate INTEGER NOT NULL )
     '''
     );
 
@@ -43,10 +43,11 @@ class JournalRepository {
 
   Future<int> insert(Map<String, dynamic> row) async{
     var database = await instance.database;
+
     return await database.insert(_table, row);
   }
 
-  Future<List<Map<String, dynamic>>> queryAllRows() async {
+  Future<List<Map<String, dynamic>>> all() async {
     Database db = await instance.database;
     return await db.query(_table);
   }

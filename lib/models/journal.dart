@@ -1,15 +1,15 @@
 class Journal {
-  String _id;
+  int _id;
   String _body;
   DateTime _date;
 
   Journal(this._id, this._body, this._date);
 
-  String get id => _id;
+  int get id => _id;
 
   String get body => _body;
 
-  set id(String value) {
+  set id(int value) {
     _id = value;
   }
 
@@ -21,5 +21,22 @@ class Journal {
 
   set time(DateTime value) {
     _date = value;
+  }
+
+  Journal.fromMap(Map<String, dynamic> data)
+      : _id = data["id"],
+        _body = data["body"],
+        _date = DateTime.fromMillisecondsSinceEpoch(data["date"]);
+
+  static Map<String, dynamic> toMap(Journal journal) {
+    return {
+      "body": journal.body,
+      "date": journal._date.millisecondsSinceEpoch,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Journal{_id: $_id, _body: $_body, _date: $_date}';
   }
 }

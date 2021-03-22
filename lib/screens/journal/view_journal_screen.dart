@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class ViewJournalScreen extends StatelessWidget {
   static const routeName = "/viewJournal";
 
-  void deleteJournal(String id, BuildContext context) {
+  void deleteJournal(int id, BuildContext context) {
     showDialog(
         context: context,
         builder: (context) {

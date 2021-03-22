@@ -16,7 +16,7 @@ class NewJournalScreen extends StatefulWidget {
 class _NewJournalScreenState extends State<NewJournalScreen> {
   TextEditingController bodyController;
   bool hasContent = false;
-  Function(String id, BuildContext context) deleteJournal;
+  Function(int id, BuildContext context) deleteJournal;
   Journal journal;
   bool isNewJournal;
   bool hasBuilt = false;
@@ -240,7 +240,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   Journal generateJournal(Map<String, Object> pageArgs) {
     if (pageArgs["isNew"]) {
       var date = pageArgs["date"] == null ? DateTime.now() : pageArgs["date"];
-      return Journal( DateTime.now().toString(), "",date);
+      return Journal( DateTime.now().millisecondsSinceEpoch, "",date);
     } else {
       deleteJournal = pageArgs["delete"] as Function;
       var journal = pageArgs["journal"] as Journal;
@@ -274,18 +274,18 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     });
   }
 
-  void saveJournal() {
-    String id = journal.id;
+  void saveJournal() async{
+    int id = journal.id;
     String body = bodyController.text;
-    DateTime time = isNewJournal ? DateTime.now() : journal.time;
+    DateTime time = isNewJournal ? DateTime.now().toLocal() : journal.time;
 
     Journal savedJournal = Journal(id, body, time);
 
     var journalProvider = Provider.of<JournalProvider>(context, listen: false);
     if (isNewJournal) {
-      journalProvider.addJournal(savedJournal);
+      await journalProvider.addJournal(savedJournal);
     } else {
-      journalProvider.editJournal(savedJournal.id, savedJournal.body);
+      await journalProvider.editJournal(savedJournal);
     }
 
     Navigator.pushReplacementNamed(context, ViewJournalScreen.routeName,
