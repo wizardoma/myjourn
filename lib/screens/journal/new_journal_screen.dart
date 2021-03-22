@@ -151,6 +151,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                         child: TextField(
                           style: TextStyle(fontSize: 17),
                           cursorColor: Theme.of(context).accentColor,
+                          autofocus: true,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           onChanged: (val) {
