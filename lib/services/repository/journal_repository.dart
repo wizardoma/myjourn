@@ -49,7 +49,7 @@ class JournalRepository {
 
   Future<List<Map<String, dynamic>>> all() async {
     Database db = await instance.database;
-    return await db.query(_table);
+    return await db.query(_table,orderBy: "date desc");
   }
 
   Future<int> update(Map<String, dynamic> row) async {
