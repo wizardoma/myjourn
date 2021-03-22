@@ -27,7 +27,10 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     if (!hasBuilt) {
       setState(() {
         var pageArgs =
-            ModalRoute.of(context).settings.arguments as Map<String, Object>;
+        ModalRoute
+            .of(context)
+            .settings
+            .arguments as Map<String, Object>;
         isNewJournal = pageArgs["isNew"];
         journal = generateJournal(pageArgs);
         hasBuilt = true;
@@ -100,7 +103,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                               children: [
                                 Text(
                                   DateFormat('d').format(journal.time),
-                                  style: Theme.of(context)
+                                  style: Theme
+                                      .of(context)
                                       .textTheme
                                       .headline3
                                       .copyWith(fontSize: 50),
@@ -111,27 +115,29 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                 Container(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Text(
                                         DateFormat('EEEE').format(journal.time),
-                                        style: Theme.of(context)
+                                        style: Theme
+                                            .of(context)
                                             .textTheme
                                             .headline2
                                             .copyWith(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w600),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       Text(
                                         DateFormat("MMMM").format(journal.time),
-                                        style: Theme.of(context)
+                                        style: Theme
+                                            .of(context)
                                             .textTheme
                                             .headline1
                                             .copyWith(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w600),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
                                       )
                                     ],
                                   ),
@@ -141,7 +147,10 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                             Spacer(),
                             Text(
                               DateFormat('jm').format(journal.time),
-                              style: Theme.of(context).textTheme.headline3,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline3,
                             ),
                           ],
                         ),
@@ -150,7 +159,9 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                         margin: EdgeInsets.only(top: 30),
                         child: TextField(
                           style: TextStyle(fontSize: 17),
-                          cursorColor: Theme.of(context).accentColor,
+                          cursorColor: Theme
+                              .of(context)
+                              .accentColor,
                           autofocus: true,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
@@ -222,26 +233,28 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   Widget checkForLeadingAppBarContent() {
     return hasContent
         ? IconButton(
-            icon: Icon(
-              Icons.check_circle,
-              size: 35,
-              color: Colors.green,
-            ),
-            onPressed: saveJournal,
-          )
+      icon: Icon(
+        Icons.check_circle,
+        size: 35,
+        color: Colors.green,
+      ),
+      onPressed: saveJournal,
+    )
         : IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.grey,
-            ),
-            onPressed: () => Navigator.pop(context),
-          );
+      icon: Icon(
+        Icons.arrow_back,
+        color: Colors.grey,
+      ),
+      onPressed: () => Navigator.pop(context),
+    );
   }
 
   Journal generateJournal(Map<String, Object> pageArgs) {
     if (pageArgs["isNew"]) {
       var date = pageArgs["date"] == null ? DateTime.now() : pageArgs["date"];
-      return Journal( DateTime.now().millisecondsSinceEpoch, "",date);
+      return Journal(DateTime
+          .now()
+          .millisecondsSinceEpoch, "", date);
     } else {
       deleteJournal = pageArgs["delete"] as Function;
       var journal = pageArgs["journal"] as Journal;
@@ -275,7 +288,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     });
   }
 
-  void saveJournal() async{
+  Future<void> saveJournal() async {
     int id = journal.id;
     String body = bodyController.text;
     DateTime time = isNewJournal ? DateTime.now().toLocal() : journal.time;
@@ -284,13 +297,31 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
 
     var journalProvider = Provider.of<JournalProvider>(context, listen: false);
     if (isNewJournal) {
-      await journalProvider.addJournal(savedJournal);
+      journalProvider.addJournal(savedJournal).then((value) {
+        if (value)
+          viewJournalAfterSave(context, savedJournal);
+        else
+          showErrorMessage(context);
+      });
     } else {
-      await journalProvider.editJournal(savedJournal);
+      journalProvider.editJournal(savedJournal).then((value) {
+        if (value)
+          viewJournalAfterSave(context, savedJournal);
+        else
+          showErrorMessage(context);
+      });
     }
+  }
 
+  void viewJournalAfterSave(BuildContext context, Journal savedJournal) {
     Navigator.pushReplacementNamed(context, ViewJournalScreen.routeName,
-        arguments:{ "journal": savedJournal,
-        "screen": HomeScreen.routeName});
+        arguments: { "journal": savedJournal,
+          "screen": HomeScreen.routeName});
+  }
+
+  void showErrorMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("There was an error saving this journal"))
+    );
   }
 }
