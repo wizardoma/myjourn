@@ -22,7 +22,7 @@ class JournalList extends StatelessWidget {
           builder:
               (BuildContext context, AsyncSnapshot<List<Journal>> snapshot) {
             return !hasFinishedLoading(snapshot.connectionState)
-                ? CircularProgressIndicator()
+                ? Center(child: CircularProgressIndicator())
                 : hasGotData(snapshot.data)
                     ? Center(
                         child: Text("No Journals"),
