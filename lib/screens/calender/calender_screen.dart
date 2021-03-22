@@ -13,8 +13,8 @@ class CalenderScreen extends StatefulWidget {
 }
 
 class _CalenderScreenState extends State<CalenderScreen> {
-  List<Journal> dayJournals;
-  List<Journal> allJournals;
+  List<Journal> dayJournals = [];
+  List<Journal> allJournals = [];
   bool dayHasJournal = false;
   bool hasInitialized = false;
   String formattedDate = DateFormat("dd MMMM y").format(DateTime.now());
@@ -35,8 +35,11 @@ class _CalenderScreenState extends State<CalenderScreen> {
               () => allJournals
                   .where((element) => areDatesEqual(e.time, element.time))
                   .toList());
+
         });
         hasInitialized = true;
+        dayJournals =getDayJournals(DateTime.now());
+        dayHasJournal = dayJournals.length > 0;
       });
     }
   }
@@ -73,9 +76,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
                         formattedDate =
                             DateFormat("dd MMMM y").format(selectedDate);
 
-                        var list = allJournals.where((element) {
-                          return areDatesEqual(datetime, element.time);
-                        }).toList();
+                        var list = getDayJournals(datetime);
                         if (list.length == 0) {
                           dayHasJournal = false;
                           dayJournals = [];
@@ -209,5 +210,11 @@ class _CalenderScreenState extends State<CalenderScreen> {
       "isNew": true,
       "date": selectedDate,
     });
+  }
+
+  List<Journal> getDayJournals(DateTime dateTime){
+    return allJournals.where((element) {
+      return areDatesEqual(dateTime, element.time);
+    }).toList();
   }
 }
