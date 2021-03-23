@@ -484,6 +484,9 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
 
     var bytes = await pickedFile.readAsBytes();
     setState(() {
+      if (images == null){
+        images = [];
+      }
       images.add(bytes);
     });
   }
