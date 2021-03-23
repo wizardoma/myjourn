@@ -98,6 +98,10 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (images.length>0)
+                        Container(
+                          child: Text("Images here")
+                        ),
                       DateSection(openDatePicker, openTimePicker, journal),
                       TextFieldSection(bodyController, setHasContent),
                     ],

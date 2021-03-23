@@ -104,6 +104,7 @@ class ViewJournalScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             Container(
               height: 70,
               padding: EdgeInsets.symmetric(vertical: 5),
