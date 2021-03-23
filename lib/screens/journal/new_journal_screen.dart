@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
+import 'package:flutterfrontend/screens/journal/new_journal_date_section.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -90,102 +91,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        onTap: () => openDatePicker(context),
-                        child: Container(
-                          height: 70,
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    DateFormat('d').format(journal.time),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3
-                                        .copyWith(fontSize: 50),
-                                  ),
-                                  SizedBox(
-                                    width: 6,
-                                  ),
-                                  Container(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          DateFormat('EEEE')
-                                              .format(journal.time),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline2
-                                              .copyWith(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w600),
-                                        ),
-                                        Text(
-                                          DateFormat("MMMM")
-                                              .format(journal.time),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline1
-                                              .copyWith(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 6,
-                                  ),
-                                  Container(
-                                    alignment: Alignment.topLeft,
-                                    child: Icon(
-                                      Icons.edit,
-                                      size: 15,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              GestureDetector(
-                                onTap: () => openTimePicker(context),
-                                child: Container(
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        child: Text(
-                                          DateFormat('jm').format(journal.time),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 6,
-                                      ),
-                                      Container(
-                                        child: Icon(
-                                          Icons.edit,
-                                          size: 15,
-                                          color: Colors.grey,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      DateSection(openDatePicker, openTimePicker, journal),
                       Container(
                         margin: EdgeInsets.only(top: 30),
                         child: TextField(

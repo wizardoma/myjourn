@@ -1,6 +1,7 @@
 class Journal {
   int _id;
   String _body;
+
   DateTime _date;
 
   Journal(this._id, this._body, this._date);
