@@ -39,7 +39,6 @@ class Journal {
     var id = data["id"];
     var body = data["body"];
     var date = DateTime.fromMillisecondsSinceEpoch(data["date"]);
-//    print(data["images"]);
     if (data["images"] != null) {
       return Journal(
           id,
@@ -59,9 +58,6 @@ class Journal {
     var date = journal.time.millisecondsSinceEpoch;
     print(journal.images==null);
     var hasImage = journal.images != null;
-
-    print(
-        "toMap method image ${journal.images} and $hasImage and length ");
     if (hasImage) {
       var joinedImage = journal.images.map((e) => base64Encode(e)).join("|");
       return {"id": id, "body": body, "date": date, "images": joinedImage};

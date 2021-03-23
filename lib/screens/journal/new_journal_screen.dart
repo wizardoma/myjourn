@@ -25,7 +25,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   TextEditingController bodyController;
   bool hasContent = false;
   Function(int id, BuildContext context) deleteJournal;
-  List<Uint8List> images = [];
+  List<Uint8List> images;
   Journal journal;
   bool isNewJournal;
   bool hasBuilt = false;
@@ -36,7 +36,10 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     if (!hasBuilt) {
       setState(() {
         var pageArgs =
-            ModalRoute.of(context).settings.arguments as Map<String, Object>;
+        ModalRoute
+            .of(context)
+            .settings
+            .arguments as Map<String, Object>;
         isNewJournal = pageArgs["isNew"];
         journal = generateJournal(pageArgs);
         hasBuilt = true;
@@ -91,8 +94,14 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -103,14 +112,15 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
                     children: [
-                      if (images!=null) JournalImageCarousel(images),
+                      if (images != null) JournalImageCarousel(images),
                       Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            DateSection(openDatePicker, openTimePicker, journal),
+                            DateSection(
+                                openDatePicker, openTimePicker, journal),
                             TextFieldSection(bodyController, setHasContent),
                           ],
                         ),
@@ -130,26 +140,28 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   Widget checkForLeadingAppBarContent() {
     return hasContent
         ? IconButton(
-            icon: Icon(
-              Icons.check_circle,
-              size: 35,
-              color: Colors.green,
-            ),
-            onPressed: saveJournal,
-          )
+      icon: Icon(
+        Icons.check_circle,
+        size: 35,
+        color: Colors.green,
+      ),
+      onPressed: saveJournal,
+    )
         : IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.grey,
-            ),
-            onPressed: () => Navigator.pop(context),
-          );
+      icon: Icon(
+        Icons.arrow_back,
+        color: Colors.grey,
+      ),
+      onPressed: () => Navigator.pop(context),
+    );
   }
 
   Journal generateJournal(Map<String, Object> pageArgs) {
     if (pageArgs["isNew"]) {
       var date = pageArgs["date"] == null ? DateTime.now() : pageArgs["date"];
-      return Journal(DateTime.now().millisecondsSinceEpoch, "", date);
+      return Journal(DateTime
+          .now()
+          .millisecondsSinceEpoch, "", date);
     } else {
       deleteJournal = pageArgs["delete"] as Function;
       var journal = pageArgs["journal"] as Journal;
@@ -189,7 +201,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     String body = bodyController.text;
     DateTime time = journal.time;
     print("Trying to save journal but images is ${images}");
-    Journal savedJournal = Journal(id, body, time, images.length == 0 ? null: images);
+
+    Journal savedJournal = Journal(id, body, time, images ?? images);
 
     var journalProvider = Provider.of<JournalProvider>(context, listen: false);
     if (isNewJournal) {
@@ -224,7 +237,9 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
         context: context,
         initialDate: journal.time,
         firstDate: DateTime(2010),
-        lastDate: DateTime(DateTime.now().year + 3));
+        lastDate: DateTime(DateTime
+            .now()
+            .year + 3));
     if (date == null) {
       return;
     }
@@ -278,7 +293,10 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: 280,
-                    maxHeight: MediaQuery.of(context).size.height * 0.8,
+                    maxHeight: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.8,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -287,11 +305,15 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                     children: [
                       Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           "Add Pictures",
-                          style: Theme.of(context).textTheme.headline1.copyWith(
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline1
+                              .copyWith(
                               fontWeight: FontWeight.w400, fontSize: 20),
                         ),
                       ),
@@ -309,7 +331,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                     children: [
                                       Icon(
                                         Icons.photo,
@@ -318,7 +340,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                       ),
                                       Text(
                                         "Gallery",
-                                        style: Theme.of(context)
+                                        style: Theme
+                                            .of(context)
                                             .textTheme
                                             .headline4
                                             .copyWith(fontSize: 15),
@@ -337,7 +360,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                     children: [
                                       Icon(
                                         Icons.camera,
@@ -346,12 +369,13 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                       ),
                                       Text(
                                         "Camera",
-                                        style: Theme.of(context)
+                                        style: Theme
+                                            .of(context)
                                             .textTheme
                                             .headline4
                                             .copyWith(
-                                              fontSize: 15,
-                                            ),
+                                          fontSize: 15,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -361,7 +385,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                           ],
                         ),
                       ),
-                      if (images!=null)
+                      if (images != null)
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -376,7 +400,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   child:
-                                      Stack(clipBehavior: Clip.none, children: [
+                                  Stack(clipBehavior: Clip.none, children: [
                                     Container(
                                       child: Image.memory(
                                         images[index],
@@ -392,7 +416,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                         padding: EdgeInsets.all(3),
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(10),
+                                          BorderRadius.circular(10),
                                           color: Colors.red,
 //                                          shape: BoxShape.circle,
                                         ),
@@ -412,8 +436,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                 );
                               },
                               gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, crossAxisSpacing: 10),
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, crossAxisSpacing: 10),
                             ),
                           ),
                         ),
@@ -439,7 +463,13 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
               );
             },
           );
-        });
+        }).then((_) {
+      if (images != null) {
+        if (images.length == 0) {
+          images = null;
+        }
+      }
+    });
   }
 
   void pickImage(String type, setState) async {

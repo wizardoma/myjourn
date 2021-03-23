@@ -24,7 +24,6 @@ class JournalProvider with ChangeNotifier {
   Future<bool> addJournal(Journal journal) async {
     int result =
         await JournalRepository.instance.insert(Journal.toMap(journal));
-    print("Journal to the db ${Journal.toMap(journal)}");
     await fetchJournals();
     notifyListeners();
 

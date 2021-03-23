@@ -10,6 +10,7 @@ class JournalImageCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("image carousel $images");
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: CarouselSlider.builder(
