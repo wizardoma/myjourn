@@ -35,44 +35,43 @@ class Journal {
     _date = value;
   }
 
-  static Journal fromNewMap(Map<String, dynamic> data){
+  static Journal fromNewMap(Map<String, dynamic> data) {
     var id = data["id"];
     var body = data["body"];
-    var date = data["date"];
-
-    if (data["images"] !=null) {
-      return Journal(id, body, date);
+    var date = DateTime.fromMillisecondsSinceEpoch(data["date"]);
+//    print(data["images"]);
+    if (data["images"] != null) {
+      return Journal(
+          id,
+          body,
+          date,
+          (data["images"] as String).split("|").map((e) {
+            return base64Decode(e);
+          }).toList());
     }
-    return Journal(id, body, date);
 
+    return Journal(id, body, date);
   }
 
-  Journal.fromMap(Map<String, dynamic> data)
-      : _id = data["id"],
-        _body = data["body"],
-        _date = DateTime.fromMillisecondsSinceEpoch(data["date"]),
-        _images = data["images"] != null
-            ? (data["images"] as String).split("|").map((e) {
-              return base64Decode(e);
-            }).toList()
-            : null;
-
   static Map<String, dynamic> toMap(Journal journal) {
+    var id = journal.id;
+    var body = journal.body;
+    var date = journal.time.millisecondsSinceEpoch;
+    print(journal.images==null);
+    var hasImage = journal.images != null;
 
-    var joinedImage = journal.images.map((e) => base64Encode(e)).join("|");
+    print(
+        "toMap method image ${journal.images} and $hasImage and length ");
+    if (hasImage) {
+      var joinedImage = journal.images.map((e) => base64Encode(e)).join("|");
+      return {"id": id, "body": body, "date": date, "images": joinedImage};
+    }
 
-    return {
-      "id": journal.id,
-      "body": journal.body,
-      "date": journal._date.millisecondsSinceEpoch,
-      "images": journal.images != null || journal.images.length > 0
-          ? joinedImage
-          : null
-    };
+    return {"id": id, "body": body, "date": date};
   }
 
   @override
   String toString() {
-    return 'Journal{_id: $_id, _body: $_body, _date: $_date}';
+    return 'Journal{_id: $_id, _body: $_body, _date: $_date , _images: $_images}';
   }
 }

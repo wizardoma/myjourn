@@ -49,6 +49,7 @@ class ViewJournalScreen extends StatelessWidget {
     var pageRoute =
         ModalRoute.of(context).settings.arguments as Map<String, Object>;
     final journal = pageRoute["journal"] as Journal;
+    print("Incoming journal ${journal.toString()}");
 
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +105,7 @@ class ViewJournalScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (journal.images.length > 0) JournalImageCarousel(journal.images),
+            if (journal.images!=null) JournalImageCarousel(journal.images),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Column(

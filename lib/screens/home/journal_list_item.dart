@@ -106,7 +106,7 @@ class JournalListItem extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              if (journals[index].images.length > 0)
+                              if (journals[index].images!=null)
                                 Container(
                                   height: 80,
                                   width: 80,

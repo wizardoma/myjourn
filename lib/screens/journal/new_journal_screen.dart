@@ -103,7 +103,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
                     children: [
-                      if (images.length > 0) JournalImageCarousel(images),
+                      if (images!=null) JournalImageCarousel(images),
                       Container(
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -188,8 +188,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     int id = journal.id;
     String body = bodyController.text;
     DateTime time = journal.time;
-
-    Journal savedJournal = Journal(id, body, time, images);
+    print("Trying to save journal but images is ${images}");
+    Journal savedJournal = Journal(id, body, time, images.length == 0 ? null: images);
 
     var journalProvider = Provider.of<JournalProvider>(context, listen: false);
     if (isNewJournal) {
@@ -361,7 +361,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                           ],
                         ),
                       ),
-                      if (images.length > 0)
+                      if (images!=null)
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.symmetric(
