@@ -59,7 +59,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+//      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         elevation: 0,
         leading: checkForLeadingAppBarContent(),
@@ -88,28 +88,39 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                 })
         ],
       ),
-      body: SafeArea(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SingleChildScrollView(
-                child: Container(
-                  margin: EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(bottom: 15),
+                  child: ListView(
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
                     children: [
-                      if (images.length > 0)
-                        JournalImageCarousel(images),
-                      DateSection(openDatePicker, openTimePicker, journal),
-                      TextFieldSection(bodyController, setHasContent),
+                      if (images.length > 0) JournalImageCarousel(images),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            DateSection(openDatePicker, openTimePicker, journal),
+                            TextFieldSection(bodyController, setHasContent),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              BottomSection(discardChanges),
-            ],
+                BottomSection(discardChanges),
+              ],
+            ),
           ),
         ),
       ),
