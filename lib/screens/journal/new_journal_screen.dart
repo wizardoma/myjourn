@@ -4,8 +4,10 @@ import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_date_section.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'new_journal_bottom_section.dart';
+import 'new_journal_textfield_section.dart';
 
 class NewJournalScreen extends StatefulWidget {
   static const routeName = "/newJournal";
@@ -92,72 +94,12 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       DateSection(openDatePicker, openTimePicker, journal),
-                      Container(
-                        margin: EdgeInsets.only(top: 30),
-                        child: TextField(
-                          style: TextStyle(fontSize: 17),
-                          cursorColor: Theme.of(context).accentColor,
-                          autofocus: true,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          onChanged: (val) {
-                            if (val == null || val.isEmpty) {
-                              setState(() {
-                                hasContent = false;
-//                                bodyController.text = val;
-                              });
-                            } else {
-                              setState(() {
-//                                bodyController.text = val;
-                                hasContent = true;
-                              });
-                            }
-                          },
-                          controller: bodyController,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.all(10),
-                              hintStyle: TextStyle(color: Colors.grey),
-                              hintText: "Write here..."),
-                        ),
-                      )
+                      TextFieldSection(bodyController, setHasContent),
                     ],
                   ),
                 ),
               ),
-              Container(
-                height: 50,
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.shade200,
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                        offset: Offset(0, 0))
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      onPressed: () => discardChanges(context),
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.mic,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              BottomSection(discardChanges),
             ],
           ),
         ),
@@ -287,5 +229,19 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
           DateTime(journal.time.year, journal.time.month, journal.time.month,
               time.hour, time.minute, journal.time.second));
     });
+  }
+
+  void setHasContent(String val) {
+    {
+      if (val == null || val.isEmpty) {
+        setState(() {
+          hasContent = false;
+        });
+      } else {
+        setState(() {
+          hasContent = true;
+        });
+      }
+    }
   }
 }
