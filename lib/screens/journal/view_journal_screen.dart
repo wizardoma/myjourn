@@ -49,7 +49,6 @@ class ViewJournalScreen extends StatelessWidget {
     var pageRoute =
         ModalRoute.of(context).settings.arguments as Map<String, Object>;
     final journal = pageRoute["journal"] as Journal;
-    print("Incoming journal ${journal.toString()}");
 
     return Scaffold(
       appBar: AppBar(

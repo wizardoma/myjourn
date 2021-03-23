@@ -56,7 +56,6 @@ class Journal {
     var id = journal.id;
     var body = journal.body;
     var date = journal.time.millisecondsSinceEpoch;
-    print(journal.images==null);
     var hasImage = journal.images != null;
     if (hasImage) {
       var joinedImage = journal.images.map((e) => base64Encode(e)).join("|");
