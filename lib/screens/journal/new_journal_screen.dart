@@ -139,6 +139,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
       deleteJournal = pageArgs["delete"] as Function;
       var journal = pageArgs["journal"] as Journal;
       bodyController.text = journal.body;
+      images = journal.images;
       hasContent = true;
       return journal;
     }
@@ -173,7 +174,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     String body = bodyController.text;
     DateTime time = journal.time;
 
-    Journal savedJournal = Journal(id, body, time);
+    Journal savedJournal = Journal(id, body, time, images);
 
     var journalProvider = Provider.of<JournalProvider>(context, listen: false);
     if (isNewJournal) {
@@ -382,7 +383,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                         ),
                                         child: FittedBox(
                                           child: IconButton(
-                                            onPressed: () => removeImage(index, setState),
+                                            onPressed: () =>
+                                                removeImage(index, setState),
                                             icon: Icon(
                                               Icons.clear,
                                               color: Colors.white,
@@ -428,7 +430,6 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   void pickImage(String type, setState) async {
     PickedFile pickedFile;
 
-
     if (type == "gallery") {
       pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
     }
@@ -442,7 +443,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     });
   }
 
-  void removeImage(int index, setState){
+  void removeImage(int index, setState) {
     setState(() {
       images.removeAt(index);
     });

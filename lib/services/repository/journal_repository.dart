@@ -38,11 +38,10 @@ class JournalRepository {
     $_columnBody TEXT NOT NULL,
     $_columnDate INTEGER NOT NULL,
     $_columnImages STRING )
-    '''
-    );
+    ''');
   }
 
-  Future<int> insert(Map<String, dynamic> row) async{
+  Future<int> insert(Map<String, dynamic> row) async {
     var database = await instance.database;
 
     return await database.insert(_table, row);
@@ -50,13 +49,14 @@ class JournalRepository {
 
   Future<List<Map<String, dynamic>>> all() async {
     Database db = await instance.database;
-    return await db.query(_table,orderBy: "date desc");
+    return await db.query(_table, orderBy: "date desc");
   }
 
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int id = row[_columnId];
-    return await db.update(_table, row, where: '$_columnId = ?', whereArgs: [id]);
+    return await db
+        .update(_table, row, where: '$_columnId = ?', whereArgs: [id]);
   }
 
   Future<int> delete(int id) async {

@@ -52,6 +52,7 @@ class JournalProvider with ChangeNotifier {
         .toList();
   }
 
+
   Future<List<Journal>> fetchJournals() async {
     var allJournals = await JournalRepository.instance.all();
     var journalList = allJournals.map((e) {

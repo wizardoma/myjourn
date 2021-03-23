@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 class Journal {
@@ -34,16 +35,39 @@ class Journal {
     _date = value;
   }
 
+  static Journal fromNewMap(Map<String, dynamic> data){
+    var id = data["id"];
+    var body = data["body"];
+    var date = data["date"];
+
+    if (data["images"] !=null) {
+      return Journal(id, body, date);
+    }
+    return Journal(id, body, date);
+
+  }
+
   Journal.fromMap(Map<String, dynamic> data)
       : _id = data["id"],
         _body = data["body"],
-        _date = DateTime.fromMillisecondsSinceEpoch(data["date"]);
+        _date = DateTime.fromMillisecondsSinceEpoch(data["date"]),
+        _images = data["images"] != null
+            ? (data["images"] as String).split("|").map((e) {
+              return base64Decode(e);
+            }).toList()
+            : null;
 
   static Map<String, dynamic> toMap(Journal journal) {
+
+    var joinedImage = journal.images.map((e) => base64Encode(e)).join("|");
+
     return {
-      "id" : journal.id,
+      "id": journal.id,
       "body": journal.body,
       "date": journal._date.millisecondsSinceEpoch,
+      "images": journal.images != null || journal.images.length > 0
+          ? joinedImage
+          : null
     };
   }
 
