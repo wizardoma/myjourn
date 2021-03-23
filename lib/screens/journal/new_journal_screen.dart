@@ -428,6 +428,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   void pickImage(String type, setState) async {
     PickedFile pickedFile;
 
+
     if (type == "gallery") {
       pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
     }

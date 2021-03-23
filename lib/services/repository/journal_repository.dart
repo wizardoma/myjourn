@@ -8,6 +8,7 @@ class JournalRepository {
   static final _dbName = "journals.db";
   static final _dbVersion = 1;
   static final _table = "journals";
+  static final _columnImages = "images";
   static final _columnId = "id";
   static final _columnBody = "body";
   static final _columnDate = "date";
@@ -35,10 +36,10 @@ class JournalRepository {
     CREATE TABLE $_table (
     $_columnId INTEGER PRIMARY KEY,
     $_columnBody TEXT NOT NULL,
-    $_columnDate INTEGER NOT NULL )
+    $_columnDate INTEGER NOT NULL,
+    $_columnImages STRING )
     '''
     );
-
   }
 
   Future<int> insert(Map<String, dynamic> row) async{

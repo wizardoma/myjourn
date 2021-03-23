@@ -1,10 +1,20 @@
+import 'dart:typed_data';
+
 class Journal {
   int _id;
   String _body;
-
+  List<Uint8List> _images;
   DateTime _date;
 
-  Journal(this._id, this._body, this._date);
+  Journal(this._id, this._body, this._date, [this._images]);
+
+  set images(List<Uint8List> images) {
+    this._images = images;
+  }
+
+  List<Uint8List> get images {
+    return _images;
+  }
 
   int get id => _id;
 
