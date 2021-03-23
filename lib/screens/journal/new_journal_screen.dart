@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_date_section.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'new_journal_bottom_section.dart';
@@ -20,6 +24,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   TextEditingController bodyController;
   bool hasContent = false;
   Function(int id, BuildContext context) deleteJournal;
+  List<Uint8List> images = [];
   Journal journal;
   bool isNewJournal;
   bool hasBuilt = false;
@@ -67,7 +72,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
               Icons.linked_camera,
               color: Colors.grey,
             ),
-            onPressed: () {},
+            onPressed: selectImage,
           ),
           if (!isNewJournal)
             IconButton(
@@ -243,5 +248,202 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
         });
       }
     }
+  }
+
+  void selectImage() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (BuildContext context,
+                void Function(void Function()) setState) {
+              return Dialog(
+                insetPadding: EdgeInsets.all(10),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: 280,
+                    maxHeight: MediaQuery.of(context).size.height * 0.8,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "Add Pictures",
+                          style: Theme.of(context).textTheme.headline1.copyWith(
+                              fontWeight: FontWeight.w400, fontSize: 20),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InkWell(
+                              onTap: () => pickImage("gallery", setState),
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                color: Colors.black.withOpacity(0.6),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.photo,
+                                        size: 40,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        "Gallery",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4
+                                            .copyWith(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => pickImage("camera", setState),
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                color: Colors.black.withOpacity(0.6),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.camera,
+                                        size: 40,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        "Camera",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4
+                                            .copyWith(
+                                              fontSize: 15,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (images.length > 0)
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 20),
+                            child: GridView.builder(
+                              clipBehavior: Clip.none,
+                              shrinkWrap: true,
+                              itemCount: images.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child:
+                                      Stack(clipBehavior: Clip.none, children: [
+                                    Container(
+                                      child: Image.memory(
+                                        images[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: -10,
+                                      right: -10,
+                                      child: Container(
+                                        height: 25,
+                                        width: 25,
+                                        padding: EdgeInsets.all(3),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.red,
+//                                          shape: BoxShape.circle,
+                                        ),
+                                        child: FittedBox(
+                                          child: IconButton(
+                                            onPressed: () => removeImage(index, setState),
+                                            icon: Icon(
+                                              Icons.clear,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ]),
+                                );
+                              },
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2, crossAxisSpacing: 10),
+                            ),
+                          ),
+                        ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                            "OK",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        });
+  }
+
+  void pickImage(String type, setState) async {
+    PickedFile pickedFile;
+
+    if (type == "gallery") {
+      pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+    }
+    if (type == "camera") {
+      pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    }
+
+    var bytes = await pickedFile.readAsBytes();
+    setState(() {
+      images.add(bytes);
+    });
+  }
+
+  void removeImage(int index, setState){
+    setState(() {
+      images.removeAt(index);
+    });
   }
 }
