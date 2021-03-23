@@ -72,7 +72,7 @@ class JournalListItem extends StatelessWidget {
                   onTap: () => viewJournal(context, journals[index]),
                   child: Container(
                     width: double.infinity,
-                    height: 120,
+                    height: 100,
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.transparent)),
                     child: Column(
