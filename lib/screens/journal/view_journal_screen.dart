@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
+import 'package:flutterfrontend/screens/journal/image_carousel.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -30,15 +31,14 @@ class ViewJournalScreen extends StatelessWidget {
           );
         }).then((value) {
       if (value) {
-        return Provider.of<JournalProvider>(context, listen: false).deleteJournal(id);
+        return Provider.of<JournalProvider>(context, listen: false)
+            .deleteJournal(id);
       }
     }).then((result) {
-      if(!result) {
+      if (!result) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("An error occurred deleting this journal"))
-        );
-      }
-      else {
+            SnackBar(content: Text("An error occurred deleting this journal")));
+      } else {
         Navigator.pop(context);
       }
     });
@@ -89,7 +89,6 @@ class ViewJournalScreen extends StatelessWidget {
         constraints: BoxConstraints(
             minHeight: 260,
             maxHeight: MediaQuery.of(context).size.height * 0.8),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -103,79 +102,94 @@ class ViewJournalScreen extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-
+            if (journal.images.length > 0) JournalImageCarousel(journal.images),
             Container(
-              height: 70,
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        DateFormat('d').format(journal.time),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline3
-                            .copyWith(fontSize: 50),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
                             Text(
-                              DateFormat('EEEE').format(journal.time),
+                              DateFormat('d').format(journal.time),
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline2
-                                  .copyWith(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600),
+                                  .headline3
+                                  .copyWith(fontSize: 50),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    DateFormat('EEEE').format(journal.time),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    DateFormat("MMMM").format(journal.time),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline1
+                                        .copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        Text(
+                          DateFormat('jm').format(journal.time),
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    child: Container(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 3,
                             ),
                             Text(
-                              DateFormat("MMMM").format(journal.time),
+                              journal.body,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1
                                   .copyWith(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400),
                             )
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  Spacer(),
-                  Text(
-                    DateFormat('jm').format(journal.time),
-                    style: Theme.of(context).textTheme.headline3,
+                    ),
                   ),
                 ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Text(
-                        journal.body,
-                        style: Theme.of(context).textTheme.headline1.copyWith(
-                            fontSize: 18, fontWeight: FontWeight.w400),
-                      )
-                    ],
-                  ),
-                ),
               ),
             ),
           ],

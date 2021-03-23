@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
+import 'package:flutterfrontend/screens/journal/image_carousel.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_date_section.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,6 +59,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         leading: checkForLeadingAppBarContent(),
@@ -98,10 +100,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (images.length>0)
-                        Container(
-                          child: Text("Images here")
-                        ),
+                      if (images.length > 0)
+                        JournalImageCarousel(images),
                       DateSection(openDatePicker, openTimePicker, journal),
                       TextFieldSection(bodyController, setHasContent),
                     ],
