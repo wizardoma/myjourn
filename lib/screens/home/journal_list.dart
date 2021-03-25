@@ -10,6 +10,7 @@ class JournalList extends StatelessWidget {
   Widget build(BuildContext context) {
 //    final journals = Provider.of<JournalProvider>(context);
     return Scaffold(
+      backgroundColor: Theme.of(context).cardColor,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).pushNamed(NewJournalScreen.routeName,

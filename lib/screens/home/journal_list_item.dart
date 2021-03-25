@@ -12,6 +12,7 @@ class JournalListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
 //      height: 200,
+      color: Theme.of(context).cardColor,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       width: double.infinity,
       child: Column(
@@ -106,7 +107,7 @@ class JournalListItem extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              if (journals[index].images!=null)
+                              if (journals[index].images != null)
                                 Container(
                                   height: 80,
                                   width: 80,
@@ -121,7 +122,11 @@ class JournalListItem extends StatelessWidget {
                                         Positioned(
                                           top: 5,
                                           right: 5,
-                                          child: Icon(Icons.photo_album, size: 15, color: Colors.white,),
+                                          child: Icon(
+                                            Icons.photo_album,
+                                            size: 15,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                     ],
                                   ),

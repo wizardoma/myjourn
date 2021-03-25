@@ -131,7 +131,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
                   vertical: 10,
                   horizontal: 15,
                 ),
-                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                decoration: BoxDecoration(color: Theme.of(context).cardColor, boxShadow: [
                   BoxShadow(
                     color: Colors.grey,
                     blurRadius: 1,

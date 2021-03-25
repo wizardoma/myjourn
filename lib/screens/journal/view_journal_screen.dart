@@ -91,7 +91,7 @@ class ViewJournalScreen extends StatelessWidget {
             maxHeight: MediaQuery.of(context).size.height * 0.8),
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
                 color: Colors.grey,

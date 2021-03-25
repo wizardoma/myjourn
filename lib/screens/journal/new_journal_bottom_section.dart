@@ -11,7 +11,7 @@ class BottomSection extends StatelessWidget {
       height: 50,
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
               color: Colors.grey.shade200,

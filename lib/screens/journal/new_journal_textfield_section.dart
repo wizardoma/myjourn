@@ -9,6 +9,7 @@ class TextFieldSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Theme.of(context).cardColor,
       margin: EdgeInsets.only(top: 30),
       child: TextField(
         style: TextStyle(fontSize: 17),

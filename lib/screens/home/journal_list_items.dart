@@ -17,6 +17,7 @@ class JournalListItems extends StatelessWidget with JournalUtils {
       physics: ScrollPhysics(),
       separatorBuilder: (context, index) {
         return Divider(
+          color: Theme.of(context).dividerColor,
           thickness: 2,
         );
       },

@@ -13,6 +13,7 @@ class HomeScreen extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: Theme.of(context).cardColor,
         appBar: AppBar(
           title: Center(
             child: Text("MYJOURN"),

@@ -60,6 +60,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
 //      resizeToAvoidBottomInset: true,
+
       appBar: AppBar(
         elevation: 0,
         leading: checkForLeadingAppBarContent(),
@@ -67,7 +68,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
           "Write",
           style: TextStyle(color: Colors.grey),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).cardColor,
         actions: [
           IconButton(
             icon: Icon(
