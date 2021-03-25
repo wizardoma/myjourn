@@ -42,6 +42,10 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: "^0.8.0"
 
+flutter_icons:
+  image_path: "assets/logo/logo.png"
+  android: "launcher_icon"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
