@@ -114,58 +114,85 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void changeTheme(BuildContext context) {
+    var selectedTheme =
+        Provider.of<ThemeProvider>(context, listen: false).currentTheme;
     showDialog(
         context: context,
         builder: (context) {
           var themes = Provider.of<ThemeProvider>(context);
-          return Dialog(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                    "Theme",
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
+
+          return StatefulBuilder(
+            builder: (BuildContext context,
+                void Function(void Function()) setState) {
+              return Dialog(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        "Theme",
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: GridView.builder(
+                            itemCount: themes.themes.length,
+                            padding: EdgeInsets.all(15),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1,
+                                    childAspectRatio: 5,
+                                    crossAxisSpacing: 30,
+                                    mainAxisSpacing: 30),
+                            itemBuilder: (context, index) {
+                              var indexedTheme =
+                                  themes.themes.values.toList()[index];
+                              return InkWell(
+                                onTap: () {
+                                  setState(() => selectedTheme = indexedTheme);
+                                },
+                                child: Stack(children: [
+                                  Container(
+                                    color: themes.themes.values
+                                        .toList()[index]
+                                        .primaryColor,
+                                  ),
+                                  if (indexedTheme == selectedTheme)
+                                    Positioned(
+                                      right: 200,
+                                      child: Icon(
+                                        Icons.check_circle_outline,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                ]),
+                              );
+                            }),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        child: Text("Choose"),
+                        onPressed: () {
+                          Navigator.pop(
+                              context, selectedTheme ?? themes.currentTheme);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: GridView.builder(
-                        itemCount: themes.themes.length,
-                        padding: EdgeInsets.all(15),
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 1,
-                            childAspectRatio: 5,
-                            crossAxisSpacing: 30,
-                            mainAxisSpacing: 30),
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: (){
-                              themes.theme = themes.themes.values.toList()[index];
-                            },
-                            child: Container(
-                              color: themes.themes.values.toList()[index].primaryColor,
-                            ),
-                          );
-                        }),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    child: Text("Choose"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                )
-              ],
-            ),
+              );
+            },
           );
-        });
+        }).then((value) {
+      var theme = value as ThemeData;
+      Provider.of<ThemeProvider>(context, listen: false).theme = theme;
+    });
   }
 }
