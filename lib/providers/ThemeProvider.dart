@@ -18,7 +18,7 @@ class ThemeProvider with ChangeNotifier {
   set theme(String themeName) {
     print("Saving themeName : $themeName");
     ThemePreferences().setAppTheme(themeName);
-    themeName = themeName;
+    this.themeName = themeName;
     notifyListeners();
   }
 
