@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: "My Journal",
         debugShowCheckedModeBanner: false,
-        theme: theme,
+        theme: purpleTheme,
         routes: {
           NewJournalScreen.routeName: (context) => NewJournalScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),

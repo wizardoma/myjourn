@@ -64,6 +64,7 @@ class SettingsScreen extends StatelessWidget {
               SettingsTile(
                 title: "Theme",
                 subtitle: "Change themes (Includes Dark theme)",
+                onPressed: (context) => changeTheme(context),
               ),
             ],
           ),
@@ -108,5 +109,65 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void changeTheme(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    "Theme",
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: GridView(
+                      padding: EdgeInsets.all(15),
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          childAspectRatio: 5,
+                          crossAxisSpacing: 30,
+                          mainAxisSpacing: 30),
+                      children: [
+                        Container(
+                          height: 100,
+                          color: Colors.green,
+                        ),
+                        Container(
+                          color: Colors.pink,
+                        ),
+                        Container(
+                          color: Colors.red,
+                        ),
+                        Container(
+                          color: Colors.orange,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    child: Text("Choose"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 }
