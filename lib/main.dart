@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
       builder: (context, child) {
-        var currentTheme = Provider.of<ThemeProvider>(context).currentTheme;
+        var currentTheme = Provider.of<ThemeProvider>(context).currentThemeData;
         return MaterialApp(
           title: "My Journal",
           debugShowCheckedModeBanner: false,

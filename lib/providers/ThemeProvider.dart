@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutterfrontend/services/preferences/theme_preferences.dart';
 
 import '../themes.dart';
 
 class ThemeProvider with ChangeNotifier {
   Map<String, ThemeData> _themes = Themes.getThemes();
-  ThemeData _currentTheme = Themes.greenTheme;
+  String themeName = "green";
 
   Map<String, ThemeData> get themes {
     return _themes;
   }
 
-  set theme(ThemeData theme) {
-    this._currentTheme = theme;
+  get currentThemeData  {
+    return _themes[themeName];
+  }
+
+  set theme(String themeName) {
+    print("Saving themeName : $themeName");
+    ThemePreferences().setAppTheme(themeName);
+    themeName = themeName;
     notifyListeners();
   }
 
-  get currentTheme {
-    return _currentTheme;
+  Future<String> get currentTheme async{
+    var themeName = await ThemePreferences().getAppTheme();
+    return themeName;
   }
 }

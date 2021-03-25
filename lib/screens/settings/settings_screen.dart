@@ -113,9 +113,9 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void changeTheme(BuildContext context) {
+  void changeTheme(BuildContext context) async {
     var selectedTheme =
-        Provider.of<ThemeProvider>(context, listen: false).currentTheme;
+        await Provider.of<ThemeProvider>(context, listen: false).currentTheme;
     showDialog(
         context: context,
         builder: (context) {
@@ -148,19 +148,21 @@ class SettingsScreen extends StatelessWidget {
                                     crossAxisSpacing: 30,
                                     mainAxisSpacing: 30),
                             itemBuilder: (context, index) {
+                              var indexedKey = themes.themes.entries
+                                  .toList()
+                                  .elementAt(index)
+                                  .key;
                               var indexedTheme =
                                   themes.themes.values.toList()[index];
                               return InkWell(
                                 onTap: () {
-                                  setState(() => selectedTheme = indexedTheme);
+                                  setState(() => selectedTheme = indexedKey);
                                 },
                                 child: Stack(children: [
                                   Container(
-                                    color: themes.themes.values
-                                        .toList()[index]
-                                        .primaryColor,
+                                    color: indexedTheme.primaryColor,
                                   ),
-                                  if (indexedTheme == selectedTheme)
+                                  if (indexedKey == selectedTheme)
                                     Positioned(
                                       right: 200,
                                       child: Icon(
@@ -179,8 +181,7 @@ class SettingsScreen extends StatelessWidget {
                       child: TextButton(
                         child: Text("Choose"),
                         onPressed: () {
-                          Navigator.pop(
-                              context, selectedTheme ?? themes.currentTheme);
+                          Navigator.pop(context, selectedTheme);
                         },
                       ),
                     ),
@@ -190,7 +191,7 @@ class SettingsScreen extends StatelessWidget {
             },
           );
         }).then((value) {
-      var theme = value as ThemeData;
+      var theme = value as String;
       Provider.of<ThemeProvider>(context, listen: false).theme = theme;
     });
   }
