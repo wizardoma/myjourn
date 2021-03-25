@@ -5,7 +5,7 @@ import '../themes.dart';
 
 class ThemeProvider with ChangeNotifier {
   Map<String, ThemeData> _themes = Themes.getThemes();
-  String themeName = "green";
+  String themeName;
 
   Map<String, ThemeData> get themes {
     return _themes;
@@ -16,14 +16,18 @@ class ThemeProvider with ChangeNotifier {
   }
 
   set theme(String themeName) {
-    print("Saving themeName : $themeName");
     ThemePreferences().setAppTheme(themeName);
     this.themeName = themeName;
     notifyListeners();
   }
 
-  Future<String> get currentTheme async{
+  String get currentTheme{
+    return themeName;
+  }
+
+  Future<String> loadTheme() async {
     var themeName = await ThemePreferences().getAppTheme();
+    this.themeName = themeName;
     return themeName;
   }
 }

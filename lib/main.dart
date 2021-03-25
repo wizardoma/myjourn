@@ -24,19 +24,22 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
       builder: (context, child) {
-        var currentTheme = Provider.of<ThemeProvider>(context).currentThemeData;
-        return MaterialApp(
-          title: "My Journal",
-          debugShowCheckedModeBanner: false,
-          theme: currentTheme,
-          routes: {
-            NewJournalScreen.routeName: (context) => NewJournalScreen(),
-            HomeScreen.routeName: (context) => HomeScreen(),
-            SearchScreen.routeName: (context) => SearchScreen(),
-            SettingsScreen.routeName: (context) => SettingsScreen(),
-            ViewJournalScreen.routeName: (context) => ViewJournalScreen(),
-          },
-          home: HomeScreen(),
+        var themeProvider = Provider.of<ThemeProvider>(context);
+        return FutureBuilder(
+          future: themeProvider.loadTheme(),
+          builder: (context, AsyncSnapshot<String> data) => MaterialApp(
+            title: "My Journal",
+            debugShowCheckedModeBanner: false,
+            theme: themeProvider.currentThemeData,
+            routes: {
+              NewJournalScreen.routeName: (context) => NewJournalScreen(),
+              HomeScreen.routeName: (context) => HomeScreen(),
+              SearchScreen.routeName: (context) => SearchScreen(),
+              SettingsScreen.routeName: (context) => SettingsScreen(),
+              ViewJournalScreen.routeName: (context) => ViewJournalScreen(),
+            },
+            home: HomeScreen(),
+          ),
         );
       },
     );
