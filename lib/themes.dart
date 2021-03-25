@@ -1,35 +1,44 @@
 import 'package:flutter/material.dart';
 
+class Themes {
 //purple Theme
-var purpleColor = Colors.purple;
-var purpleAccent = Colors.purpleAccent;
+  static const _purpleColor = Colors.purple;
+  static const _purpleAccent = Colors.purpleAccent;
 
 // Green Theme
-var greenColor = Colors.green;
-var greenAccent = Colors.greenAccent;
+  static const _greenColor = Colors.green;
+  static const _greenAccent = Colors.greenAccent;
 
-var purpleTheme = ThemeData(
-    primarySwatch: purpleColor,
-    accentColor: purpleAccent,
-    textTheme: getTextTheme(purpleColor, purpleAccent));
+  static final purpleTheme = ThemeData(
+      primarySwatch: _purpleColor,
+      accentColor: _purpleAccent,
+      textTheme: _getTextTheme(_purpleColor, _purpleAccent));
 
-var greenTheme = ThemeData(
-    primarySwatch: greenColor,
-    accentColor: greenAccent,
-    textTheme: getTextTheme(greenColor, greenAccent),
-);
+  static final greenTheme = ThemeData(
+    primarySwatch: _greenColor,
+    accentColor: _greenAccent,
+    textTheme: _getTextTheme(_greenColor, _greenAccent),
+  );
 
-TextTheme getTextTheme(Color primaryColor, Color secondaryColor) {
-  return TextTheme(
-      headline1: TextStyle(
-          fontSize: 16, color: Colors.black, fontWeight: FontWeight.w400),
-      headline2: TextStyle(color: Colors.grey),
+  static TextTheme _getTextTheme(Color primaryColor, Color accentColor) {
+    return TextTheme(
+        headline1: TextStyle(
+            fontSize: 16, color: Colors.black, fontWeight: FontWeight.w400),
+        headline2: TextStyle(color: Colors.grey),
 // For textStyles that emulates the primarySwatch Color
-      headline3: TextStyle(
-          color: Colors.deepPurple, fontSize: 17, fontWeight: FontWeight.bold),
-      headline4: TextStyle(
-        color: Colors.white,
-      ));
+        headline3: TextStyle(
+            color: primaryColor,
+            fontSize: 17,
+            fontWeight: FontWeight.bold),
+        headline4: TextStyle(
+          color: Colors.white,
+        ));
+  }
+
+  static Map<String, ThemeData> getThemes(){
+    return {
+      "purple": purpleTheme,
+      "green": greenTheme,
+    };
+  }
 }
-
-
