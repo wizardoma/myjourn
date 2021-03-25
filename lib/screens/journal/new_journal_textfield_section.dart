@@ -12,7 +12,10 @@ class TextFieldSection extends StatelessWidget {
       color: Theme.of(context).cardColor,
       margin: EdgeInsets.only(top: 30),
       child: TextField(
-        style: TextStyle(fontSize: 17),
+        style: TextStyle(
+          fontSize: 17,
+          color: Theme.of(context).textTheme.headline1.color
+        ),
         cursorColor: Theme.of(context).accentColor,
         autofocus: true,
         keyboardType: TextInputType.multiline,

@@ -62,12 +62,14 @@ class Themes {
       primaryColor: primaryColor,
       cardColor: isDarkTheme ? Colors.black : Colors.white,
       accentColor: accentColor,
-      dividerColor: isDarkTheme ? Colors.white: Colors.grey.shade200,
+      dividerColor: isDarkTheme ? Colors.white : Colors.grey.shade200,
       backgroundColor: isDarkTheme ? Colors.black : Colors.white,
       textTheme: TextTheme(
-
+        bodyText1: TextStyle(color: isDarkTheme ? Colors.white : Colors.black),
         headline1: TextStyle(
-            fontSize: 16, color: isDarkTheme ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
+            fontSize: 16,
+            color: isDarkTheme ? Colors.white : Colors.black,
+            fontWeight: FontWeight.w400),
         headline2: TextStyle(color: Colors.grey),
 // For textStyles that emulates the primarySwatch Color
         headline3: TextStyle(

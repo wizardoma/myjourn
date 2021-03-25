@@ -60,7 +60,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
 //      resizeToAvoidBottomInset: true,
-
+      backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
         elevation: 0,
         leading: checkForLeadingAppBarContent(),
@@ -135,7 +135,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
             icon: Icon(
               Icons.check_circle,
               size: 35,
-              color: Colors.green,
+              color: Theme.of(context).accentColor.withOpacity(0.8),
             ),
             onPressed: saveJournal,
           )

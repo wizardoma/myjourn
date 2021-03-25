@@ -97,8 +97,8 @@ class MoreScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade200)),
                     child: ListTile(
-                      leading: Icon(e["icon"]),
-                      title: Text(e["title"]),
+                      leading: Icon(e["icon"], color: Colors.grey,),
+                      title: Text(e["title"], style: Theme.of(context).textTheme.headline1,),
                     ),
                   );
                 }).toList(),
