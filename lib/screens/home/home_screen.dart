@@ -33,6 +33,7 @@ class HomeScreen extends StatelessWidget {
                 itemBuilder: (context) {
                   return {"Setting"}.map((e) {
                     return PopupMenuItem(
+                      textStyle: Theme.of(context).textTheme.headline1,
                       child: Text(e),
                       value: e,
                     );

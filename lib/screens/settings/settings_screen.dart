@@ -133,10 +133,9 @@ class SettingsScreen extends StatelessWidget {
                       padding: EdgeInsets.all(20),
                       child: Text(
                         "Theme",
-                        style: Theme.of(context).textTheme.headline1,
                       ),
                     ),
-                    Expanded(
+                    Flexible(
                       child: SingleChildScrollView(
                         child: GridView.builder(
                             itemCount: themes.themes.length,
