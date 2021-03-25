@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../themes.dart';
 
 class ThemeProvider with ChangeNotifier {
-  Map<String, ThemeData> _themes;
+  Map<String, ThemeData> _themes = Themes.getThemes();
   ThemeData _currentTheme = Themes.greenTheme;
 
-  get themes {
+  Map<String, ThemeData> get themes {
     return _themes;
   }
 
-  set themes(ThemeData theme) {
+  set theme(ThemeData theme) {
     this._currentTheme = theme;
     notifyListeners();
   }

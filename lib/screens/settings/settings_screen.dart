@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutterfrontend/providers/ThemeProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -115,6 +117,7 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
         context: context,
         builder: (context) {
+          var themes = Provider.of<ThemeProvider>(context);
           return Dialog(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -129,30 +132,25 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                    child: GridView(
-                      padding: EdgeInsets.all(15),
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          childAspectRatio: 5,
-                          crossAxisSpacing: 30,
-                          mainAxisSpacing: 30),
-                      children: [
-                        Container(
-                          height: 100,
-                          color: Colors.green,
-                        ),
-                        Container(
-                          color: Colors.pink,
-                        ),
-                        Container(
-                          color: Colors.red,
-                        ),
-                        Container(
-                          color: Colors.orange,
-                        ),
-                      ],
-                    ),
+                    child: GridView.builder(
+                        itemCount: themes.themes.length,
+                        padding: EdgeInsets.all(15),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            childAspectRatio: 5,
+                            crossAxisSpacing: 30,
+                            mainAxisSpacing: 30),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: (){
+                              themes.theme = themes.themes.values.toList()[index];
+                            },
+                            child: Container(
+                              color: themes.themes.values.toList()[index].primaryColor,
+                            ),
+                          );
+                        }),
                   ),
                 ),
                 Container(
