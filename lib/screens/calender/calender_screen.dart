@@ -69,6 +69,9 @@ class _CalenderScreenState extends State<CalenderScreen> {
                 Material(
                   elevation: 4,
                   child: TableCalendar(
+                    calendarStyle: CalendarStyle(
+
+                    ),
                     events: events,
                     onDaySelected: (DateTime datetime, _, __) {
                       setState(() {

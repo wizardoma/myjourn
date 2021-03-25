@@ -88,6 +88,7 @@ class JournalListItem extends StatelessWidget {
                         ),
                         Flexible(
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
                                 child: Container(
