@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/server/.mvn/.mvn.iml" filepath="$PROJECT_DIR$/server/.mvn/.mvn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/MyJournDiary.iml" filepath="$PROJECT_DIR$/.idea/MyJournDiary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/sqflite/intermediates/aapt_friendly_merged_manifests/debug/aapt/aapt.iml" filepath="$PROJECT_DIR$/app/build/sqflite/intermediates/aapt_friendly_merged_manifests/debug/aapt/aapt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/android/android.iml" filepath="$PROJECT_DIR$/app/android/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/app/app.iml" filepath="$PROJECT_DIR$/app/build/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/sqflite/intermediates/library_manifest/debug/debug.iml" filepath="$PROJECT_DIR$/app/build/sqflite/intermediates/library_manifest/debug/debug.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/flutter_plugin_android_lifecycle/flutter_plugin_android_lifecycle.iml" filepath="$PROJECT_DIR$/app/build/flutter_plugin_android_lifecycle/flutter_plugin_android_lifecycle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/image_picker/image_picker.iml" filepath="$PROJECT_DIR$/app/build/image_picker/image_picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server/src/main/main.iml" filepath="$PROJECT_DIR$/server/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myjournserver/myjournserver.iml" filepath="$PROJECT_DIR$/myjournserver/myjournserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/app/intermediates/merged_manifest/debug/out/out.iml" filepath="$PROJECT_DIR$/app/build/app/intermediates/merged_manifest/debug/out/out.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/path_provider/path_provider.iml" filepath="$PROJECT_DIR$/app/build/path_provider/path_provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/android/app/src/profile/profile.iml" filepath="$PROJECT_DIR$/app/android/app/src/profile/profile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/shared_preferences/shared_preferences.iml" filepath="$PROJECT_DIR$/app/build/shared_preferences/shared_preferences.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/build/sqflite/sqflite.iml" filepath="$PROJECT_DIR$/app/build/sqflite/sqflite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server/src/test/test.iml" filepath="$PROJECT_DIR$/server/src/test/test.iml" />
+    </modules>
+  </component>
+</project>
