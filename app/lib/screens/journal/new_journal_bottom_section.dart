@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
-class BottomSection extends StatelessWidget {
+class BottomSection extends StatefulWidget {
   final Function(BuildContext context) discardChanges;
+  final TextEditingController bodyController;
 
-  BottomSection(this.discardChanges);
+  BottomSection(this.discardChanges, this.bodyController);
 
+  @override
+  _BottomSectionState createState() => _BottomSectionState();
+}
+
+class _BottomSectionState extends State<BottomSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,7 +30,7 @@ class BottomSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-            onPressed: () => discardChanges(context),
+            onPressed: () => widget.discardChanges(context),
             icon: Icon(
               Icons.clear,
               color: Colors.grey,
@@ -41,4 +47,6 @@ class BottomSection extends StatelessWidget {
       ),
     );
   }
+
+
 }

@@ -58,8 +58,11 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context);
+    var bottomInset = mediaQuery.viewInsets.bottom;
+    print(" Bottom inset ${bottomInset}");
     return Scaffold(
-//      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
         elevation: 0,
@@ -92,37 +95,46 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//              crossAxisAlignment: CrossAxisAlignment.stretch,
+            width: mediaQuery.size.width,
+            height: mediaQuery.size.height,
+            child: Stack(
               children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 15),
-                  child: ListView(
-                    physics: ScrollPhysics(),
-                    shrinkWrap: true,
-                    children: [
-                      if (images != null) JournalImageCarousel(images),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            DateSection(
-                                openDatePicker, openTimePicker, journal),
-                            TextFieldSection(bodyController, setHasContent),
-                          ],
+                Positioned(
+                  top: 0,
+                  bottom:  bottomInset <=10 ? 0 : bottomInset + 50,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 15),
+                    child: ListView(
+                      physics: ScrollPhysics(),
+                      shrinkWrap: true,
+                      children: [
+                        if (images != null) JournalImageCarousel(images),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              DateSection(
+                                  openDatePicker, openTimePicker, journal),
+                              TextFieldSection(bodyController, setHasContent),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  child: BottomSection(discardChanges),
+                Positioned(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+//                  alignment: Alignment.bottomCenter,
+                    child: BottomSection(discardChanges, bodyController),
+                  ),
                 )
               ],
             ),
