@@ -15,6 +15,7 @@ class BottomSection extends StatefulWidget {
 class _BottomSectionState extends State<BottomSection> {
   bool isListening = false;
   SpeechToText stt;
+  String recognizedWords = "";
 
   @override
   void initState() {
@@ -96,10 +97,11 @@ class _BottomSectionState extends State<BottomSection> {
 
   void speechToText(BuildContext context) async {
     bool available = await stt.initialize(onStatus: (status) {
-      print("Status: $status");
       if (status != "listening") {
-        setState(() {
-          isListening = false;
+        widget.bodyController.selection = TextSelection.fromPosition(TextPosition(offset: widget.bodyController.text.length));
+        widget.bodyController.text += recognizedWords;
+          setState(() { isListening = false;
+          recognizedWords = "";
         });
       }
     });
@@ -109,11 +111,12 @@ class _BottomSectionState extends State<BottomSection> {
       });
     }
 
-    print("is it gonna record ? $available ");
     stt.listen(
         onResult: (SpeechRecognitionResult result) {
-          widget.bodyController.text += result.recognizedWords;
+          setState(() {
+            recognizedWords += result.recognizedWords;
+          });
         },
-        listenFor: Duration(seconds: 15));
+        listenFor: Duration(seconds: 15)).then((value) => print("value $value"));
   }
 }

@@ -60,7 +60,6 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     var bottomInset = mediaQuery.viewInsets.bottom;
-    print(" Bottom inset ${bottomInset}");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
@@ -128,7 +127,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                   ),
                 ),
                 Positioned(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  bottom: mediaQuery.viewInsets.bottom,
                   left: 0,
                   right: 0,
                   child: Container(
