@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class BottomSection extends StatefulWidget {
   final Function(BuildContext context) discardChanges;
@@ -11,6 +13,22 @@ class BottomSection extends StatefulWidget {
 }
 
 class _BottomSectionState extends State<BottomSection> {
+  bool isListening = false;
+  SpeechToText stt;
+
+  @override
+  void initState() {
+    super.initState();
+    stt = SpeechToText();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    stt.stop();
+    stt.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +56,7 @@ class _BottomSectionState extends State<BottomSection> {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () => speechToText(context),
               icon: Icon(
                 Icons.mic,
                 color: Colors.grey,
@@ -46,23 +64,56 @@ class _BottomSectionState extends State<BottomSection> {
             ),
           ],
         ),
-        Container(
-          height: 60,
-          color: Theme.of(context).cardColor,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                "Listening",
-                style: Theme.of(context).textTheme.headline1,
+        if (isListening)
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isListening = false;
+                stt.stop();
+              });
+            },
+            child: Container(
+              height: 60,
+              color: Theme.of(context).cardColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    "Listening",
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                  Icon(
+                    Icons.mic,
+                    color: Colors.grey,
+                  )
+                ],
               ),
-              Icon(
-                Icons.mic,
-              )
-            ],
-          ),
-        )
+            ),
+          )
       ]),
     );
+  }
+
+  void speechToText(BuildContext context) async {
+    bool available = await stt.initialize(onStatus: (status) {
+      print("Status: $status");
+      if (status != "listening") {
+        setState(() {
+          isListening = false;
+        });
+      }
+    });
+    if (available) {
+      setState(() {
+        isListening = true;
+      });
+    }
+
+    print("is it gonna record ? $available ");
+    stt.listen(
+        onResult: (SpeechRecognitionResult result) {
+          widget.bodyController.text += result.recognizedWords;
+        },
+        listenFor: Duration(seconds: 15));
   }
 }
