@@ -26,27 +26,43 @@ class _BottomSectionState extends State<BottomSection> {
               offset: Offset(0, 0))
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            onPressed: () => widget.discardChanges(context),
-            icon: Icon(
-              Icons.clear,
-              color: Colors.grey,
+      child: Stack(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () => widget.discardChanges(context),
+              icon: Icon(
+                Icons.clear,
+                color: Colors.grey,
+              ),
             ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.mic,
-              color: Colors.grey,
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.mic,
+                color: Colors.grey,
+              ),
             ),
+          ],
+        ),
+        Container(
+          height: 60,
+          color: Theme.of(context).cardColor,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                "Listening",
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              Icon(
+                Icons.mic,
+              )
+            ],
           ),
-        ],
-      ),
+        )
+      ]),
     );
   }
-
-
 }
