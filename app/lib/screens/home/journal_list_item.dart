@@ -10,6 +10,7 @@ class JournalListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
 //      height: 200,
       color: Theme.of(context).cardColor,
@@ -117,6 +118,8 @@ class JournalListItem extends StatelessWidget {
                                     children: [
                                       Image.memory(
                                         journals[index].images[0],
+                                        width: 80,
+                                        height: 80,
                                         fit: BoxFit.cover,
                                       ),
                                       if (journals[index].images.length > 1)
