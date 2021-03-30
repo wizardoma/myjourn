@@ -33,4 +33,4 @@ build/
 .vscode/
 
 #prod database
-#/src/main/resources/application-prod.properties
+/myjournserver/src/main/resources/application-prod.properties
