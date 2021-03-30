@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/flutterfrontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/myjournserver" vcs="Git" />
   </component>
 </project>
