@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class JournalController {
     }
 
     @PostMapping
-    public ResponseEntity<Journal> saveJournal(@ModelAttribute Journal journal) {
+    public ResponseEntity<Journal> saveJournal(@Valid @ModelAttribute Journal journal) {
         return ResponseEntity.created(URI.create("")).body(journalService.save(journal));
     }
 
