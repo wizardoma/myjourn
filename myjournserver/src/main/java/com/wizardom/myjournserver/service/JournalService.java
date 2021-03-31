@@ -36,4 +36,7 @@ public class JournalService {
         return journalRepository.findById(id).get();
     }
 
+    public List<Journal> getAll() {
+        return journalRepository.findAll();
+    }
 }
