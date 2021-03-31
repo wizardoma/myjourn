@@ -11,9 +11,9 @@ mixin JournalUtils {
     journals.map((e) {
       // have a distinct year, month and day in map
       return result.putIfAbsent(DateTime(e.time.year, e.time.month, e.time.day), () {
-        return journals.where((element) {
+        return journals.where((journal) {
           // filter journals that correspond with the current date
-         return element.time.year == e.time.year && element.time.month == e.time.month && element.time.day == e.time.day;
+         return journal.time.year == e.time.year && journal.time.month == e.time.month && journal.time.day == e.time.day;
         }).toList();
       });
     }).toList();
