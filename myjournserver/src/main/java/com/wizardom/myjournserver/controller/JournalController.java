@@ -1,5 +1,7 @@
 package com.wizardom.myjournserver.controller;
 
+import com.wizardom.myjournserver.controller.request.JournalDto;
+import com.wizardom.myjournserver.controller.request.JournalMapper;
 import com.wizardom.myjournserver.model.Journal;
 import com.wizardom.myjournserver.service.JournalService;
 import lombok.RequiredArgsConstructor;
@@ -8,11 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.text.ParseException;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/journals")
 public class JournalController {
+
 
     private final JournalService journalService;
 
@@ -22,8 +26,8 @@ public class JournalController {
     }
 
     @PostMapping
-    public ResponseEntity<Journal> saveJournal(@Valid @ModelAttribute Journal journal) {
-        return ResponseEntity.created(URI.create("")).body(journalService.save(journal));
+    public ResponseEntity<?> saveJournal(@Valid @ModelAttribute JournalDto journal) throws ParseException {
+        return ResponseEntity.created(URI.create("")).body(JournalMapper.toDto(journalService.save(JournalMapper.toJournal(journal))));
     }
 
     @DeleteMapping("{id}")
@@ -33,8 +37,8 @@ public class JournalController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Journal> getJournalByID(@PathVariable("id") long id) {
-        return ResponseEntity.ok(journalService.getById(id));
+    public ResponseEntity<?> getJournalByID(@PathVariable("id") long id) {
+        return ResponseEntity.ok(JournalMapper.toDto(journalService.getById(id)));
     }
 
 

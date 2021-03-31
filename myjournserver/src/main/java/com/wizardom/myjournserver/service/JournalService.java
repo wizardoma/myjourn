@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,10 +21,11 @@ public class JournalService {
         return journalRepository.save(journal);
     }
 
-    public Journal edit(long id, String body, LocalDateTime time, List<MultipartFile> images){
+    public Journal edit(long id, String body, String time, List<MultipartFile> images){
+
         Journal journal = journalRepository.findById(id).get()
                 .setBody(body)
-                .setDate(time)
+                .setDate(Instant.ofEpochMilli(Long.parseLong(time)))
                 .setImages(Collections.emptyList());
         return journalRepository.save(journal);
     }
