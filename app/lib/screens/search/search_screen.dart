@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/journal_events.dart';
+import 'package:flutterfrontend/bloc/journal_state.dart';
+import 'package:flutterfrontend/bloc/search_journal_bloc.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/journal_list_items.dart';
@@ -58,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
               });
             }
           },
-          onSubmitted: (query) => searchJournals(query),
+          onSubmitted: (query) => searchJournals(query, context),
           style: TextStyle(
             color: Colors.white,
           ),
@@ -73,23 +77,34 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: !hasSearched
           ? Container()
-          : searchResults.length == 0
-              ?
-//      noSearchFound(context);
-              Center(
-                  child: Text("No Search found"),
-                )
-              : JournalListItems(searchResults),
+          : BlocBuilder<SearchJournalBloc, JournalState>(
+
+              builder: (BuildContext context, state) {
+                if (state is InitialJournalState) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is SearchEmpty) {
+                  return Center(
+                    child: Text("No Search found"),
+                  );
+                } else if (state is SearchFound) {
+                  return JournalListItems(state.journals); }
+                else return Container();
+              },
+            ),
     );
   }
 
-  void searchJournals(String query) {
+  void searchJournals(String query, BuildContext context) {
     if (query == null || query.isEmpty) {
       return;
     }
+
     setState(() {
-      searchResults = Provider.of<JournalProvider>(context, listen: false)
-          .searchJournal(query);
+      context.read<SearchJournalBloc>().add(SearchJournalEvent(query));
+//      searchResults = Provider.of<JournalProvider>(context, listen: false)
+//          .searchJournal(query);
       hasSearched = true;
     });
   }
