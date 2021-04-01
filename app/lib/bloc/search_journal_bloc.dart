@@ -1,13 +1,25 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/journal_bloc.dart';
 import 'package:flutterfrontend/bloc/journal_events.dart';
 import 'package:flutterfrontend/bloc/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';
 
 class SearchJournalBloc extends Bloc<JournalEvents, JournalState> {
-  final JournalRepository _repository;
+  JournalRepository _repository;
+  StreamSubscription streamSubscription;
 
-  SearchJournalBloc(JournalRepository repository) : _repository = repository?? JournalRepository.instance, super(SearchEmpty());
+
+  SearchJournalBloc(JournalRepository repository) : super(InitialJournalState()) {
+    this._repository = repository?? JournalRepository.instance;
+//    streamSubscription = stream.listen((event) {
+//      if (event is FetchJournalsSuccess){
+//        _journals = event.journals;
+//      }
+//    });
+    }
 
   List<Journal> _journals = [];
 

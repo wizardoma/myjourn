@@ -11,7 +11,7 @@ class SearchFound extends JournalState {
   SearchFound(this._journals);
   get journals => _journals;
 }
-
+class LoadingState extends JournalState{}
 class InitialJournalState extends JournalState{}
 class DeleteSuccess extends JournalState{}
 class DeleteFailure extends JournalState{}

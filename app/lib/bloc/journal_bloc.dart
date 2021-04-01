@@ -29,11 +29,12 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
     }
 
     if (event is FetchJournalsEvent){
-      yield await fetchJournals(event);
+      yield LoadingState();
+      yield await fetchJournals();
     }
   }
 
-  Future<JournalState> fetchJournals(FetchJournalsEvent event) async{
+  Future<JournalState> fetchJournals() async{
     try {
       var journals = (await _repository.all()).map((e) => Journal.fromNewMap(e)).toList();
       _journals = journals;
