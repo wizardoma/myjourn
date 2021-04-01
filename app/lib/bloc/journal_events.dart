@@ -16,12 +16,12 @@ class SearchJournalEvent extends JournalEvents {
   SearchJournalEvent(this.query);
 }
 
-class GetJournalsEvent extends JournalEvents{
+class FetchJournalsEvent extends JournalEvents{
 
 }
 
 class DeleteJournalEvent extends JournalEvents {
-  final String id;
+  final int id;
 
   DeleteJournalEvent(this.id);
 }

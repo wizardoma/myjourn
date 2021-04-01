@@ -12,6 +12,7 @@ class SearchFound extends JournalState {
   get journals => _journals;
 }
 
+class InitialJournalState extends JournalState{}
 class DeleteSuccess extends JournalState{}
 class DeleteFailure extends JournalState{}
 class EditSuccess extends JournalState{}
@@ -22,5 +23,8 @@ class FetchJournalsSuccess extends JournalState{
   FetchJournalsSuccess(this._journals);
   get journals => _journals;
 }
-class AddJournalSuccess extends JournalState{}
+class FetchJournalsFailure extends JournalState{}
+class AddJournalSuccess extends JournalState{
+
+}
 class AddJournalFailure extends JournalState{}
