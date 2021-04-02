@@ -58,7 +58,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
     try {
       var result = await _repository.update(Journal.toMap(event.journal));
       if (databaseOpWasSuccessful(result)){
-        return EditSuccess();
+        return EditSuccess(event.journal);
       }
       return EditFailure();
     }
@@ -71,7 +71,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
     try {
       var result = await _repository.insert(Journal.toMap(event.journal));
       if (databaseOpWasSuccessful(result))
-      return AddJournalSuccess();
+      return AddJournalSuccess(event.journal);
       else return AddJournalFailure();
     }
     catch (e) {

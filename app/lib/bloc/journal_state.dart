@@ -21,7 +21,11 @@ class LoadingState extends JournalState{}
 class InitialJournalState extends JournalState{}
 class DeleteSuccess extends JournalState{}
 class DeleteFailure extends JournalState{}
-class EditSuccess extends JournalState{}
+class EditSuccess extends JournalState{
+  final Journal journal;
+
+  EditSuccess(this.journal);
+}
 class EditFailure extends JournalState{}
 class FetchJournalsSuccess extends JournalState{
   final List<Journal> _journals;
@@ -31,6 +35,9 @@ class FetchJournalsSuccess extends JournalState{
 }
 class FetchJournalsFailure extends JournalState{}
 class AddJournalSuccess extends JournalState{
+  final Journal journal;
+
+  AddJournalSuccess(this.journal);
 
 }
 class AddJournalFailure extends JournalState{}

@@ -2,8 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/journal_bloc.dart';
+import 'package:flutterfrontend/bloc/journal_events.dart';
+import 'package:flutterfrontend/bloc/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
-import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/screens/journal/image_carousel.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_date_section.dart';
@@ -91,51 +94,64 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                 })
         ],
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            width: mediaQuery.size.width,
-            height: mediaQuery.size.height,
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  bottom:  bottomInset <=10 ? 0 : bottomInset + 50,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: ListView(
-                      physics: ScrollPhysics(),
-                      shrinkWrap: true,
-                      children: [
-                        if (images != null) JournalImageCarousel(images),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              DateSection(
-                                  openDatePicker, openTimePicker, journal),
-                              TextFieldSection(bodyController, setHasContent),
-                            ],
+      body: BlocListener<JournalBloc, JournalState>(
+        listener: (context, state) {
+          if (state is AddJournalFailure || state is EditFailure){
+            showErrorMessage(context);
+          }
+          if (state is AddJournalSuccess){
+            viewJournalAfterSave(context, state.journal);
+          }
+          if (state is EditSuccess){
+            viewJournalAfterSave(context, state.journal);
+          }
+        },
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Container(
+              width: mediaQuery.size.width,
+              height: mediaQuery.size.height,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    bottom:  bottomInset <=10 ? 0 : bottomInset + 50,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 15),
+                      child: ListView(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        children: [
+                          if (images != null) JournalImageCarousel(images),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                DateSection(
+                                    openDatePicker, openTimePicker, journal),
+                                TextFieldSection(bodyController, setHasContent),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: mediaQuery.viewInsets.bottom,
-                  left: 0,
-                  right: 0,
-                  child: Container(
+                  Positioned(
+                    bottom: mediaQuery.viewInsets.bottom,
+                    left: 0,
+                    right: 0,
+                    child: Container(
 //                  alignment: Alignment.bottomCenter,
-                    child: BottomSection(discardChanges, bodyController),
-                  ),
-                )
-              ],
+                      child: BottomSection(discardChanges, bodyController),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -207,21 +223,12 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
 
     Journal savedJournal = Journal(id, body, time, images ?? images);
 
-    var journalProvider = Provider.of<JournalProvider>(context, listen: false);
     if (isNewJournal) {
-      journalProvider.addJournal(savedJournal).then((value) {
-        if (value)
-          viewJournalAfterSave(context, savedJournal);
-        else
-          showErrorMessage(context);
-      });
+      context.read<JournalBloc>().add(AddJournalEvent(savedJournal));
+
     } else {
-      journalProvider.editJournal(savedJournal).then((value) {
-        if (value)
-          viewJournalAfterSave(context, savedJournal);
-        else
-          showErrorMessage(context);
-      });
+      context.read<JournalBloc>().add(EditJournalEvent(savedJournal));
+
     }
   }
 
