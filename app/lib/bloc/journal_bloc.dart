@@ -17,20 +17,29 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
   Stream<JournalState> mapEventToState(JournalEvents event) async*{
     yield InitialJournalState();
     if (event is AddJournalEvent){
+      yield LoadingState();
       yield await insertJournal(event);
     }
 
+
     if (event is DeleteJournalEvent){
+      yield LoadingState();
       yield await deleteJournal(event);
     }
 
     if (event is EditJournalEvent){
+      yield LoadingState();
       yield await editJournal(event);
     }
 
     if (event is FetchJournalsEvent){
       yield LoadingState();
       yield await fetchJournals();
+    }
+
+    if (event is FetchJournalEvent){
+      yield LoadingState();
+      yield await fetchJournalByID(event);
     }
   }
 
@@ -86,6 +95,22 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
     catch (e) {
       return DeleteFailure();
     }
+  }
+
+  Future<JournalState> fetchJournalByID(FetchJournalEvent event) async{
+   try {
+     var result = await _repository.getById(event.id);
+     if (result.length > 0) {
+       return FetchJournalSuccess(Journal.fromNewMap(result[0]));
+     }
+     if (result.length == 0){
+       return FetchJournalEmpty();
+     }
+   }
+   catch (e) {
+     print(e);
+     return FetchJournalEmpty();
+   }
   }
 
 }

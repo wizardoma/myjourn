@@ -4,6 +4,12 @@ abstract class JournalEvents {
   const JournalEvents();
 }
 
+class FetchJournalEvent extends JournalEvents {
+  final int id;
+
+  FetchJournalEvent(this.id);
+}
+
 class AddJournalEvent extends JournalEvents {
   final Journal journal;
 

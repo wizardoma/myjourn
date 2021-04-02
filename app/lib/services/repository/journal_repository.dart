@@ -47,6 +47,11 @@ class JournalRepository {
     return await database.insert(_table, row);
   }
 
+  Future<List<Map<String, dynamic>>> getById(int id) async {
+    Database db = await instance.database;
+    return await db.query(_table, where: '$_columnId= ?', whereArgs: [id]);
+  }
+
   Future<List<Map<String, dynamic>>> all() async {
     Database db = await instance.database;
     return await db.query(_table, orderBy: "date desc");
