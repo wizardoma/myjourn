@@ -80,7 +80,7 @@ class _SearchScreenState extends State<SearchScreen> {
           : BlocBuilder<SearchJournalBloc, JournalState>(
 
               builder: (BuildContext context, state) {
-                if (state is InitialJournalState) {
+                if (state is InitialJournalState || state is LoadingState) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
@@ -100,11 +100,8 @@ class _SearchScreenState extends State<SearchScreen> {
     if (query == null || query.isEmpty) {
       return;
     }
-
+    context.read<SearchJournalBloc>().add(SearchJournalEvent(query));
     setState(() {
-      context.read<SearchJournalBloc>().add(SearchJournalEvent(query));
-//      searchResults = Provider.of<JournalProvider>(context, listen: false)
-//          .searchJournal(query);
       hasSearched = true;
     });
   }

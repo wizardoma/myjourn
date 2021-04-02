@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   final JournalRepository repository;
 
   MyApp(this.repository);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -38,28 +39,29 @@ class MyApp extends StatelessWidget {
         return FutureBuilder(
           future: themeProvider.loadTheme(),
           builder: (context, AsyncSnapshot<String> data) => MultiBlocProvider(
-
             providers: [
               BlocProvider(
-                create: (ctx) => JournalBloc(repository)..add(FetchJournalsEvent()),
+                create: (ctx) =>
+                    JournalBloc(repository)..add(FetchJournalsEvent()),
               ),
               BlocProvider(
-              create: (context) => SearchJournalBloc(repository),),
-        ],
-              child: MaterialApp(
-                title: "My Journal",
-                debugShowCheckedModeBanner: false,
-                theme: themeProvider.currentThemeData,
-                routes: {
-                  NewJournalScreen.routeName: (context) => NewJournalScreen(),
-                  HomeScreen.routeName: (context) => HomeScreen(),
-                  SearchScreen.routeName: (context) => SearchScreen(),
-                  SettingsScreen.routeName: (context) => SettingsScreen(),
-                  ViewJournalScreen.routeName: (context) => ViewJournalScreen(),
-                },
-                home: HomeScreen(),
+                create: (context) => SearchJournalBloc(repository),
               ),
+            ],
+            child: MaterialApp(
+              title: "My Journal",
+              debugShowCheckedModeBanner: false,
+              theme: themeProvider.currentThemeData,
+              routes: {
+                NewJournalScreen.routeName: (context) => NewJournalScreen(),
+                HomeScreen.routeName: (context) => HomeScreen(),
+                SearchScreen.routeName: (context) => SearchScreen(),
+                SettingsScreen.routeName: (context) => SettingsScreen(),
+                ViewJournalScreen.routeName: (context) => ViewJournalScreen(),
+              },
+              home: HomeScreen(),
             ),
+          ),
         );
       },
     );
