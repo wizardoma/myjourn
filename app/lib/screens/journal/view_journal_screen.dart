@@ -30,7 +30,9 @@ class ViewJournalScreen extends StatelessWidget {
                       child: Text("CANCEL")),
                   TextButton(
                       onPressed: () {
-                        context.read<JournalBloc>().add(DeleteJournalEvent(id));
+                        context.read<JournalBloc>()
+                          ..add(DeleteJournalEvent(id))
+                          ..add(FetchJournalsEvent());
                       },
                       child: Text("DELETE"))
                 ],

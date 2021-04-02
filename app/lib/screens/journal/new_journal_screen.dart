@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/journal_bloc.dart';
@@ -96,13 +95,13 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
       ),
       body: BlocListener<JournalBloc, JournalState>(
         listener: (context, state) {
-          if (state is AddJournalFailure || state is EditFailure){
+          if (state is AddJournalFailure || state is EditFailure) {
             showErrorMessage(context);
           }
-          if (state is AddJournalSuccess){
+          if (state is AddJournalSuccess) {
             viewJournalAfterSave(context, state.journal);
           }
-          if (state is EditSuccess){
+          if (state is EditSuccess) {
             viewJournalAfterSave(context, state.journal);
           }
         },
@@ -115,7 +114,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                 children: [
                   Positioned(
                     top: 0,
-                    bottom:  bottomInset <=10 ? 0 : bottomInset + 50,
+                    bottom: bottomInset <= 10 ? 0 : bottomInset + 50,
                     left: 0,
                     right: 0,
                     child: Container(
@@ -224,11 +223,13 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     Journal savedJournal = Journal(id, body, time, images ?? images);
 
     if (isNewJournal) {
-      context.read<JournalBloc>().add(AddJournalEvent(savedJournal));
-
+      context.read<JournalBloc>()
+        ..add(AddJournalEvent(savedJournal))
+        ..add(FetchJournalsEvent());
     } else {
-      context.read<JournalBloc>().add(EditJournalEvent(savedJournal));
-
+      context.read<JournalBloc>()
+        ..add(EditJournalEvent(savedJournal))
+        ..add(FetchJournalsEvent());
     }
   }
 

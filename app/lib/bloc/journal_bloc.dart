@@ -58,6 +58,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
     try {
       var result = await _repository.update(Journal.toMap(event.journal));
       if (databaseOpWasSuccessful(result)){
+//        fetchJournals();
         return EditSuccess(event.journal);
       }
       return EditFailure();
@@ -70,8 +71,9 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
   Future<JournalState> insertJournal(AddJournalEvent event) async{
     try {
       var result = await _repository.insert(Journal.toMap(event.journal));
-      if (databaseOpWasSuccessful(result))
-      return AddJournalSuccess(event.journal);
+      if (databaseOpWasSuccessful(result)){
+//        fetchJournals();
+      return AddJournalSuccess(event.journal);}
       else return AddJournalFailure();
     }
     catch (e) {
@@ -87,6 +89,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
     try {
       var result = await _repository.delete(event.id);
       if (databaseOpWasSuccessful(result)){
+//        fetchJournals();
         return  DeleteSuccess();
 
       }
@@ -113,4 +116,5 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
    }
   }
 
+  List<Journal> get journals => [..._journals];
 }

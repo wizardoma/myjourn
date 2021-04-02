@@ -9,6 +9,8 @@ class JournalList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var bloc= BlocProvider.of<JournalBloc>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       floatingActionButton: FloatingActionButton(
@@ -19,6 +21,7 @@ class JournalList extends StatelessWidget {
         child: Icon(Icons.add),
       ),
       body: BlocBuilder<JournalBloc, JournalState>(
+
           // ignore: missing_return
           builder: (BuildContext context, state) {
         if (state is FetchJournalsSuccess) {
