@@ -114,8 +114,7 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void changeTheme(BuildContext context) async {
-    var selectedTheme =
-        await Provider.of<ThemeProvider>(context, listen: false).currentTheme;
+    var selectedTheme = Provider.of<ThemeProvider>(context, listen: false).currentTheme;
     showDialog(
         context: context,
         builder: (context) {

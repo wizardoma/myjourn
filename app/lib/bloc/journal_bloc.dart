@@ -6,77 +6,78 @@ import 'package:flutterfrontend/services/repository/journal_repository.dart';
 import 'journal_events.dart';
 import 'journal_state.dart';
 
-class JournalBloc extends Bloc<JournalEvents, JournalState>{
+class JournalBloc extends Bloc<JournalEvents, JournalState> {
   JournalRepository _repository;
 
   List<Journal> _journals = [];
 
-  JournalBloc(JournalRepository repository) : _repository = repository?? JournalRepository.instance ,super(InitialJournalState());
+  JournalBloc() : super(InitialJournalState()) {
+    _repository = _repository ?? JournalRepository.instance;
+//    add(FetchJournalsEvent());
+  }
 
   @override
-  Stream<JournalState> mapEventToState(JournalEvents event) async*{
+  Stream<JournalState> mapEventToState(JournalEvents event) async* {
     yield InitialJournalState();
-    if (event is AddJournalEvent){
+    if (event is AddJournalEvent) {
       yield LoadingState();
       yield await insertJournal(event);
     }
 
-
-    if (event is DeleteJournalEvent){
+    if (event is DeleteJournalEvent) {
       yield LoadingState();
       yield await deleteJournal(event);
     }
 
-    if (event is EditJournalEvent){
+    if (event is EditJournalEvent) {
       yield LoadingState();
       yield await editJournal(event);
     }
 
-    if (event is FetchJournalsEvent){
+    if (event is FetchJournalsEvent) {
       yield LoadingState();
       yield await fetchJournals();
     }
 
-    if (event is FetchJournalEvent){
+    if (event is FetchJournalEvent) {
       yield LoadingState();
       yield await fetchJournalByID(event);
     }
   }
 
-  Future<JournalState> fetchJournals() async{
+  Future<JournalState> fetchJournals() async {
     try {
-      var journals = (await _repository.all()).map((e) => Journal.fromNewMap(e)).toList();
+      var journals =
+          (await _repository.all()).map((e) => Journal.fromNewMap(e)).toList();
       _journals = journals;
       return FetchJournalsSuccess([..._journals]);
-    }
-    catch (e) {
+    } catch (e) {
       return FetchJournalsFailure();
     }
   }
 
-  Future<JournalState> editJournal(EditJournalEvent event)async {
+  Future<JournalState> editJournal(EditJournalEvent event) async {
     try {
       var result = await _repository.update(Journal.toMap(event.journal));
-      if (databaseOpWasSuccessful(result)){
+      if (databaseOpWasSuccessful(result)) {
 //        fetchJournals();
         return EditSuccess(event.journal);
       }
       return EditFailure();
-    }
-    catch (e) {
+    } catch (e) {
       return EditFailure();
     }
   }
 
-  Future<JournalState> insertJournal(AddJournalEvent event) async{
+  Future<JournalState> insertJournal(AddJournalEvent event) async {
     try {
       var result = await _repository.insert(Journal.toMap(event.journal));
-      if (databaseOpWasSuccessful(result)){
+      if (databaseOpWasSuccessful(result)) {
 //        fetchJournals();
-      return AddJournalSuccess(event.journal);}
-      else return AddJournalFailure();
-    }
-    catch (e) {
+        return AddJournalSuccess(event.journal);
+      } else
+        return AddJournalFailure();
+    } catch (e) {
       return AddJournalFailure();
     }
   }
@@ -85,35 +86,36 @@ class JournalBloc extends Bloc<JournalEvents, JournalState>{
     return result != 0;
   }
 
-  Future<JournalState> deleteJournal(DeleteJournalEvent event) async{
+  Future<JournalState> deleteJournal(DeleteJournalEvent event) async {
     try {
       var result = await _repository.delete(event.id);
-      if (databaseOpWasSuccessful(result)){
+      if (databaseOpWasSuccessful(result)) {
 //        fetchJournals();
-        return  DeleteSuccess();
-
-      }
-      else return DeleteFailure();
-    }
-    catch (e) {
+        return DeleteSuccess();
+      } else
+        return DeleteFailure();
+    } catch (e) {
       return DeleteFailure();
     }
   }
 
-  Future<JournalState> fetchJournalByID(FetchJournalEvent event) async{
-   try {
-     var result = await _repository.getById(event.id);
-     if (result.length > 0) {
-       return FetchJournalSuccess(Journal.fromNewMap(result[0]));
-     }
-     if (result.length == 0){
-       return FetchJournalEmpty();
-     }
-   }
-   catch (e) {
-     print(e);
-     return FetchJournalEmpty();
-   }
+  Future<JournalState> fetchJournalByID(FetchJournalEvent event) async {
+    try {
+      var result = await _repository.getById(event.id);
+      if (result.length > 0) {
+        return FetchJournalSuccess(Journal.fromNewMap(result[0]));
+      }
+      if (result.length == 0) {
+        return FetchJournalEmpty();
+      }
+    } catch (e) {
+      print(e);
+      return FetchJournalEmpty();
+    }
+  }
+
+  Journal getJournalById(int id) {
+    return journals.firstWhere((element) => element.id == id);
   }
 
   List<Journal> get journals => [..._journals];

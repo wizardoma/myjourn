@@ -84,8 +84,7 @@ class ViewJournalScreen extends StatelessWidget {
                       "journal": journal,
                       "delete": deleteJournal
                     }).then((value) {
-                  if (Provider.of<JournalProvider>(context, listen: false)
-                          .findById(journal.id) ==
+                  if (context.read<JournalBloc>().getJournalById(journal.id) ==
                       null) {
                     Navigator.pop(context);
                   }

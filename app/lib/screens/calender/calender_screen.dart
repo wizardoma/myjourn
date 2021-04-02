@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/journal_bloc.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/journal_list_items.dart';
@@ -29,7 +31,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
     if (!hasInitialized) {
       setState(() {
         allJournals =
-            Provider.of<JournalProvider>(context, listen: false).journals;
+            BlocProvider.of<JournalBloc>(context, listen: false).journals;
         allJournals.forEach((e) {
           events.putIfAbsent(
               e.time,
@@ -69,9 +71,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
                 Material(
                   elevation: 4,
                   child: TableCalendar(
-                    calendarStyle: CalendarStyle(
-
-                    ),
+                    calendarStyle: CalendarStyle(),
                     events: events,
                     onDaySelected: (DateTime datetime, _, __) {
                       setState(() {
@@ -113,7 +113,6 @@ class _CalenderScreenState extends State<CalenderScreen> {
             ),
             if (dayHasJournal)
               Column(
-
                 children: [
                   Padding(
                     padding: EdgeInsets.all(5),
@@ -134,13 +133,15 @@ class _CalenderScreenState extends State<CalenderScreen> {
                   vertical: 10,
                   horizontal: 15,
                 ),
-                decoration: BoxDecoration(color: Theme.of(context).cardColor, boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 1,
-                    spreadRadius: 1,
-                  )
-                ]),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 1,
+                        spreadRadius: 1,
+                      )
+                    ]),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     var width = constraints.maxWidth;

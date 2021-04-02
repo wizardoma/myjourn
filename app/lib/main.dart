@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
             providers: [
               BlocProvider(
                 create: (ctx) =>
-                    JournalBloc(repository)..add(FetchJournalsEvent()),
+                    JournalBloc()..add(FetchJournalsEvent()),
               ),
               BlocProvider(
                 create: (context) => SearchJournalBloc(repository),
