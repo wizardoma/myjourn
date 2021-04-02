@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutterfrontend/bloc/journal_bloc.dart';
-import 'package:flutterfrontend/bloc/search_journal_bloc.dart';
+import 'package:flutterfrontend/bloc/journal/journal_bloc.dart';
+import 'package:flutterfrontend/bloc/journal/journal_events.dart';
+import 'package:flutterfrontend/bloc/search/search_journal_bloc.dart';
 import 'package:flutterfrontend/providers/ThemeProvider.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
@@ -12,7 +13,6 @@ import 'package:flutterfrontend/screens/settings/settings_screen.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';
 import 'package:provider/provider.dart';
 
-import 'bloc/journal_events.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

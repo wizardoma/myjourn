@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutterfrontend/bloc/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';
 

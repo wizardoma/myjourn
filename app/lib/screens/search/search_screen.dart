@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutterfrontend/bloc/journal_events.dart';
-import 'package:flutterfrontend/bloc/journal_state.dart';
-import 'package:flutterfrontend/bloc/search_journal_bloc.dart';
+import 'package:flutterfrontend/bloc/journal/journal_events.dart';
+import 'package:flutterfrontend/bloc/journal/journal_state.dart';
+import 'package:flutterfrontend/bloc/search/search_journal_bloc.dart';
 import 'package:flutterfrontend/models/journal.dart';
-import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/home/journal_list_items.dart';
 import 'package:provider/provider.dart';
 

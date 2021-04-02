@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutterfrontend/bloc/journal_bloc.dart';
+import 'package:flutterfrontend/bloc/journal/journal_bloc.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/screens/home/journal_list_items.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
