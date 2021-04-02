@@ -40,8 +40,8 @@ class MyApp extends StatelessWidget {
           future: themeProvider.loadTheme(),
           builder: (context, AsyncSnapshot<String> data) => MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (ctx) =>
+              BlocProvider.value(
+                value:
                     JournalBloc()..add(FetchJournalsEvent()),
               ),
               BlocProvider(
