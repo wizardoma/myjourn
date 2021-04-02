@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/journal_bloc.dart';
+import 'package:flutterfrontend/bloc/journal_events.dart';
+import 'package:flutterfrontend/bloc/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/journal/image_carousel.dart';
@@ -13,32 +17,37 @@ class ViewJournalScreen extends StatelessWidget {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            contentPadding: EdgeInsets.all(15),
-            content: Text("Do you want to delete this note?"),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: Text("CANCEL")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text("DELETE"))
-            ],
+          return BlocConsumer<JournalBloc, JournalState>(
+            builder: (BuildContext context, state) {
+              return AlertDialog(
+                contentPadding: EdgeInsets.all(15),
+                content: Text("Do you want to delete this note?"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Text("CANCEL")),
+                  TextButton(
+                      onPressed: () {
+                        context.read<JournalBloc>().add(DeleteJournalEvent(id));
+                      },
+                      child: Text("DELETE"))
+                ],
+              );
+            },
+            listener: (BuildContext context, state) {
+              if (state is DeleteSuccess) {
+                Navigator.pop(context, true);
+              }
+              if (state is DeleteFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("An error occurred deleting this journal")));
+              }
+            },
           );
         }).then((value) {
       if (value) {
-        return Provider.of<JournalProvider>(context, listen: false)
-            .deleteJournal(id);
-      }
-    }).then((result) {
-      if (!result) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("An error occurred deleting this journal")));
-      } else {
         Navigator.pop(context);
       }
     });
@@ -105,7 +114,7 @@ class ViewJournalScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (journal.images!=null) JournalImageCarousel(journal.images),
+            if (journal.images != null) JournalImageCarousel(journal.images),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Column(
