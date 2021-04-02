@@ -4,11 +4,9 @@ import 'package:flutterfrontend/bloc/journal_bloc.dart';
 import 'package:flutterfrontend/bloc/journal_events.dart';
 import 'package:flutterfrontend/bloc/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
-import 'package:flutterfrontend/providers/journal_provider.dart';
 import 'package:flutterfrontend/screens/journal/image_carousel.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class ViewJournalScreen extends StatelessWidget {
   static const routeName = "/viewJournal";

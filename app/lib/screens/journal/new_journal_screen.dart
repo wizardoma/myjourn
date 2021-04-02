@@ -11,7 +11,6 @@ import 'package:flutterfrontend/screens/journal/image_carousel.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_date_section.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
 import 'new_journal_bottom_section.dart';
 import 'new_journal_textfield_section.dart';
