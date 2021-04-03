@@ -1,11 +1,11 @@
 package com.wizardom.myjournserver.service;
 
-import com.wizardom.myjournserver.dto.UserDto;
-import com.wizardom.myjournserver.dto.UserMapper;
+import com.wizardom.myjournserver.controller.request.SignUpRequest;
 import com.wizardom.myjournserver.exceptions.UserNotFoundException;
 import com.wizardom.myjournserver.model.User;
 import com.wizardom.myjournserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User getByEmail(String email){
         return userRepository.findByEmail(email.toLowerCase())
@@ -25,8 +26,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User with id: "+id + " not found"));
     }
 
-    public User save(UserDto userDto){
-        User user = UserMapper.fromDto(userDto);
+    public User save(SignUpRequest request){
+        User user = new User()
+                .setEmail(request.getEmail().toLowerCase())
+                .setPassword(passwordEncoder.encode(request.getPassword()));
         return userRepository.save(user);
     }
 

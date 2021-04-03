@@ -10,20 +10,20 @@ import java.util.Map;
 @Accessors(chain = true)
 public class JsonResponse<T> {
     private T body;
-    private HttpStatus status;
+    private int status;
     private Map<String, String> errors;
 
     public JsonResponse(HttpStatus status){
-        this.status = status;
+        this.status = status.value();
     }
 
     public JsonResponse(HttpStatus status, T body){
-        this.status = status;
+        this.status = status.value();
         this.body = body;
     }
 
     public JsonResponse(HttpStatus status, Map<String, String> errors){
-        this.status = status;
+        this.status = status.value();
         this.errors = errors;
     }
 }

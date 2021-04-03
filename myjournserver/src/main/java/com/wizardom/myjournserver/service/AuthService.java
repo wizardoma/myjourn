@@ -1,6 +1,7 @@
 package com.wizardom.myjournserver.service;
 
 import com.wizardom.myjournserver.controller.request.LoginRequest;
+import com.wizardom.myjournserver.controller.request.SignUpRequest;
 import com.wizardom.myjournserver.dto.UserDto;
 import com.wizardom.myjournserver.dto.UserMapper;
 import com.wizardom.myjournserver.model.User;
@@ -31,8 +32,8 @@ public class AuthService {
         addTokenToResponse(email, response);
     }
 
-    public UserDto signUp(UserDto userDto, HttpServletResponse response){
-        User user = userService.save(userDto);
+    public UserDto signUp(SignUpRequest request, HttpServletResponse response){
+        User user = userService.save(request);
         setAuthentication(user.getEmail(), user.getPassword());
         addTokenToResponse(user.getEmail(), response);
         return UserMapper.toDto(user);
