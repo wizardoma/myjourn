@@ -10,6 +10,8 @@ public class User {
     private  long id;
     private String email;
     private String password;
+    @Enumerated(value = EnumType.STRING)
+    private SignUpType signUpType;
 
     @OneToMany(mappedBy = "user")
     List<Journal> journals;
