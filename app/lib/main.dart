@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/journal/journal_bloc.dart';
 import 'package:flutterfrontend/bloc/journal/journal_events.dart';
 import 'package:flutterfrontend/bloc/search/search_journal_bloc.dart';
-import 'package:flutterfrontend/providers/ThemeProvider.dart';
-import 'package:flutterfrontend/providers/journal_provider.dart';
+import 'package:flutterfrontend/bloc/settings/themes_bloc.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
@@ -13,57 +12,50 @@ import 'package:flutterfrontend/screens/settings/settings_screen.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';
 import 'package:provider/provider.dart';
 
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var repository = JournalRepository.instance;
-  runApp(MyApp(repository));
+  var themesBloc = ThemesBloc("green");
+  await themesBloc.loadTheme();
+
+  runApp(MyApp(repository, themesBloc));
 }
 
 class MyApp extends StatelessWidget {
+  final ThemesBloc _themesBloc;
   final JournalRepository repository;
 
-  MyApp(this.repository);
+  MyApp(this.repository, this._themesBloc);
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider.value(
-          value: JournalProvider(),
+        BlocProvider.value(
+          value: JournalBloc()..add(FetchJournalsEvent()),
         ),
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        BlocProvider(
+          create: (context) => SearchJournalBloc(repository),
+        ),
+        BlocProvider.value(
+          value: _themesBloc,
+        ),
       ],
-      builder: (context, child) {
-        var themeProvider = Provider.of<ThemeProvider>(context);
-        return FutureBuilder(
-          future: themeProvider.loadTheme(),
-          builder: (context, AsyncSnapshot<String> data) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value:
-                    JournalBloc()..add(FetchJournalsEvent()),
-              ),
-              BlocProvider(
-                create: (context) => SearchJournalBloc(repository),
-              ),
-            ],
-            child: MaterialApp(
-              title: "My Journal",
-              debugShowCheckedModeBanner: false,
-              theme: themeProvider.currentThemeData,
-              routes: {
-                NewJournalScreen.routeName: (context) => NewJournalScreen(),
-                HomeScreen.routeName: (context) => HomeScreen(),
-                SearchScreen.routeName: (context) => SearchScreen(),
-                SettingsScreen.routeName: (context) => SettingsScreen(),
-                ViewJournalScreen.routeName: (context) => ViewJournalScreen(),
-              },
-              home: HomeScreen(),
-            ),
-          ),
-        );
-      },
+      child: Builder(
+        builder: (context) => MaterialApp(
+          title: "My Journal",
+          debugShowCheckedModeBanner: false,
+          theme: context.watch<ThemesBloc>().getCurrentTheme(),
+          routes: {
+            NewJournalScreen.routeName: (context) => NewJournalScreen(),
+            HomeScreen.routeName: (context) => HomeScreen(),
+            SearchScreen.routeName: (context) => SearchScreen(),
+            SettingsScreen.routeName: (context) => SettingsScreen(),
+            ViewJournalScreen.routeName: (context) => ViewJournalScreen(),
+          },
+          home: HomeScreen(),
+        ),
+      ),
     );
   }
 }

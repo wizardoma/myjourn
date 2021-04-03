@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/settings/themes_bloc.dart';
 import 'package:flutterfrontend/providers/ThemeProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -114,11 +116,11 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void changeTheme(BuildContext context) async {
-    var selectedTheme = Provider.of<ThemeProvider>(context, listen: false).currentTheme;
+    var selectedTheme = context.read<ThemesBloc>().currentTheme;
     showDialog(
         context: context,
         builder: (context) {
-          var themes = Provider.of<ThemeProvider>(context);
+          var themes = BlocProvider.of<ThemesBloc>(context);
 
           return StatefulBuilder(
             builder: (BuildContext context,
@@ -191,7 +193,7 @@ class SettingsScreen extends StatelessWidget {
           );
         }).then((value) {
       var theme = value as String;
-      Provider.of<ThemeProvider>(context, listen: false).theme = theme;
+      context.read<ThemesBloc>().setTheme(theme);
     });
   }
 }
