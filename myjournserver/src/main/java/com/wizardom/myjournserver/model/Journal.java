@@ -22,6 +22,8 @@ public class Journal {
     @NotEmpty
     @NotNull
     private  String body;
+    @ManyToOne
+    private User user;
     @NotNull
     private Instant date;
     @ElementCollection
