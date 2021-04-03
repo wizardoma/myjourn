@@ -1,6 +1,7 @@
 package com.wizardom.myjournserver.controller;
 
 import com.wizardom.myjournserver.controller.request.LoginRequest;
+import com.wizardom.myjournserver.controller.response.JsonResponse;
 import com.wizardom.myjournserver.dto.UserDto;
 import com.wizardom.myjournserver.model.User;
 import com.wizardom.myjournserver.service.AuthService;
@@ -25,15 +26,15 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@ModelAttribute LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<JsonResponse<?>> login(@ModelAttribute LoginRequest request, HttpServletResponse response) {
         authService.login(request, response);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(new JsonResponse<>(HttpStatus.OK));
     }
 
     @PostMapping("signup")
-    public ResponseEntity<UserDto> signUp(@ModelAttribute UserDto userDto, HttpServletResponse response) {
+    public ResponseEntity<JsonResponse<UserDto>> signUp(@ModelAttribute UserDto userDto, HttpServletResponse response) {
         UserDto user = authService.signUp(userDto, response);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(new JsonResponse<>(HttpStatus.CREATED, user), HttpStatus.CREATED);
     }
 
 
