@@ -387,57 +387,59 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                       if (images != null)
                         Expanded(
                           child: Container(
+                            alignment: Alignment.topCenter,
                             padding: EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 20),
-                            child: GridView.builder(
-                              clipBehavior: Clip.none,
-                              shrinkWrap: true,
-                              itemCount: images.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child:
-                                      Stack(clipBehavior: Clip.none, children: [
-                                    Container(
-                                      child: Image.memory(
-                                        images[index],
-                                        fit: BoxFit.cover,
-                                      ),
+                            child: Wrap(
+
+                                spacing: 20,
+                                runSpacing: 20,
+                                clipBehavior: Clip.none,
+                                children: images.map((image) {
+                                  return Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
-                                    Positioned(
-                                      top: -10,
-                                      right: -10,
-                                      child: Container(
-                                        height: 25,
-                                        width: 25,
-                                        padding: EdgeInsets.all(3),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.red,
-//                                          shape: BoxShape.circle,
-                                        ),
-                                        child: FittedBox(
-                                          child: IconButton(
-                                            onPressed: () =>
-                                                removeImage(index, setState),
-                                            icon: Icon(
-                                              Icons.clear,
-                                              color: Colors.white,
+                                    child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Container(
+                                            child: Image.memory(
+                                              image,
+                                              height: 100,width: 100,
+                                              fit: BoxFit.cover,
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    )
-                                  ]),
-                                );
-                              },
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, crossAxisSpacing: 10),
-                            ),
+                                          Positioned(
+                                            top: -10,
+                                            right: -10,
+                                            child: Container(
+                                              height: 25,
+                                              width: 25,
+                                              padding: EdgeInsets.all(3),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.red,
+//                                          shape: BoxShape.circle,
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: () => removeImage(
+                                                    image, setState),
+                                                child: FittedBox(
+                                                  child: Icon(
+                                                      Icons.clear,
+                                                      color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ]),
+                                  );
+                                }).toList()),
                           ),
                         ),
                       SizedBox(
@@ -492,9 +494,10 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     }
   }
 
-  void removeImage(int index, setState) {
+  void removeImage(Uint8List image, setState) {
     setState(() {
-      images.removeAt(index);
+      images.remove(image);
+//      images.removeAt(index);
     });
   }
 }
