@@ -71,6 +71,7 @@ flutter:
     - assets/logos/instagram.png
     - assets/logos/twitter.png
     - assets/logos/google.png
+    - assets/logos/mail.png
 
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/assets-and-images/#resolution-aware.
