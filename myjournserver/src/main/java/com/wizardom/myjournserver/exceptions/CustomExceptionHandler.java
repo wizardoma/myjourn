@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +37,18 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
         }
         return handleExceptionInternal(ex, new JsonResponse<>(status).setErrors(errorMap), headers, status, request);
+
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleConstraintViolation(ConstraintViolationException exception){
+        Map<String, String> errorMap = new HashMap<>();
+
+        for (ConstraintViolation violation : exception.getConstraintViolations()){
+            errorMap.put("field.error", violation.getMessage());
+        }
+
+        return respondToException(HttpStatus.BAD_REQUEST, errorMap);
 
     }
 

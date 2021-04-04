@@ -34,7 +34,6 @@ public class AuthService {
 
     public UserDto signUp(SignUpRequest request, HttpServletResponse response){
         User user = userService.save(request);
-        setAuthentication(user.getEmail(), user.getPassword());
         addTokenToResponse(user.getEmail(), response);
         return UserMapper.toDto(user);
     }

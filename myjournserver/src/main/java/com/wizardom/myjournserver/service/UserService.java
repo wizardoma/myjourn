@@ -2,6 +2,7 @@ package com.wizardom.myjournserver.service;
 
 import com.wizardom.myjournserver.controller.request.SignUpRequest;
 import com.wizardom.myjournserver.exceptions.UserNotFoundException;
+import com.wizardom.myjournserver.model.SignUpType;
 import com.wizardom.myjournserver.model.User;
 import com.wizardom.myjournserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class UserService {
     public User save(SignUpRequest request){
         User user = new User()
                 .setEmail(request.getEmail().toLowerCase())
+                .setSignUpType(SignUpType.valueOf(request.getSignUpType().toLowerCase()))
                 .setPassword(passwordEncoder.encode(request.getPassword()));
         return userRepository.save(user);
     }
