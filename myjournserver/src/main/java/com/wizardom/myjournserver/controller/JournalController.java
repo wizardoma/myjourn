@@ -1,7 +1,8 @@
 package com.wizardom.myjournserver.controller;
 
-import com.wizardom.myjournserver.controller.request.JournalDto;
-import com.wizardom.myjournserver.controller.request.JournalMapper;
+import com.wizardom.myjournserver.controller.request.CreateJournalRequest;
+import com.wizardom.myjournserver.controller.response.JsonResponse;
+import com.wizardom.myjournserver.dto.JournalMapper;
 import com.wizardom.myjournserver.model.Journal;
 import com.wizardom.myjournserver.service.JournalService;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.text.ParseException;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,8 +29,10 @@ public class JournalController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveJournal(@Valid @ModelAttribute JournalDto journal) throws ParseException {
-        return ResponseEntity.created(URI.create("")).body(JournalMapper.toDto(journalService.save(JournalMapper.toJournal(journal))));
+    public ResponseEntity<JsonResponse<?>> saveJournal(@Valid @ModelAttribute CreateJournalRequest request) throws ParseException {
+        Journal journal = journalService.save(request);
+        return new ResponseEntity<>(new JsonResponse<>(CREATED, JournalMapper.toDto(journal)),
+                CREATED);
     }
 
     @DeleteMapping("{id}")

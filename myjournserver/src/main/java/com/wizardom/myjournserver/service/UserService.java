@@ -6,6 +6,8 @@ import com.wizardom.myjournserver.model.SignUpType;
 import com.wizardom.myjournserver.model.User;
 import com.wizardom.myjournserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User getByEmail(String email){
+    public User getByEmail(String email) {
         return userRepository.findByEmail(email.toLowerCase())
-                .orElseThrow(() -> new UserNotFoundException("User with email "+email + " not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
     }
 
-    public User getById(long id){
+    public User getById(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with id: "+id + " not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + id + " not found"));
     }
 
-    public User save(SignUpRequest request){
+    public User save(SignUpRequest request) {
         User user = new User()
                 .setEmail(request.getEmail().toLowerCase())
                 .setSignUpType(SignUpType.valueOf(request.getSignUpType().toLowerCase()))
@@ -35,10 +37,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    public User getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("No User found with email: " + email));
+    }
 
 
 }

@@ -1,5 +1,6 @@
 package com.wizardom.myjournserver.service;
 
+import com.wizardom.myjournserver.controller.request.CreateJournalRequest;
 import com.wizardom.myjournserver.model.Journal;
 import com.wizardom.myjournserver.repository.JournalRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,12 @@ import java.util.List;
 @Service
 public class JournalService {
     private final JournalRepository journalRepository;
+    private final UserService userService;
 
-    public Journal save(Journal journal){
+    public Journal save(CreateJournalRequest request){
+        Journal journal = new Journal().setUser(userService.getCurrentUser()).setBody(request.getBody())
+                .setImages(request.getImages())
+                .setDate(Instant.ofEpochMilli(Long.parseLong(request.getDate())));
         return journalRepository.save(journal);
     }
 
