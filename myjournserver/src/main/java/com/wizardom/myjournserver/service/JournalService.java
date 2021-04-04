@@ -47,4 +47,10 @@ public class JournalService {
     public List<Journal> getAll() {
         return journalRepository.findAll();
     }
+
+    public List<Journal> getUserJournals() {
+        return journalRepository.findByUser(userService.getCurrentUser());
+    }
+
+
 }

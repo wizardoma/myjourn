@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.text.ParseException;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class JournalController {
     private final JournalService journalService;
 
     @GetMapping
-    public ResponseEntity<?> getJournals() {
-        return ResponseEntity.ok(journalService.getAll());
+    public ResponseEntity<JsonResponse<?>> getJournals() {
+        return ResponseEntity.ok(new JsonResponse<>(OK, journalService.getUserJournals()));
     }
 
     @PostMapping
