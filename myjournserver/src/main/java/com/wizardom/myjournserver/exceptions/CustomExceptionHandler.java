@@ -45,7 +45,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, String> errorMap = new HashMap<>();
 
         for (ConstraintViolation violation : exception.getConstraintViolations()){
-            errorMap.put("field.error", violation.getMessage());
+
+            errorMap.put("field.error", violation.getMessageTemplate());
         }
 
         return respondToException(HttpStatus.BAD_REQUEST, errorMap);

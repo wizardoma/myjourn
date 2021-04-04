@@ -19,7 +19,7 @@ public class User {
     @Column(unique = true, nullable = false)
     @NotEmpty(message = "email cannot be empty")
     private String email;
-    @Size(min = 4, max= 40, message = "Password must be more than 3 letters")
+    @Column(length = 10000,columnDefinition = "text")
     private String password;
     @NotNull(message = "You must specify a signup Type")
     @Enumerated(value = EnumType.STRING)

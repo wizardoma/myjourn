@@ -8,6 +8,6 @@ public class UserMapper {
     }
 
     public static  UserDto toDto(User user){
-        return new UserDto().setEmail(user.getEmail());
+        return new UserDto().setEmail(user.getEmail()).setId(user.getId());
     }
 }
