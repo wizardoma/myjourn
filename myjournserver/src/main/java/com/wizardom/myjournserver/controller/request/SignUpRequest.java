@@ -1,16 +1,21 @@
 package com.wizardom.myjournserver.controller.request;
 
+import com.wizardom.myjournserver.validation.UniqueEmail;
+import com.wizardom.myjournserver.validation.ValidSignUpType;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
 public class SignUpRequest {
     @NotEmpty(message = "email cannot be empty")
+    @Email(message = "Please use a valid email address")
+    @UniqueEmail
     private String email;
     @Size(min = 4, max = 40, message = "Password must be at least 4 letters")
     private String password;
-    @NotEmpty
+    @ValidSignUpType
     private String signUpType;
 }
