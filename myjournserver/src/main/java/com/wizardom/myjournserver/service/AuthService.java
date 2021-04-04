@@ -16,9 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
-import static com.wizardom.myjournserver.security.SecurityConstants.*;
+import static com.wizardom.myjournserver.security.SecurityConstants.HEADER_STRING;
+import static com.wizardom.myjournserver.security.SecurityConstants.TOKEN_PREFIX;
 
 @Service
 @RequiredArgsConstructor
@@ -27,22 +27,25 @@ public class AuthService {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
 
-    public void login(LoginRequest request, HttpServletResponse response){
+    public void login(LoginRequest request, HttpServletResponse response) {
         String email = setAuthentication(request.getEmail(), request.getPassword());
         addTokenToResponse(email, response);
     }
 
-    public UserDto signUp(SignUpRequest request, HttpServletResponse response){
+    public UserDto signUp(SignUpRequest request, HttpServletResponse response) {
         User user = userService.save(request);
         addTokenToResponse(user.getEmail(), response);
         return UserMapper.toDto(user);
     }
 
     public String setAuthentication(String email, String password) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return Optional.ofNullable(authentication.getName())
-                .orElseThrow(() -> new BadCredentialsException("No User found with email Address"));
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return authentication.getName();
+        } catch (Exception e) {
+            throw new BadCredentialsException("Email or password is incorrect");
+        }
     }
 
     public void addTokenToResponse(String email, HttpServletResponse response) {
