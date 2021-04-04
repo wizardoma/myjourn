@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
+import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/bloc/settings/themes_bloc.dart';
 import 'package:flutterfrontend/providers/ThemeProvider.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +71,7 @@ class SettingsScreen extends StatelessWidget {
               SettingsTile(
                 title: "Theme",
                 subtitle: "Change themes (Includes Dark theme)",
-                onPressed: (context) => changeTheme(context),
+                onPressed:  changeTheme,
               ),
             ],
           ),
@@ -89,11 +92,12 @@ class SettingsScreen extends StatelessWidget {
             title: "Login",
             tiles: [
               SettingsTile(
-                leading: Image.asset("assets/logos/google.png"),
+                leading: Image.asset("assets/logos/google.png", height: 30, width: 30,),
                 title: "alibekason@gmail.com",
               ),
               SettingsTile(
                 title: "Logout",
+                onPressed: logout,
               )
             ],
           ),
@@ -194,6 +198,27 @@ class SettingsScreen extends StatelessWidget {
         }).then((value) {
       var theme = value as String;
       context.read<ThemesBloc>().setTheme(theme);
+    });
+  }
+
+  void logout(BuildContext uiContext) async {
+    showDialog(context: uiContext, builder: (context) {
+      return BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (BuildContext context, state) {
+          if (state is NotAuthenticated){
+            Navigator.pushReplacementNamed(uiContext, "/signUp");
+          }
+        },
+        child: AlertDialog(
+          title: Text("Logout"),
+          content: Text("Are you sure you want to logout"),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: Text("CANCEL"),),
+            TextButton(onPressed: () {
+              context.read<AuthenticationBloc>().add(LogoutEvent());}, child: Text("LOGOUT"))
+          ],
+        ),
+      );
     });
   }
 }
