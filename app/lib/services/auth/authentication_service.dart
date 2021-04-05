@@ -29,6 +29,16 @@ class AuthenticationService {
     else return JsonResponse.withError(response.data);
   }
 
+  Future<JsonResponse> verifyUniqueEmail(String email) async{
+    var response = await AuthenticationRepository().verifyUniqueEmail({"email" : email});
+    if (response.statusCode == 200){
+      return JsonResponse.withData(response.data);
+    }
+    else {
+      return JsonResponse.withError(response.data);
+    }
+  }
+
   String _extractToken(JsonResponse response){
     return response.headers.value(ServerConstants.authHeaderName).substring(0, ServerConstants.tokenPrefix.length);
   }
@@ -41,4 +51,6 @@ class AuthenticationService {
   Future<void> logout() async{
     _storeToken(null);
   }
+
+
 }

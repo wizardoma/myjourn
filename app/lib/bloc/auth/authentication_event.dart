@@ -16,6 +16,10 @@ class SignUpEvent extends AuthenticationEvent {
 
 }
 
-class LogoutEvent extends AuthenticationEvent {
+class LogoutEvent extends AuthenticationEvent {}
 
+class VerifyUniqueEmailEvent extends AuthenticationEvent {
+  final String email;
+
+  VerifyUniqueEmailEvent(this.email);
 }

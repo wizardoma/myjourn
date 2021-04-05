@@ -19,4 +19,9 @@ class AuthenticationRepository {
     return JsonResponse.fromResponse(response);
   }
 
+  Future<JsonResponse> verifyUniqueEmail(Map<String, dynamic> verifyCreds) async {
+    var response = await _dio.post(ServerConstants.authUrl, data: verifyCreds);
+    return JsonResponse.fromResponse(response);
+  }
+
 }

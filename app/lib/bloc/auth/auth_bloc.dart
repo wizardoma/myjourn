@@ -22,6 +22,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     if (event is LogoutEvent){
       yield await logout();
     }
+
+    if (event is VerifyUniqueEmailEvent){
+      yield await verifyUniqueEmail(event);
+    }
+  }
+
+  Future<AuthenticationState> verifyUniqueEmail(VerifyUniqueEmailEvent event) async{
+    var response = await _authenticationService.verifyUniqueEmail(event.email);
   }
   
   Future<AuthenticationState> signUp(String email, String password, String signUpType) async{
