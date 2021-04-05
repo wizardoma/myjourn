@@ -1,4 +1,6 @@
-class LoginRequest {
+import 'package:flutterfrontend/services/auth/request.dart';
+
+class LoginRequest  extends Request{
   final String email;
   final String password;
 

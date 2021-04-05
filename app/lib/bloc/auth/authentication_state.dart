@@ -6,7 +6,11 @@ class NotAuthenticated extends AuthenticationState {
   NotAuthenticated(this.errors);
 }
 
-class FetchingDataState extends AuthenticationState{}
+class FetchingDataState extends AuthenticationState{
+
+}
 
 class EmailIsAvailableState extends AuthenticationState{}
-class EmailNotAvailableState extends AuthenticationState {}
+class EmailNotAvailableState extends AuthenticationState {
+
+}

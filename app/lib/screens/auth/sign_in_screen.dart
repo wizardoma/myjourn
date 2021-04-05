@@ -6,6 +6,9 @@ import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/screens/auth/signin_textfield_widget.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
+import 'package:flutterfrontend/services/auth/login_request.dart';
+import 'package:flutterfrontend/services/auth/signup_request.dart';
+import 'package:flutterfrontend/services/auth/verify_email_request.dart';
 
 import '../../themes.dart';
 
@@ -52,7 +55,8 @@ class _SignInScreenState extends State<SignInScreen> {
             child: BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, state) {
                 if (state is FetchingDataState) {
-                  showLoadingState(context);
+                  if (isVerifyEmail()) {
+                  showLoadingState(context, "");}
                 }
                 if (state is EmailIsAvailableState) {
                   setState(() {
@@ -69,7 +73,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   });
                 }
 
-                if (state is IsAuthenticated){
+                if (state is IsAuthenticated) {
                   Navigator.pushNamed(context, HomeScreen.routeName);
                 }
               },
@@ -128,7 +132,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: MaterialButton(
                         color: Theme.of(context).accentColor,
                         onPressed: submit,
-                        child: Text("NEXT"),
+                        child: Text(isVerifyEmail()?"NEXT": isSignIn? "LOGIN" : willRegister? "SIGN UP": "NEXT"),
                       ),
                     ),
                   ],
@@ -166,15 +170,28 @@ class _SignInScreenState extends State<SignInScreen> {
   void submit() {
     if (_formKey.currentState.validate()) {
       print("it is validated");
-      context
-          .read<AuthenticationBloc>()
-          .add(VerifyUniqueEmailEvent(_emailEditingController.text));
+      if (isSignIn) {
+        login(LoginRequest(
+            _emailEditingController.text, _passwordEditingController.text));
+      }
+      else if (willRegister){
+        signUp(SignUpRequest(_emailEditingController.text, _passwordEditingController.text, SignUpType.email));
+      }
+
+      else if (isVerifyEmail()) {
+        verifyEmail(VerifyEmailRequest(_emailEditingController.text));
+
+      }
     } else {
       print("it is not validated");
     }
   }
 
-  void showLoadingState(BuildContext uiContext) {
+  void login(LoginRequest request) {}
+
+  void signUp(SignUpRequest request){}
+
+  void showLoadingState(BuildContext uiContext, String message) {
     showDialog(
         context: uiContext,
         builder: (context) {
@@ -185,11 +202,20 @@ class _SignInScreenState extends State<SignInScreen> {
             },
             child: AlertDialog(
               content: ListTile(
-                title: Text("Checking for existing account"),
+                title: Text(message),
                 leading: CircularProgressIndicator(),
               ),
             ),
           );
         });
+  }
+
+  void verifyEmail(VerifyEmailRequest verifyEmailRequest) {
+    context.read<AuthenticationBloc>().add(VerifyUniqueEmailEvent(
+        VerifyEmailRequest(_emailEditingController.text)));
+  }
+
+  bool isVerifyEmail() {
+    return !isSignIn && !willRegister;
   }
 }

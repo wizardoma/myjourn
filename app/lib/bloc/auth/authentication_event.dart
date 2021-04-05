@@ -1,25 +1,24 @@
+import 'package:flutterfrontend/services/auth/request.dart';
+
 abstract class AuthenticationEvent {
 }
 
 class LoginEvent extends AuthenticationEvent {
-  final String email;
-  final String password;
+  final Request request;
 
-  LoginEvent(this.email, this.password);
+  LoginEvent(this.request);
 }
 class SignUpEvent extends AuthenticationEvent {
-  final String email;
-  final String password;
-  final String signUpType;
+  final Request request;
 
-  SignUpEvent(this.email, this.password, this.signUpType);
+  SignUpEvent(this.request);
 
 }
 
 class LogoutEvent extends AuthenticationEvent {}
 
 class VerifyUniqueEmailEvent extends AuthenticationEvent {
-  final String email;
+  final Request request;
 
-  VerifyUniqueEmailEvent(this.email);
+  VerifyUniqueEmailEvent(this.request);
 }

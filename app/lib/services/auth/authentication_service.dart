@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutterfrontend/services/auth/login_creds.dart';
-import 'package:flutterfrontend/services/auth/signup_creds.dart';
+import 'package:flutterfrontend/services/auth/login_request.dart';
+import 'package:flutterfrontend/services/auth/signup_request.dart';
+import 'package:flutterfrontend/services/auth/verify_email_request.dart';
 import 'package:flutterfrontend/services/preferences/authentication_preferences.dart';
 import 'package:flutterfrontend/services/repository/auth_repository.dart';
 import 'package:flutterfrontend/services/repository/jsonresponse.dart';
@@ -34,8 +35,8 @@ class AuthenticationService {
     return true;
   }
 
-  Future<JsonResponse> verifyUniqueEmail(String email) async{
-    var response = await AuthenticationRepository().verifyUniqueEmail(FormData.fromMap({"email" : email.trim()}));
+  Future<JsonResponse> verifyUniqueEmail(VerifyEmailRequest request) async{
+    var response = await AuthenticationRepository().verifyUniqueEmail(FormData.fromMap({"email" : request.email.trim()}));
     print("Gotten response : ${response.errors}");
     return response;
   }

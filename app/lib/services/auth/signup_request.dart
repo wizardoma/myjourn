@@ -1,6 +1,8 @@
+import 'package:flutterfrontend/services/auth/request.dart';
+
 enum SignUpType { email, facebook, google }
 
-class SignUpRequest {
+class SignUpRequest extends Request{
   final String email;
   final String password;
   final SignUpType signUpType;
