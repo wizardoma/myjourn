@@ -13,30 +13,30 @@ class AuthenticationService {
       var token = _extractToken(response);
       _storeToken(token);
       print("The token is: "+token);
-      return JsonResponse.withData(response.data);
     }
-    else return JsonResponse.withError(response.data);
+    return response;
   }
 
   Future<JsonResponse> signUp(SignUpRequest signUpRequest) async {
     var response = await AuthenticationRepository().signUp(SignUpRequest.toMap(signUpRequest));
     if (response.statusCode == 201) {
-      var token  = _extractToken(response);
+      var token = _extractToken(response);
       _storeToken(token);
       print("the token is: $token");
-      return JsonResponse.withData(response.data);
     }
-    else return JsonResponse.withError(response.data);
+    return response;
+  }
+
+  static Future<bool> isAuthenticated() async {
+    String token = await AuthenticationPreferences().getToken();
+    if (token == null || token.isEmpty) return false;
+    return true;
   }
 
   Future<JsonResponse> verifyUniqueEmail(String email) async{
     var response = await AuthenticationRepository().verifyUniqueEmail({"email" : email});
-    if (response.statusCode == 200){
-      return JsonResponse.withData(response.data);
-    }
-    else {
-      return JsonResponse.withError(response.data);
-    }
+    print("Gotten response : ${response.errors}");
+    return response;
   }
 
   String _extractToken(JsonResponse response){

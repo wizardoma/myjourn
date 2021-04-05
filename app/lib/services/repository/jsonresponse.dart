@@ -4,7 +4,7 @@ class JsonResponse<T> {
   final int statusCode;
   final Headers headers;
   final T data;
-  final Map<String, String> errors;
+  final Map<String, dynamic> errors;
 
   JsonResponse(this.statusCode, this.data, this.errors, this.headers);
 

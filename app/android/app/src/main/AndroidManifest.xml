@@ -9,6 +9,7 @@
     </queries>
 
     <application
+            android:usesCleartextTraffic="true"
             android:label="flutterfrontend"
             android:icon="@mipmap/launcher_icon">
         <activity

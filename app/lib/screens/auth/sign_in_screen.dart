@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
+import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/screens/auth/signin_textfield_widget.dart';
 
 import '../../themes.dart';
@@ -12,22 +16,28 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController _editingController;
+  TextEditingController _emailEditingController;
+  TextEditingController _passwordEditingController;
+  TextEditingController _usernameEditingController;
   final _formKey = GlobalKey<FormState>();
-  bool hasRegistered = true;
+  bool willRegister = false;
   bool isSignIn = false;
 
   @override
   void initState() {
     super.initState();
 //    formState = FormState();
-    _editingController = TextEditingController();
+    _emailEditingController = TextEditingController();
+    _passwordEditingController = TextEditingController();
+    _usernameEditingController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _editingController.dispose();
+    _emailEditingController.dispose();
+    _passwordEditingController.dispose();
+    _usernameEditingController.dispose();
   }
 
   @override
@@ -35,61 +45,88 @@ class _SignInScreenState extends State<SignInScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Themes.authBackGroundColor,
-        body: Container(
-          margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SignInTextField("Email", validateEmail),
-                if (isSignIn)SignInTextField("Password", validatePassword),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+            child: BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                if (state is FetchingDataState){
+                  showLoadingState(context);
+                }
+                if (state is EmailIsAvailableState) {
+                  setState(() {
+                    isSignIn = true;
+                    willRegister = false;
+                  });
+                }
 
-                if (!hasRegistered)
-                  Container(
-                    child: Column(
-                      children: [
-                        SignInTextField("Username", validateUsername),
-                        SignInTextField("Password", validatePassword),
-                        SizedBox(
-                          height: 10,
+                if (state is EmailNotAvailableState) {
+                  print("from ui: email is not available");
+                  setState(() {
+                    isSignIn = false;
+                    willRegister = true;
+                  });
+                }
+              },
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    SignInTextField(
+                        "Email", validateEmail, _emailEditingController),
+                    if (isSignIn)
+                      SignInTextField("Password", validatePassword,
+                          _passwordEditingController),
+                    if (willRegister)
+                      Container(
+                        child: Column(
+                          children: [
+                            SignInTextField("Username", validateUsername,
+                                _usernameEditingController),
+                            SignInTextField("Password", validatePassword,
+                                _passwordEditingController),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              child: RichText(
+                                text: TextSpan(
+                                    text:
+                                        "By tapping Save you are indicating that you agree to the ",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4
+                                        .copyWith(fontSize: 16),
+                                    children: [
+                                      TextSpan(
+                                        text: "Terms of Service",
+                                        style: TextStyle(
+                                            color: Theme.of(context).accentColor),
+                                      ),
+                                      TextSpan(text: "and the"),
+                                      TextSpan(
+                                        text: "Privacy Policy",
+                                        style: TextStyle(
+                                            color: Theme.of(context).accentColor),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          child: RichText(
-                            text: TextSpan(
-                                text:
-                                    "By tapping Save you are indicating that you agree to the ",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    .copyWith(fontSize: 16),
-                                children: [
-                                  TextSpan(
-                                    text: "Terms of Service",
-                                    style: TextStyle(
-                                        color: Theme.of(context).accentColor),
-                                  ),
-                                  TextSpan(text: "and the"),
-                                  TextSpan(
-                                    text: "Privacy Policy",
-                                    style: TextStyle(
-                                        color: Theme.of(context).accentColor),
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ],
+                      ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      alignment: Alignment.centerRight,
+                      child: MaterialButton(
+                        color: Theme.of(context).accentColor,
+                        onPressed: submit,
+                        child: Text("NEXT"),
+                      ),
                     ),
-                  ),
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  alignment: Alignment.centerRight,
-                  child: MaterialButton(
-                    color: Theme.of(context).accentColor,
-                    onPressed: submit,
-                    child: Text("NEXT"),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -120,9 +157,32 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void submit() {
-    _formKey.currentState.validate();
-    setState(() {
-      isSignIn = true;
+    if (_formKey.currentState.validate()) {
+      print("it is validated");
+      context
+          .read<AuthenticationBloc>()
+          .add(VerifyUniqueEmailEvent(_emailEditingController.text));
+    }
+    else {
+      print("it is not validated");
+    }
+  }
+
+  void showLoadingState(BuildContext uiContext) {
+    showDialog(context: uiContext, builder: (context) {
+      return BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if (state is EmailNotAvailableState || state is EmailIsAvailableState) Navigator.pop(context);
+        },
+
+        child: AlertDialog(
+          content: ListTile(
+            title: Text("Checking for existing account"),
+            leading: CircularProgressIndicator(),
+          ),
+        ),
+      );
     });
+
   }
 }
