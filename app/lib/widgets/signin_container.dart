@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignInContainer extends StatelessWidget {
@@ -8,21 +9,25 @@ class SignInContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-//      height: 40,
-//      width: double.infinity,
+      width: 200,
+      height: 50,
       margin: EdgeInsets.symmetric(vertical: 15),
       decoration: BoxDecoration(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(10)
+      borderRadius: BorderRadius.circular(5)
       ),
-      child: ListTile(
-        minVerticalPadding: 0,
-        leading: Image.asset(asset, height: 30, width: 30,),
-        title:   Text(text, style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: backgroundColor == Colors.white ? Colors.grey: Colors.white
-        ),)),
+      child: SizedBox(
+        child: ListTile(
+          minVerticalPadding: 0,
+          leading: Image.asset(asset, height: 30, width: 30,),
+          title:   FittedBox(
+            child: Text(text,overflow: TextOverflow.visible, style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: backgroundColor == Colors.white ? Colors.black.withOpacity(0.7): Colors.white
+            ),),
+          )),
+      ),
     );
   }
 }
