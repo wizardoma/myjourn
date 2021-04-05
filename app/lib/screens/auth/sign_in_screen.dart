@@ -5,6 +5,7 @@ import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/screens/auth/signin_textfield_widget.dart';
+import 'package:flutterfrontend/screens/home/home_screen.dart';
 
 import '../../themes.dart';
 
@@ -50,22 +51,26 @@ class _SignInScreenState extends State<SignInScreen> {
             margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
             child: BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, state) {
-                if (state is FetchingDataState){
+                if (state is FetchingDataState) {
                   showLoadingState(context);
                 }
                 if (state is EmailIsAvailableState) {
                   setState(() {
-                    isSignIn = true;
-                    willRegister = false;
+                    isSignIn = false;
+                    willRegister = true;
                   });
                 }
 
                 if (state is EmailNotAvailableState) {
                   print("from ui: email is not available");
                   setState(() {
-                    isSignIn = false;
-                    willRegister = true;
+                    isSignIn = true;
+                    willRegister = false;
                   });
+                }
+
+                if (state is IsAuthenticated){
+                  Navigator.pushNamed(context, HomeScreen.routeName);
                 }
               },
               child: Form(
@@ -101,13 +106,15 @@ class _SignInScreenState extends State<SignInScreen> {
                                       TextSpan(
                                         text: "Terms of Service",
                                         style: TextStyle(
-                                            color: Theme.of(context).accentColor),
+                                            color:
+                                                Theme.of(context).accentColor),
                                       ),
                                       TextSpan(text: "and the"),
                                       TextSpan(
                                         text: "Privacy Policy",
                                         style: TextStyle(
-                                            color: Theme.of(context).accentColor),
+                                            color:
+                                                Theme.of(context).accentColor),
                                       ),
                                     ]),
                               ),
@@ -162,27 +169,27 @@ class _SignInScreenState extends State<SignInScreen> {
       context
           .read<AuthenticationBloc>()
           .add(VerifyUniqueEmailEvent(_emailEditingController.text));
-    }
-    else {
+    } else {
       print("it is not validated");
     }
   }
 
   void showLoadingState(BuildContext uiContext) {
-    showDialog(context: uiContext, builder: (context) {
-      return BlocListener<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state is EmailNotAvailableState || state is EmailIsAvailableState) Navigator.pop(context);
-        },
-
-        child: AlertDialog(
-          content: ListTile(
-            title: Text("Checking for existing account"),
-            leading: CircularProgressIndicator(),
-          ),
-        ),
-      );
-    });
-
+    showDialog(
+        context: uiContext,
+        builder: (context) {
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
+            listener: (context, state) {
+              if (state is EmailNotAvailableState ||
+                  state is EmailIsAvailableState) Navigator.pop(context);
+            },
+            child: AlertDialog(
+              content: ListTile(
+                title: Text("Checking for existing account"),
+                leading: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        });
   }
 }

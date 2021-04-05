@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutterfrontend/services/auth/login_creds.dart';
 import 'package:flutterfrontend/services/auth/signup_creds.dart';
 import 'package:flutterfrontend/services/preferences/authentication_preferences.dart';
@@ -8,7 +9,7 @@ import 'package:flutterfrontend/services/repository/server_const.dart';
 class AuthenticationService {
 
   Future<JsonResponse> login(LoginRequest loginRequest) async {
-    var response = await AuthenticationRepository().login(LoginRequest.toMap(loginRequest));
+    var response = await AuthenticationRepository().login(FormData.fromMap(LoginRequest.toMap(loginRequest)));
     if (response.statusCode == 200){
       var token = _extractToken(response);
       _storeToken(token);
@@ -18,7 +19,7 @@ class AuthenticationService {
   }
 
   Future<JsonResponse> signUp(SignUpRequest signUpRequest) async {
-    var response = await AuthenticationRepository().signUp(SignUpRequest.toMap(signUpRequest));
+    var response = await AuthenticationRepository().signUp(FormData.fromMap(SignUpRequest.toMap(signUpRequest)));
     if (response.statusCode == 201) {
       var token = _extractToken(response);
       _storeToken(token);
@@ -34,7 +35,7 @@ class AuthenticationService {
   }
 
   Future<JsonResponse> verifyUniqueEmail(String email) async{
-    var response = await AuthenticationRepository().verifyUniqueEmail({"email" : email});
+    var response = await AuthenticationRepository().verifyUniqueEmail(FormData.fromMap({"email" : email.trim()}));
     print("Gotten response : ${response.errors}");
     return response;
   }

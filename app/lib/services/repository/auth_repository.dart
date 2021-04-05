@@ -10,7 +10,7 @@ class AuthenticationRepository {
     _dio = Dio();
   }
 
-  Future<JsonResponse> login(Map<String, dynamic> loginRequest) async {
+  Future<JsonResponse> login(FormData loginRequest) async {
     try {
       var response =
           await _dio.post(ServerConstants.loginUrl, data: loginRequest);
@@ -22,21 +22,25 @@ class AuthenticationRepository {
     }
   }
 
-  Future<JsonResponse> signUp(Map<String, dynamic> signUpCreds) async {
+  Future<JsonResponse> signUp(FormData signUpCreds) async {
     var response =
         await _dio.post(ServerConstants.signUpUrl, data: signUpCreds);
     return JsonResponse.fromResponse(response);
   }
 
   Future<JsonResponse> verifyUniqueEmail(
-      Map<String, dynamic> verifyCreds) async {
-    print("verifying email: $verifyCreds");
+      FormData verifyCreds) async {
+    Response response;
+    print("verifying email: ${verifyCreds.fields}");
     try {
-      var response =
+      response =
           await _dio.post(ServerConstants.authUrl, data: verifyCreds);
+      print(response.data);
+
       return JsonResponse.fromResponse(response);
     } on DioError catch (e) {
-      print(e.message);
+      print(e.response.data);
+
       return JsonResponse.fromResponse(e.response);
     }
   }
