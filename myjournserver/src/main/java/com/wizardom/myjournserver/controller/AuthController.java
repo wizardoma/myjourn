@@ -2,9 +2,11 @@ package com.wizardom.myjournserver.controller;
 
 import com.wizardom.myjournserver.controller.request.LoginRequest;
 import com.wizardom.myjournserver.controller.request.SignUpRequest;
+import com.wizardom.myjournserver.controller.request.VerifyEmailRequest;
 import com.wizardom.myjournserver.controller.response.JsonResponse;
 import com.wizardom.myjournserver.dto.UserDto;
 import com.wizardom.myjournserver.service.AuthService;
+import com.wizardom.myjournserver.validation.UniqueEmail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,11 @@ import javax.validation.Valid;
 @RequestMapping("auth")
 public class AuthController {
     private final AuthService authService;
+    
+    @PostMapping("")
+    public ResponseEntity<JsonResponse<?>> checkIfUniqueEmail(@Valid VerifyEmailRequest request){
+        return ResponseEntity.ok(null);
+    }
 
     @PostMapping("login")
     public ResponseEntity<JsonResponse<?>> login(@ModelAttribute @Valid LoginRequest request, HttpServletResponse response) {
