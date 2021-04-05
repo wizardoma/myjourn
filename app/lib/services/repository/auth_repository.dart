@@ -5,36 +5,39 @@ import 'server_const.dart';
 
 class AuthenticationRepository {
   Dio _dio;
-  AuthenticationRepository(){
+
+  AuthenticationRepository() {
     _dio = Dio();
   }
 
-  Future<JsonResponse> login(Map<String, dynamic> loginRequest) async{
-    try {var response = await _dio.post(ServerConstants.loginUrl, data: loginRequest);
-    print("response: ${response.data.toString()}");
-    return JsonResponse.fromResponse(response);
-
-    }
-    on DioError catch (e) {
+  Future<JsonResponse> login(Map<String, dynamic> loginRequest) async {
+    try {
+      var response =
+          await _dio.post(ServerConstants.loginUrl, data: loginRequest);
+      print("response: ${response.data.toString()}");
+      return JsonResponse.fromResponse(response);
+    } on DioError catch (e) {
       print(e.message);
       return JsonResponse.fromResponse(e.response);
     }
-
   }
 
   Future<JsonResponse> signUp(Map<String, dynamic> signUpCreds) async {
-    var response = await _dio.post(ServerConstants.signUpUrl, data: signUpCreds);
+    var response =
+        await _dio.post(ServerConstants.signUpUrl, data: signUpCreds);
     return JsonResponse.fromResponse(response);
   }
 
-  Future<JsonResponse> verifyUniqueEmail(Map<String, dynamic> verifyCreds) async {
+  Future<JsonResponse> verifyUniqueEmail(
+      Map<String, dynamic> verifyCreds) async {
     print("verifying email: $verifyCreds");
-    try {var response = await _dio.post(ServerConstants.authUrl, data: verifyCreds);
-    return JsonResponse.fromResponse(response); }
-    on DioError catch (e) {
+    try {
+      var response =
+          await _dio.post(ServerConstants.authUrl, data: verifyCreds);
+      return JsonResponse.fromResponse(response);
+    } on DioError catch (e) {
       print(e.message);
       return JsonResponse.fromResponse(e.response);
     }
   }
-
 }
