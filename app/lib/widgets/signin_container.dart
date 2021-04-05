@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class SignInContainer extends StatelessWidget {
   final String asset, text;
   final Color backgroundColor;
-  SignInContainer(this.asset, this.backgroundColor, this.text);
+  final Function(BuildContext context) action;
+  SignInContainer(this.asset, this.backgroundColor, this.text, this.action);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,7 @@ class SignInContainer extends StatelessWidget {
       ),
       child: SizedBox(
         child: ListTile(
+          onTap: () => action(context),
           minVerticalPadding: 0,
           leading: Image.asset(asset, height: 30, width: 30,),
           title:   FittedBox(

@@ -5,6 +5,7 @@ import 'package:flutterfrontend/bloc/journal/journal_events.dart';
 import 'package:flutterfrontend/bloc/search/search_journal_bloc.dart';
 import 'package:flutterfrontend/bloc/settings/themes_bloc.dart';
 import 'package:flutterfrontend/screens/auth/authentication_screen.dart';
+import 'package:flutterfrontend/screens/auth/sign_in_screen.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
@@ -50,6 +51,8 @@ class MyApp extends StatelessWidget {
           routes: {
             NewJournalScreen.routeName: (context) => NewJournalScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),
+            AuthenticationScreen.routeName: (context) => AuthenticationScreen(),
+            SignInScreen.routeName: (context) => SignInScreen(),
             SearchScreen.routeName: (context) => SearchScreen(),
             SettingsScreen.routeName: (context) => SettingsScreen(),
             ViewJournalScreen.routeName: (context) => ViewJournalScreen(),

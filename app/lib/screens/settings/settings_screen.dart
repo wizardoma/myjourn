@@ -5,6 +5,7 @@ import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/bloc/settings/themes_bloc.dart';
 import 'package:flutterfrontend/providers/ThemeProvider.dart';
+import 'package:flutterfrontend/screens/auth/authentication_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -206,7 +207,7 @@ class SettingsScreen extends StatelessWidget {
       return BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (BuildContext context, state) {
           if (state is NotAuthenticated){
-            Navigator.pushReplacementNamed(uiContext, "/signUp");
+            Navigator.pushReplacementNamed(uiContext, AuthenticationScreen.routeName);
           }
         },
         child: AlertDialog(

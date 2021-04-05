@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Themes {
+  static const Color authBackGroundColor = Colors.brown;
+
   //purple Theme
   static const _purpleColor = Colors.purple;
   static const _purpleAccent = Colors.purpleAccent;

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutterfrontend/screens/auth/sign_in_screen.dart';
 import 'package:flutterfrontend/widgets/signin_container.dart';
 
+import '../../themes.dart';
+
 class AuthenticationScreen extends StatelessWidget {
+  static const routeName = "/auth";
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.brown,
+      backgroundColor: Themes.authBackGroundColor,
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -76,11 +80,11 @@ class AuthenticationScreen extends StatelessWidget {
                         height: 20,
                       ),
                       SignInContainer("assets/logos/google.png", Colors.white,
-                          "Sign in with Google"),
+                          "Sign in with Google", null),
                       SignInContainer("assets/logos/facebook.png",
-                          Colors.blue.shade900, "Sign in with Facebook"),
+                          Colors.blue.shade900, "Sign in with Facebook", null),
                       SignInContainer("assets/logos/mail.png",
-                          Colors.red.shade900, "Sign in with Email"),
+                          Colors.red.shade900, "Sign in with Email", signInWithEmail),
                     ],
                   ),
                 ),
@@ -90,5 +94,9 @@ class AuthenticationScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void signInWithEmail(context){
+    Navigator.pushNamed(context, SignInScreen.routeName);
   }
 }
