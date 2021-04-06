@@ -31,6 +31,7 @@ class AuthenticationService {
 
   static Future<bool> isAuthenticated() async {
     String token = await AuthenticationPreferences().getToken();
+    print("isAuthenticated $token");
     if (token == null || token.isEmpty) return false;
     return true;
   }
@@ -42,7 +43,7 @@ class AuthenticationService {
   }
 
   String _extractToken(JsonResponse response){
-    return response.headers.value(ServerConstants.authHeaderName).substring(0, ServerConstants.tokenPrefix.length);
+    return response.headers.value(ServerConstants.authHeaderName).substring(ServerConstants.tokenPrefix.length);
   }
 
   void _storeToken(String token){
@@ -51,7 +52,7 @@ class AuthenticationService {
   }
 
   Future<void> logout() async{
-    _storeToken(null);
+    _storeToken("");
   }
 
 

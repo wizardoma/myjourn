@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Themes.authBackGroundColor,
@@ -56,25 +56,39 @@ class _SignInScreenState extends State<SignInScreen> {
               listener: (context, state) {
                 if (state is FetchingDataState) {
                   if (isVerifyEmail()) {
-                  showLoadingState(context, "");}
-                }
-                if (state is EmailIsAvailableState) {
-                  setState(() {
-                    isSignIn = false;
-                    willRegister = true;
-                  });
+                    showLoadingState(
+                        context, "Checking for Existing accounts", "verify");
+                  } else if (isSignIn) {
+                    showLoadingState(context, "Logging in", "login");
+                  } else if (willRegister) {
+                    showLoadingState(context, "Signing Up", "signUp");
+                  }
                 }
 
-                if (state is EmailNotAvailableState) {
-                  print("from ui: email is not available");
-                  setState(() {
-                    isSignIn = true;
-                    willRegister = false;
-                  });
+                if (isVerifyEmail()) {
+                  if (state is EmailIsAvailableState) {
+                    setState(() {
+                      isSignIn = false;
+                      willRegister = true;
+                    });
+                  }
+
+                  if (state is EmailNotAvailableState) {
+                    print("from ui: email is not available");
+                    setState(() {
+                      isSignIn = true;
+                      willRegister = false;
+                    });
+                  }
+                }
+
+                if (state is NotAuthenticated){
+                  showErrorMessage(state.errors);
                 }
 
                 if (state is IsAuthenticated) {
-                  Navigator.pushNamed(context, HomeScreen.routeName);
+                  print("successfully logged in");
+                  Navigator.pushReplacementNamed(mainContext, HomeScreen.routeName);
                 }
               },
               child: Form(
@@ -102,7 +116,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 text: TextSpan(
                                     text:
                                         "By tapping Save you are indicating that you agree to the ",
-                                    style: Theme.of(context)
+                                    style: Theme.of(mainContext)
                                         .textTheme
                                         .headline4
                                         .copyWith(fontSize: 16),
@@ -111,14 +125,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                         text: "Terms of Service",
                                         style: TextStyle(
                                             color:
-                                                Theme.of(context).accentColor),
+                                                Theme.of(mainContext).accentColor),
                                       ),
                                       TextSpan(text: "and the"),
                                       TextSpan(
                                         text: "Privacy Policy",
                                         style: TextStyle(
                                             color:
-                                                Theme.of(context).accentColor),
+                                                Theme.of(mainContext).accentColor),
                                       ),
                                     ]),
                               ),
@@ -130,9 +144,15 @@ class _SignInScreenState extends State<SignInScreen> {
                       margin: EdgeInsets.only(top: 10),
                       alignment: Alignment.centerRight,
                       child: MaterialButton(
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(mainContext).accentColor,
                         onPressed: submit,
-                        child: Text(isVerifyEmail()?"NEXT": isSignIn? "LOGIN" : willRegister? "SIGN UP": "NEXT"),
+                        child: Text(isVerifyEmail()
+                            ? "NEXT"
+                            : isSignIn
+                                ? "LOGIN"
+                                : willRegister
+                                    ? "SIGN UP"
+                                    : "NEXT"),
                       ),
                     ),
                   ],
@@ -173,32 +193,38 @@ class _SignInScreenState extends State<SignInScreen> {
       if (isSignIn) {
         login(LoginRequest(
             _emailEditingController.text, _passwordEditingController.text));
-      }
-      else if (willRegister){
-        signUp(SignUpRequest(_emailEditingController.text, _passwordEditingController.text, SignUpType.email));
-      }
-
-      else if (isVerifyEmail()) {
+      } else if (willRegister) {
+        signUp(SignUpRequest(_emailEditingController.text,
+            _passwordEditingController.text, SignUpType.email));
+      } else if (isVerifyEmail()) {
         verifyEmail(VerifyEmailRequest(_emailEditingController.text));
-
       }
     } else {
       print("it is not validated");
     }
   }
 
-  void login(LoginRequest request) {}
+  void login(LoginRequest request) {
+    context.read<AuthenticationBloc>().add(LoginEvent(request));
+  }
 
-  void signUp(SignUpRequest request){}
+  void signUp(SignUpRequest request) {}
 
-  void showLoadingState(BuildContext uiContext, String message) {
+  void showLoadingState(BuildContext uiContext, String message, String event) {
     showDialog(
         context: uiContext,
         builder: (context) {
           return BlocListener<AuthenticationBloc, AuthenticationState>(
             listener: (context, state) {
-              if (state is EmailNotAvailableState ||
-                  state is EmailIsAvailableState) Navigator.pop(context);
+              if ((state is EmailNotAvailableState ||
+                      state is EmailIsAvailableState) &&
+                  event == "verify") {
+                Navigator.pop(context);
+              } else if ((event == "login" || event == "signUp") &&
+                  (state is NotAuthenticated)) {
+                Navigator.pop(context);
+              }
+
             },
             child: AlertDialog(
               content: ListTile(
@@ -217,5 +243,18 @@ class _SignInScreenState extends State<SignInScreen> {
 
   bool isVerifyEmail() {
     return !isSignIn && !willRegister;
+  }
+
+  void showErrorMessage(Map<String, dynamic> errors) {
+    if (errors == null || errors.length == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Please check your credentials and try again")));
+    }
+    else {
+      if (errors["authentication.error"] != null){
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errors["authentication.error"].toString())));
+      }
+    }
   }
 }

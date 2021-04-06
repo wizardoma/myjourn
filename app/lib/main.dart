@@ -20,7 +20,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var isAuthenticated = await AuthenticationService.isAuthenticated();
-  var authenticationBloc = AuthenticationBloc(isAuthenticated?IsAuthenticated:NotAuthenticated(null));
+  var authenticationBloc = AuthenticationBloc(isAuthenticated?IsAuthenticated():NotAuthenticated(null));
 //  authenticationBloc.add(event)
   var repository = JournalRepository.instance;
   var themesBloc = ThemesBloc("green");

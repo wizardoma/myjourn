@@ -18,6 +18,7 @@ class _SignInTextFieldState extends State<SignInTextField> {
       margin: EdgeInsets.symmetric(vertical: 15),
 
       child: TextFormField(
+        keyboardType: widget.labelText == "Email"? TextInputType.emailAddress : TextInputType.text,
         controller: widget.textEditingController,
         decoration: InputDecoration(
             hintText: widget.labelText,
