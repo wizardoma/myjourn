@@ -96,8 +96,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 if (state is IsAuthenticated) {
                   print("successfully logged in");
-                  Navigator.popUntil(
-                      mainContext, ModalRoute.withName(HomeScreen.routeName));
+                  Navigator.pushNamedAndRemoveUntil(
+                      mainContext, HomeScreen.routeName, (Route<dynamic> route) => false);
                 }
               },
               child: Form(
