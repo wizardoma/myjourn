@@ -6,7 +6,6 @@ import com.wizardom.myjournserver.controller.request.VerifyEmailRequest;
 import com.wizardom.myjournserver.controller.response.JsonResponse;
 import com.wizardom.myjournserver.dto.UserDto;
 import com.wizardom.myjournserver.service.AuthService;
-import com.wizardom.myjournserver.validation.UniqueEmail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,7 @@ public class AuthController {
     
     @PostMapping("")
     public ResponseEntity<JsonResponse<?>> checkIfUniqueEmail(@Valid VerifyEmailRequest request){
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(new JsonResponse<>(HttpStatus.OK));
     }
 
     @PostMapping("login")

@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        com.wizardom.myjournserver.model.User user = userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("No user found with email: "+email));
+        com.wizardom.myjournserver.model.User user = userRepository.findByEmailIgnoreCase(email).orElseThrow(()-> new UsernameNotFoundException("No user found with email: "+email));
         return new User(user.getEmail(), user.getPassword(), Collections.emptyList());
     }
 }

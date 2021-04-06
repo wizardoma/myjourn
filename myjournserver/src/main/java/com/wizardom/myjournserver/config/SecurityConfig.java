@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable().formLogin().disable()
                 .authorizeRequests()
-                .mvcMatchers("auth/login", "auth/signup").permitAll().anyRequest().authenticated()
+                .mvcMatchers("auth", "auth/login", "auth/signup").permitAll().anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security

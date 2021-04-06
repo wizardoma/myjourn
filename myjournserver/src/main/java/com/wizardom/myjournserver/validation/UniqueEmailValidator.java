@@ -22,6 +22,6 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
       if (StringUtils.isEmpty(email)){
          return false;
       }
-      return userRepository.findByEmail(email.toLowerCase()).isEmpty();
+      return userRepository.findByEmailIgnoreCase(email.toLowerCase()).isEmpty();
    }
 }

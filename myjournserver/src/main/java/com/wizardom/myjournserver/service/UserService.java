@@ -6,7 +6,6 @@ import com.wizardom.myjournserver.model.SignUpType;
 import com.wizardom.myjournserver.model.User;
 import com.wizardom.myjournserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email.toLowerCase())
+        return userRepository.findByEmailIgnoreCase(email.toLowerCase())
                 .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
     }
 
@@ -31,7 +30,7 @@ public class UserService {
 
     public User save(SignUpRequest request) {
         User user = new User()
-                .setEmail(request.getEmail().toLowerCase())
+                .setEmail(request.getEmail().trim())
                 .setSignUpType(SignUpType.valueOf(request.getSignUpType().toLowerCase()))
                 .setPassword(passwordEncoder.encode(request.getPassword()));
         return userRepository.save(user);
@@ -43,8 +42,12 @@ public class UserService {
 
     public User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("No User found with email: " + email));
+        return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new UserNotFoundException("No User found with email: " + email));
     }
 
 
+    public void deleteById(long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found"));
+        userRepository.delete(user);
+    }
 }

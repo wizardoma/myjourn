@@ -8,4 +8,5 @@ import lombok.experimental.Accessors;
 public class UserDto {
     private long id;
     private String email;
+    private String username;
 }
