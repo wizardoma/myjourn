@@ -22,6 +22,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("")
+    public ResponseEntity<JsonResponse<?>> getCurrentUser(){
+        UserDto userDto = UserMapper.toDto(userService.getCurrentUser());
+        return ResponseEntity.ok(new JsonResponse<>(OK,userDto));
+    }
+
+    @GetMapping("all")
     public ResponseEntity<JsonResponse<?>> getUsers(){
         List<UserDto> users = userService.getAllUsers().stream()
                 .map(UserMapper::toDto)
@@ -37,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok(new JsonResponse<>(OK,user));
     }
     
-    @DeleteMapping({"id"})
+    @DeleteMapping("{id}")
     public ResponseEntity<JsonResponse> deleteUser(@PathVariable("id") long id){
         userService.deleteById(id);
         return ResponseEntity.ok(new JsonResponse(OK));

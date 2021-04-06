@@ -17,7 +17,8 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    
+    
     public User getByEmail(String email) {
         return userRepository.findByEmailIgnoreCase(email.toLowerCase())
                 .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
