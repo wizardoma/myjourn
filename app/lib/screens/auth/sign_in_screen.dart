@@ -23,6 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController _emailEditingController;
   TextEditingController _passwordEditingController;
   TextEditingController _usernameEditingController;
+  Map<String, dynamic> serverErrors = {};
   final _formKey = GlobalKey<FormState>();
   bool willRegister = false;
   bool isSignIn = false;
@@ -83,7 +84,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 }
 
                 if (state is NotAuthenticated) {
-                  showErrorMessage(state.errors);
+                  print("Not authenticated");
+                  print(state.errors.toString());
+                  setState(() {
+                    serverErrors = state.errors;
+                  });
+                  showErrorMessage();
+                  _formKey.currentState.validate();
+                  serverErrors = {};
                 }
 
                 if (state is IsAuthenticated) {
@@ -173,6 +181,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (!val.contains("@")) {
       return "The email address isn't correct";
     }
+    if (serverErrors["field.email"]!=null){return serverErrors["field.email"].toString();}
     return null;
   }
 
@@ -180,11 +189,15 @@ class _SignInScreenState extends State<SignInScreen> {
     if (val.isEmpty) {
       return "Password not strong enough. Use at least 6 characters and a mix of letters nd numbers";
     }
+    if (serverErrors["field.password"]!=null){return serverErrors["field.password"].toString();}
+
     return null;
   }
 
   String validateUsername(String val) {
     if (val.isEmpty) return "You can't leave this empty";
+    if (serverErrors["field.username"]!=null){return serverErrors["field.username"].toString();}
+
     return null;
   }
 
@@ -195,8 +208,8 @@ class _SignInScreenState extends State<SignInScreen> {
         login(LoginRequest(
             _emailEditingController.text, _passwordEditingController.text));
       } else if (willRegister) {
-        signUp(SignUpRequest(_emailEditingController.text,
-            _passwordEditingController.text, SignUpType.email));
+        signUp(SignUpRequest(_emailEditingController.text, _usernameEditingController.text,
+            _passwordEditingController.text,  SignUpType.email));
       } else if (isVerifyEmail()) {
         verifyEmail(VerifyEmailRequest(_emailEditingController.text));
       }
@@ -206,10 +219,14 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void login(LoginRequest request) {
+    serverErrors = {};
     context.read<AuthenticationBloc>().add(LoginEvent(request));
   }
 
-  void signUp(SignUpRequest request) {}
+  void signUp(SignUpRequest request) {
+    serverErrors = {};
+    context.read<AuthenticationBloc>().add(SignUpEvent(request));
+  }
 
   void showLoadingState(BuildContext uiContext, String message, String event) {
     showDialog(
@@ -237,6 +254,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void verifyEmail(VerifyEmailRequest verifyEmailRequest) {
+    serverErrors = {};
     context.read<AuthenticationBloc>().add(VerifyUniqueEmailEvent(
         VerifyEmailRequest(_emailEditingController.text)));
   }
@@ -245,15 +263,22 @@ class _SignInScreenState extends State<SignInScreen> {
     return !isSignIn && !willRegister;
   }
 
-  void showErrorMessage(Map<String, dynamic> errors) {
-    if (errors == null || errors.length == 0) {
+  void showErrorMessage() {
+
+    if (serverErrors == null || serverErrors.length == 0) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Please check your credentials and try again")));
+          content: Text("Please make sure you field the form correctly and try again")));
+      return;
     } else {
-      if (errors["authentication.error"] != null) {
+      if (serverErrors["authentication.error"] != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(errors["authentication.error"].toString())));
+            SnackBar(content: Text(serverErrors["authentication.error"].toString())));
+        return;
       }
+//
+//      if (serverErrors.keys.firstWhere((element) => element.contains("field"))!=null){
+//        if (serverErrors[])
+//      }
     }
   }
 }

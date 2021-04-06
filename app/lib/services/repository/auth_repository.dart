@@ -23,9 +23,19 @@ class AuthenticationRepository {
   }
 
   Future<JsonResponse> signUp(FormData signUpCreds) async {
-    var response =
-        await _dio.post(ServerConstants.signUpUrl, data: signUpCreds);
+    Response response;
+    try {
+      response =
+      await _dio.post(ServerConstants.signUpUrl, data: signUpCreds);
     return JsonResponse.fromResponse(response);
+  }
+  on DioError catch (e) {
+      return JsonResponse.fromResponse(e.response);
+  }
+  catch (e) {
+      print(e);
+  }
+
   }
 
   Future<JsonResponse> verifyUniqueEmail(
