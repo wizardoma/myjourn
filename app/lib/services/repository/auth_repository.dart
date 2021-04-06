@@ -4,12 +4,15 @@ import 'package:flutterfrontend/services/repository/jsonresponse.dart';
 import 'server_const.dart';
 
 class AuthenticationRepository {
-  Dio _dio;
+  static final Dio _dio = Dio();
 
-  AuthenticationRepository() {
-    _dio = Dio();
+  AuthenticationRepository._privateConstructor();
+
+  static final AuthenticationRepository _instance = AuthenticationRepository._privateConstructor();
+
+  factory AuthenticationRepository() {
+    return _instance;
   }
-
   Future<JsonResponse> login(FormData loginRequest) async {
     try {
       var response =

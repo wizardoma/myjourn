@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/bloc/journal/journal_bloc.dart';
 import 'package:flutterfrontend/bloc/journal/journal_events.dart';
@@ -19,22 +20,22 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var isAuthenticated = await AuthenticationService.isAuthenticated();
-  var authenticationBloc = AuthenticationBloc(isAuthenticated?IsAuthenticated():NotAuthenticated(null));
-//  authenticationBloc.add(event)
   var repository = JournalRepository.instance;
+  var authenticationService = AuthenticationService();
+  var authenticationBloc = AuthenticationBloc(authenticationService: authenticationService)..add(AppStartedEvent());
+  var journalBloc = JournalBloc(repository)..add(FetchJournalsEvent());
   var themesBloc = ThemesBloc("green");
   await themesBloc.loadTheme();
 
-  runApp(MyApp(repository,authenticationBloc, themesBloc));
+  runApp(MyApp(authenticationBloc,journalBloc, themesBloc));
 }
 
 class MyApp extends StatelessWidget {
   final ThemesBloc _themesBloc;
-  final JournalRepository repository;
+  final JournalBloc _journalBloc;
   final AuthenticationBloc _authenticationBloc;
 
-  MyApp(this.repository,this._authenticationBloc, this._themesBloc);
+  MyApp(this._authenticationBloc,this._journalBloc, this._themesBloc);
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +43,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider.value(value: _authenticationBloc),
         BlocProvider.value(
-          value: JournalBloc()..add(FetchJournalsEvent()),
+          value: _journalBloc,
         ),
         BlocProvider(
-          create: (context) => SearchJournalBloc(repository),
+          create: (context) => SearchJournalBloc(journalBloc: BlocProvider.of<JournalBloc>(context)),
         ),
         BlocProvider.value(
           value: _themesBloc,

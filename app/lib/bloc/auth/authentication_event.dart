@@ -3,6 +3,8 @@ import 'package:flutterfrontend/services/auth/request.dart';
 abstract class AuthenticationEvent {
 }
 
+class AppStartedEvent extends AuthenticationEvent {}
+
 class LoginEvent extends AuthenticationEvent {
   final Request request;
 

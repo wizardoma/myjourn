@@ -1,12 +1,15 @@
 class ServerConstants {
   static final baseUrl = "https://myjournserver.herokuapp.com";
   static final journalsUrl = "$baseUrl/journals";
-  static final String authUrl = "$baseUrl/auth";
+
+  // auth
+  static final authUrl = "$baseUrl/auth";
   static final loginUrl = "$authUrl/login";
   static final signUpUrl = "$authUrl/signup";
+
+  //user
+  static final userUrl = "$baseUrl/users";
+
   static final authHeaderName = "Authorization";
-  static final tokenPrefix= "Bearer ";
-
-
-
+  static final tokenPrefix = "Bearer ";
 }

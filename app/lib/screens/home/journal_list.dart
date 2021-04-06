@@ -18,8 +18,9 @@ class _JournalListState extends State<JournalList> {
   @override
   void initState() {
     super.initState();
-    bloc = JournalBloc()..add(FetchJournalsEvent());
+    BlocProvider.of<JournalBloc>(context).add(FetchJournalsEvent());
   }
+
   @override
   Widget build(BuildContext context) {
 

@@ -1,18 +1,23 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/journal/journal_bloc.dart';
 import 'package:flutterfrontend/bloc/journal/journal_events.dart';
 import 'package:flutterfrontend/bloc/journal/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
-import 'package:flutterfrontend/services/repository/journal_repository.dart';
 
 class SearchJournalBloc extends Bloc<JournalEvents, JournalState> {
-  JournalRepository _repository;
-  StreamSubscription streamSubscription;
+  JournalBloc journalBloc;
+  StreamSubscription _streamSubscription;
 
-  SearchJournalBloc(JournalRepository repository) : super(InitialJournalState()) {
-    this._repository = repository?? JournalRepository.instance;
-    }
+  SearchJournalBloc({this.journalBloc}) : super(InitialJournalState()) {
+    this._journals = journalBloc.journals;
+    _streamSubscription = journalBloc.stream.listen((event) {
+      if (state is FetchJournalsSuccess){
+        this._journals = (state as FetchJournalsSuccess).journals;
+      }
+    });
+  }
 
   List<Journal> _journals = [];
 
@@ -27,13 +32,10 @@ class SearchJournalBloc extends Bloc<JournalEvents, JournalState> {
 
   Future<JournalState> searchJournal(SearchJournalEvent event)async {
 
-
     try {
         List<Journal> result;
         if (_journals.length == 0) {
-          result = (await _repository.all()).map((e) =>
-              Journal.fromNewMap(e)).toList().where((element) =>
-              element.body.contains(event.query)).toList();
+          return SearchEmpty();
         }
         else {
           result = _journals.where((element) =>
@@ -51,7 +53,10 @@ class SearchJournalBloc extends Bloc<JournalEvents, JournalState> {
       }
   }
 
-  dispose() {
-    streamSubscription.cancel();
+  @override
+  close() async {
+    super.close();
+    _streamSubscription.cancel();
   }
+
 }

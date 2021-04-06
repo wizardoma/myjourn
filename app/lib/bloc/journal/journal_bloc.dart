@@ -6,14 +6,11 @@ import 'journal_events.dart';
 import 'journal_state.dart';
 
 class JournalBloc extends Bloc<JournalEvents, JournalState> {
-  JournalRepository _repository;
+  final JournalRepository _repository;
 
   List<Journal> _journals = [];
 
-  JournalBloc() : super(InitialJournalState()) {
-    _repository = _repository ?? JournalRepository.instance;
-//    add(FetchJournalsEvent());
-  }
+  JournalBloc(this._repository) : super(InitialJournalState());
 
   @override
   Stream<JournalState> mapEventToState(JournalEvents event) async* {
@@ -59,7 +56,6 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
     try {
       var result = await _repository.update(Journal.toMap(event.journal));
       if (databaseOpWasSuccessful(result)) {
-//        fetchJournals();
         return EditSuccess(event.journal);
       }
       return EditFailure();
@@ -72,7 +68,6 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
     try {
       var result = await _repository.insert(Journal.toMap(event.journal));
       if (databaseOpWasSuccessful(result)) {
-//        fetchJournals();
         return AddJournalSuccess(event.journal);
       } else
         return AddJournalFailure();

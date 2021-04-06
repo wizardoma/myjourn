@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthenticationPreferences {
+class AccessTokenPreferences {
   static const _appThemePrefName = "token";
 
   setToken(String themeName) async {

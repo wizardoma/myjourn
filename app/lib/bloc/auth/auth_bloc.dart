@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
@@ -8,14 +9,22 @@ import 'package:flutterfrontend/services/auth/verify_email_request.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationService _authenticationService = AuthenticationService();
-  AuthenticationState authenticationState;
+  final AuthenticationService authenticationService;
 
-  AuthenticationBloc(AuthenticationState initialState) : super(initialState);
+  AuthenticationBloc({@required this.authenticationService})
+      : super(AuthenticationNotInitialized());
 
   @override
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
+    if (event is AppStartedEvent) {
+      var token = await authenticationService.getToken();
+      if (token) {
+        yield IsAuthenticated();
+      } else {
+        yield NotAuthenticated();
+      }
+    }
     if (event is LoginEvent) {
       yield FetchingDataState();
       yield await login(event.request);
@@ -32,7 +41,6 @@ class AuthenticationBloc
     }
 
     if (event is VerifyUniqueEmailEvent) {
-      print("It is verify email");
       yield FetchingDataState();
       yield await verifyUniqueEmail(event.request);
     }
@@ -40,35 +48,29 @@ class AuthenticationBloc
 
   Future<AuthenticationState> verifyUniqueEmail(
       VerifyEmailRequest request) async {
-    var response = await _authenticationService.verifyUniqueEmail(request);
+    var response = await authenticationService.verifyUniqueEmail(request);
     if (response.statusCode == 200) {
-      print("email is valid");
       return EmailIsAvailableState();
     }
-    print("email is not available");
     return EmailNotAvailableState();
   }
 
   Future<AuthenticationState> signUp(SignUpRequest request) async {
-    var signUpTypeEnum = SignUpType.values
-        .firstWhere((element) => element == request.signUpType);
-    var response = await _authenticationService
-        .signUp(request);
+    var response = await authenticationService.signUp(request);
     return response.statusCode == 201
         ? IsAuthenticated()
-        : NotAuthenticated(response.errors);
+        : NotAuthenticated.withErrors(response.errors);
   }
 
   Future<AuthenticationState> login(LoginRequest request) async {
-    var response =
-        await _authenticationService.login(request);
+    var response = await authenticationService.login(request);
     return response.statusCode == 200
         ? IsAuthenticated()
-        : NotAuthenticated(response.errors);
+        : NotAuthenticated.withErrors(response.errors);
   }
 
   Future<AuthenticationState> logout() async {
-    await _authenticationService.logout();
-    return NotAuthenticated(null);
+    await authenticationService.logout();
+    return NotAuthenticated();
   }
 }
