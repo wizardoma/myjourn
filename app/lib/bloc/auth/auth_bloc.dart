@@ -18,6 +18,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
     if (event is AppStartedEvent) {
+      print("app started");
       var token = await authenticationService.getToken();
       if (token) {
         yield IsAuthenticated();

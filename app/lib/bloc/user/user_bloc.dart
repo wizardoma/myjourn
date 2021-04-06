@@ -17,6 +17,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({this.authenticationBloc, this.userService}) : super(UserNotInitializedState()){
     _streamSubscription = authenticationBloc.stream.listen((state) {
       if (state is IsAuthenticated){
+        print("from users now going to fetch user");
         this.add(FetchUserEvent());
       }
     });

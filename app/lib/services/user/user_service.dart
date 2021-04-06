@@ -8,13 +8,17 @@ class UserService with ResponseUtil{
   static final AccessTokenPreferences _accessTokenPreferences = AccessTokenPreferences();
   UserRepository _userRepository;
 
+  UserService(){
+    _userRepository = UserRepository();
+  }
+
   Future<User> getCurrentUser() async{
     var token = await _accessTokenPreferences.getToken();
     Map<String, dynamic> headers = {"${ServerConstants.authHeaderName}": "${ServerConstants.tokenPrefix}$token"};
     var response = await _userRepository.getCurrentUser(headers);
 
     if (ResponseUtil.isOk(response.statusCode)){
-      return User.fromMap(response.data["body"]);
+      return User.fromMap(response.data);
     }
     // authentication
     else if (ResponseUtil.isAuthorizationError(response.statusCode)){
