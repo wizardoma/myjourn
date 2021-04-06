@@ -32,6 +32,7 @@ public class UserService {
         User user = new User()
                 .setEmail(request.getEmail().trim())
                 .setSignUpType(SignUpType.valueOf(request.getSignUpType().toLowerCase()))
+                .setUsername(request.getUsername())
                 .setPassword(passwordEncoder.encode(request.getPassword()));
         return userRepository.save(user);
     }
