@@ -82,13 +82,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   }
                 }
 
-                if (state is NotAuthenticated){
+                if (state is NotAuthenticated) {
                   showErrorMessage(state.errors);
                 }
 
                 if (state is IsAuthenticated) {
                   print("successfully logged in");
-                  Navigator.pushReplacementNamed(mainContext, HomeScreen.routeName);
+                  Navigator.popUntil(
+                      mainContext, ModalRoute.withName(HomeScreen.routeName));
                 }
               },
               child: Form(
@@ -124,15 +125,15 @@ class _SignInScreenState extends State<SignInScreen> {
                                       TextSpan(
                                         text: "Terms of Service",
                                         style: TextStyle(
-                                            color:
-                                                Theme.of(mainContext).accentColor),
+                                            color: Theme.of(mainContext)
+                                                .accentColor),
                                       ),
                                       TextSpan(text: "and the"),
                                       TextSpan(
                                         text: "Privacy Policy",
                                         style: TextStyle(
-                                            color:
-                                                Theme.of(mainContext).accentColor),
+                                            color: Theme.of(mainContext)
+                                                .accentColor),
                                       ),
                                     ]),
                               ),
@@ -224,7 +225,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   (state is NotAuthenticated)) {
                 Navigator.pop(context);
               }
-
             },
             child: AlertDialog(
               content: ListTile(
@@ -247,11 +247,10 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void showErrorMessage(Map<String, dynamic> errors) {
     if (errors == null || errors.length == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Please check your credentials and try again")));
-    }
-    else {
-      if (errors["authentication.error"] != null){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Please check your credentials and try again")));
+    } else {
+      if (errors["authentication.error"] != null) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(errors["authentication.error"].toString())));
       }
