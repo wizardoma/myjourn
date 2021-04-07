@@ -6,7 +6,6 @@ import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/bloc/settings/themes_bloc.dart';
 import 'package:flutterfrontend/bloc/user/user_bloc.dart';
 import 'package:flutterfrontend/models/user.dart';
-import 'package:flutterfrontend/providers/ThemeProvider.dart';
 import 'package:flutterfrontend/screens/auth/authentication_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -77,7 +76,7 @@ class SettingsScreen extends StatelessWidget {
                 SettingsTile(
                   title: "Theme",
                   subtitle: "Change themes (Includes Dark theme)",
-                  onPressed:  changeTheme,
+                  onPressed: changeTheme,
                 ),
               ],
             ),
@@ -98,8 +97,14 @@ class SettingsScreen extends StatelessWidget {
               title: "Login",
               tiles: [
                 SettingsTile(
-                  leading: Image.asset("assets/logos/google.png", height: 30, width: 30,),
-                  title: snapshot.connectionState == ConnectionState.done ?snapshot.data.email : "Loading email",
+                  leading: Image.asset(
+                    "assets/logos/google.png",
+                    height: 30,
+                    width: 30,
+                  ),
+                  title: snapshot.connectionState == ConnectionState.done
+                      ? snapshot.data.email
+                      : "Loading email",
                 ),
                 SettingsTile(
                   title: "Logout",
@@ -209,23 +214,32 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void logout(BuildContext uiContext) async {
-    showDialog(context: uiContext, builder: (context) {
-      return BlocListener<AuthenticationBloc, AuthenticationState>(
-        listener: (BuildContext context, state) {
-          if (state is NotAuthenticated){
-            Navigator.pushReplacementNamed(uiContext, AuthenticationScreen.routeName);
-          }
-        },
-        child: AlertDialog(
-          title: Text("Logout"),
-          content: Text("Are you sure you want to logout"),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: Text("CANCEL"),),
-            TextButton(onPressed: () {
-              context.read<AuthenticationBloc>().add(LogoutEvent());}, child: Text("LOGOUT"))
-          ],
-        ),
-      );
-    });
+    showDialog(
+        context: uiContext,
+        builder: (context) {
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
+            listener: (BuildContext context, state) {
+              if (state is NotAuthenticated) {
+                Navigator.pushReplacementNamed(
+                    uiContext, AuthenticationScreen.routeName);
+              }
+            },
+            child: AlertDialog(
+              title: Text("Logout"),
+              content: Text("Are you sure you want to logout"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("CANCEL"),
+                ),
+                TextButton(
+                    onPressed: () {
+                      context.read<AuthenticationBloc>().add(LogoutEvent());
+                    },
+                    child: Text("LOGOUT"))
+              ],
+            ),
+          );
+        });
   }
 }
