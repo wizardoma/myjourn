@@ -44,6 +44,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
+  Future<User> fetchCachedUser() async {
+    User user;
+    user = await userService.getCachedUser();
+    if (user!=null) {return user;}
+    else {
+      var userState = await fetchUser();
+      if (userState is UserFetchedState){
+       user =  userState.user;
+      }
+    }
+    print(user);
+
+    return user;
+  }
+
   @override
   Future<void> close() {
     _streamSubscription.cancel();

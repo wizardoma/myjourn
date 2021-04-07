@@ -13,6 +13,8 @@ class User {
         _email = email,
         _username = username;
 
+  int get id => _id;
+
   factory User.fromMap(Map<String, dynamic> map) {
     return new User(
       id: map['id'] as int,
@@ -24,9 +26,13 @@ class User {
   Map<String, dynamic> toMap() {
     // ignore: unnecessary_cast
     return {
-      '_id': this._id,
-      '_email': this._email,
-      '_username': this._username,
+      'id': this._id,
+      'email': this._email,
+      'username': this._username,
     } as Map<String, dynamic>;
   }
+
+  String get email => _email;
+
+  String get username => _username;
 }
