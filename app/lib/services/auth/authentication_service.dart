@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutterfrontend/services/auth/login_request.dart';
 import 'package:flutterfrontend/services/auth/signup_request.dart';
 import 'package:flutterfrontend/services/auth/verify_email_request.dart';
@@ -9,15 +10,13 @@ import 'package:flutterfrontend/services/repository/server_const.dart';
 
 class AuthenticationService {
 
-  AuthenticationRepository _authenticationRepository;
+  AuthenticationRepository authenticationRepository;
   static final AccessTokenPreferences _accessTokenPreferences = AccessTokenPreferences();
 
-  AuthenticationService(){
-    this._authenticationRepository = AuthenticationRepository();
-  }
+  AuthenticationService({@required this.authenticationRepository});
 
   Future<JsonResponse> login(LoginRequest loginRequest) async {
-    var response = await _authenticationRepository.login(FormData.fromMap(LoginRequest.toMap(loginRequest)));
+    var response = await authenticationRepository.login(FormData.fromMap(LoginRequest.toMap(loginRequest)));
     if (response.statusCode == 200){
       var token = _extractToken(response);
       _storeToken(token);
@@ -27,7 +26,7 @@ class AuthenticationService {
   }
 
   Future<JsonResponse> signUp(SignUpRequest signUpRequest) async {
-    var response = await _authenticationRepository.signUp(FormData.fromMap(SignUpRequest.toMap(signUpRequest)));
+    var response = await authenticationRepository.signUp(FormData.fromMap(SignUpRequest.toMap(signUpRequest)));
     if (response.statusCode == 201) {
       var token = _extractToken(response);
       _storeToken(token);
@@ -42,7 +41,7 @@ class AuthenticationService {
   }
 
   Future<JsonResponse> verifyUniqueEmail(VerifyEmailRequest request) async{
-    var response = await _authenticationRepository.verifyUniqueEmail(FormData.fromMap({"email" : request.email.trim()}));
+    var response = await authenticationRepository.verifyUniqueEmail(FormData.fromMap({"email" : request.email.trim()}));
     return response;
   }
 
