@@ -20,6 +20,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         print("from users now going to fetch user");
         this.add(FetchUserEvent());
       }
+      if (state is NotAuthenticated){
+        deleteCachedUser();
+//        this.add(ClearUserEvent());
+      }
     });
   }
 
@@ -29,8 +33,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 //      yield await fetchUser();
 //    }
     if (event is FetchUserEvent){
+      print("it is fetch user event");
       yield await fetchUser();
     }
+
+//    if (event is ClearUserEvent){
+//      yield await
+//    }
   }
 
   Future<UserState> fetchUser() async {
@@ -51,16 +60,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Future<User> fetchCachedUser() async {
     User user;
     user = await userService.getCachedUser();
-    if (user!=null) {return user;}
-    else {
-      var userState = await fetchUser();
-      if (userState is UserFetchedState){
-       user =  userState.user;
-      }
-    }
-    print(user);
-
     return user;
+  }
+
+  Future<void> deleteCachedUser() async {
+    userService.deleteCachedUser();
   }
 
   @override

@@ -9,15 +9,20 @@ class UserPreferences {
   setUser(User user) async {
     var instance = await SharedPreferences.getInstance();
     var encodedUser = jsonEncode(user.toMap());
-    print("inserted user to pref $encodedUser");
     await instance.setString(prefName, encodedUser);
   }
 
   Future<User> getUser() async {
     var instance = await SharedPreferences.getInstance();
-    var user = User.fromMap(jsonDecode(instance.get(prefName)));
-    print("Gotten user from pref ${user.toMap()}");
-
+    var userObj = instance.get(prefName);
+    if (userObj == null || (userObj as String).isEmpty) return null;
+    print("$userObj");
+    var user = User.fromMap(jsonDecode(userObj));
     return user;
+  }
+
+  void deleteUser() async {
+    var instance = await SharedPreferences.getInstance();
+    instance.setString(prefName, "");
   }
 }
