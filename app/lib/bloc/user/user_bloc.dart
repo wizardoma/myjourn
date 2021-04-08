@@ -34,7 +34,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Future<UserState> fetchUser() async {
-    var user = await userService.getCurrentUser();
+    User user;
+    user = await fetchCachedUser();
+    if (user != null) return UserFetchedState(user);
+
+    user = await userService.getCurrentUser();
     if (user== null) {
       authenticationBloc.add(LogoutEvent());
       return UserNullState();
