@@ -6,8 +6,9 @@ import 'package:sqflite/sqflite.dart';
 
 class JournalRepository {
   static final _dbName = "journals.db";
-  static final _dbVersion = 1;
+  static final _dbVersion = 2;
   static final _table = "journals";
+  static final _columnServerId = "serverId";
   static final _columnImages = "images";
   static final _columnId = "id";
   static final _columnBody = "body";
@@ -28,7 +29,8 @@ class JournalRepository {
   _initDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, _dbName);
-    return await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
+    return await openDatabase(path,
+        version: _dbVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -41,9 +43,16 @@ class JournalRepository {
     ''');
   }
 
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (2 > oldVersion) {
+      await db.execute('''
+      ALTER TABLE $_table ADD COLUMN $_columnServerId INTEGER
+      ''');
+    }
+  }
+
   Future<int> insert(Map<String, dynamic> row) async {
     var database = await instance.database;
-
     return await database.insert(_table, row);
   }
 
