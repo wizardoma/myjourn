@@ -3,11 +3,12 @@ import 'dart:typed_data';
 
 class Journal {
   int _id;
+  int _serverId;
   String _body;
   List<Uint8List> _images;
   DateTime _date;
 
-  Journal(this._id, this._body, this._date, [this._images]);
+  Journal(this._id, this._body, this._date, [this._images, this._serverId]);
 
   set images(List<Uint8List> images) {
     this._images = images;
@@ -15,6 +16,12 @@ class Journal {
 
   List<Uint8List> get images {
     return _images;
+  }
+
+  int get serverId => _serverId;
+
+  set serverId(int value) {
+    _serverId = value;
   }
 
   int get id => _id;
@@ -35,7 +42,7 @@ class Journal {
     _date = value;
   }
 
-  static Journal fromNewMap(Map<String, dynamic> data) {
+  static Journal fromMap(Map<String, dynamic> data) {
     var id = data["id"];
     var body = data["body"];
     var date = DateTime.fromMillisecondsSinceEpoch(data["date"]);
@@ -52,21 +59,22 @@ class Journal {
     return Journal(id, body, date);
   }
 
-  static Map<String, dynamic> toMap(Journal journal) {
-    var id = journal.id;
-    var body = journal.body;
-    var date = journal.time.millisecondsSinceEpoch;
-    var hasImage = journal.images != null;
+
+  Map<String, dynamic> toMap() {
+    var id = this.id;
+    var body = this.body;
+    var date = this.time.millisecondsSinceEpoch;
+    var hasImage = this.images != null;
     if (hasImage) {
-      var joinedImage = journal.images.map((e) => base64Encode(e)).join("|");
-      return {"id": id, "body": body, "date": date, "images": joinedImage};
+      var joinedImage = this.images.map((e) => base64Encode(e)).join("|");
+      return {"id": id, "body": body, "date": date, "images": joinedImage, "serverId": this.serverId};
     }
 
-    return {"id": id, "body": body, "date": date};
+    return {"id": id, "body": body, "date": date, "serverId": this.serverId};
   }
 
   @override
   String toString() {
-    return 'Journal{_id: $_id, _body: $_body, _date: $_date , _images: $_images}';
+    return 'Journal{_id: $_id, _body: $_body, _date: $_date , _images: $_images , _serverId: $_serverId}';
   }
 }
