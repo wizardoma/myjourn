@@ -18,6 +18,6 @@ public class JournalMapper {
                 .setDate(journal.getDate())
                 .setImages(journal.getImages())
                 .setBody(journal.getBody())
-                .setUser(journal.getUser());
+                .setUser(UserMapper.toDto(journal.getUser()));
     }
 }

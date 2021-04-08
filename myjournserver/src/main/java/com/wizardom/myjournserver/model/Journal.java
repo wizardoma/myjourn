@@ -19,7 +19,7 @@ public class Journal {
     @NotEmpty
     @NotNull
     private  String body;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY )
     private User user;
     @NotNull
     private Instant date;

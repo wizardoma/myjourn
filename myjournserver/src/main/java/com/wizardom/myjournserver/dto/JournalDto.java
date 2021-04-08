@@ -14,6 +14,6 @@ public class JournalDto {
     private long dbId;
     private String body;
     private Instant date;
-    private User user;
+    private UserDto user;
     private List<String> images;
 }
