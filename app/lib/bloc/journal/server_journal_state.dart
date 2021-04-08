@@ -2,6 +2,8 @@ import 'package:flutterfrontend/models/server_journal.dart';
 
 abstract class ServerJournalState {}
 
+class ServerJournalInitialState extends ServerJournalState{}
+
 class EditServerJournalSuccess extends ServerJournalState {
   final ServerJournal journal;
 

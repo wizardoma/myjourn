@@ -44,11 +44,11 @@ class JournalServerRepository {
   }
 
   Future<JsonResponse> delete(
-      int dbId, FormData data, Map<String, dynamic> headers) async {
+      int dbId, Map<String, dynamic> headers) async {
     Response response;
     try {
       response = await _dio.delete("${ServerConstants.journalsUrl}/$dbId",
-          data: data, options: Options(headers: headers));
+          options: Options(headers: headers));
       return JsonResponse.fromResponse(response);
     } on DioError catch (e) {
       print(e);

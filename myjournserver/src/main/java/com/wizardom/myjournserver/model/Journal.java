@@ -15,6 +15,7 @@ import java.util.List;
 public class Journal {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private long dbId;
     @NotEmpty
     @NotNull
     private  String body;

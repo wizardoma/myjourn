@@ -2,6 +2,7 @@ package com.wizardom.myjournserver.controller;
 
 import com.wizardom.myjournserver.controller.request.CreateJournalRequest;
 import com.wizardom.myjournserver.controller.response.JsonResponse;
+import com.wizardom.myjournserver.dto.JournalDto;
 import com.wizardom.myjournserver.dto.JournalMapper;
 import com.wizardom.myjournserver.model.Journal;
 import com.wizardom.myjournserver.service.JournalService;
@@ -43,8 +44,15 @@ public class JournalController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getJournalByID(@PathVariable("id") long id) {
-        return ResponseEntity.ok(JournalMapper.toDto(journalService.getById(id)));
+    public ResponseEntity<JsonResponse<?>> getJournalByID(@PathVariable("id") long id) {
+        JournalDto journalDto = JournalMapper.toDto(journalService.getById(id));
+        return ResponseEntity.ok(new JsonResponse<>(OK, journalDto));
+    }
+    
+    @PatchMapping("{id}")
+    public ResponseEntity<JsonResponse<?>> editJournal(@PathVariable("id") long id, @ModelAttribute @Valid CreateJournalRequest request){
+        JournalDto journalDto = JournalMapper.toDto(journalService.edit(request));
+        return ResponseEntity.ok(new JsonResponse<>(OK,journalDto));
     }
 
 }

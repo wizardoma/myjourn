@@ -77,4 +77,8 @@ class Journal {
   String toString() {
     return 'Journal{_id: $_id, _body: $_body, _date: $_date , _images: $_images , _serverId: $_serverId}';
   }
+
+  factory Journal.fromServer(Map<String, dynamic> data) {
+    return new Journal(data["dbId"], data["body"], data["date"], data["images"], data["id"]);
+  }
 }

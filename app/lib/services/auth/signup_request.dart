@@ -11,7 +11,6 @@ class SignUpRequest extends Request{
   SignUpRequest(this.email,this.username, this.password, this.signUpType);
 
   static Map<String, dynamic> toMap(SignUpRequest request) {
-    print(request.signUpType.toString().split(".").last);
     return {
       "email": request.email,
       "password": request.password,

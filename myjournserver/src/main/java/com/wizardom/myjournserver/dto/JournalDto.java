@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 public class JournalDto {
     private long id;
+    private long dbId;
     private String body;
     private Instant date;
     private User user;

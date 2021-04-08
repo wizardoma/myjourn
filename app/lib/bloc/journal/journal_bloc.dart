@@ -44,7 +44,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
   Future<JournalState> fetchJournals() async {
     try {
       var journals =
-          (await _repository.all()).map((e) => Journal.fromNewMap(e)).toList();
+          (await _repository.all()).map((e) => Journal.fromMap(e)).toList();
       _journals = journals;
       return FetchJournalsSuccess([..._journals]);
     } catch (e) {
@@ -54,7 +54,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
 
   Future<JournalState> editJournal(EditJournalEvent event) async {
     try {
-      var result = await _repository.update(Journal.toMap(event.journal));
+      var result = await _repository.update(event.journal.toMap());
       if (databaseOpWasSuccessful(result)) {
         return EditSuccess(event.journal);
       }
@@ -66,7 +66,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
 
   Future<JournalState> insertJournal(AddJournalEvent event) async {
     try {
-      var result = await _repository.insert(Journal.toMap(event.journal));
+      var result = await _repository.insert(event.journal.toMap());
       if (databaseOpWasSuccessful(result)) {
         return AddJournalSuccess(event.journal);
       } else
@@ -97,7 +97,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
     try {
       var result = await _repository.getById(event.id);
       if (result.length > 0) {
-        return FetchJournalSuccess(Journal.fromNewMap(result[0]));
+        return FetchJournalSuccess(Journal.fromMap(result[0]));
       }
       if (result.length == 0) {
         return FetchJournalEmpty();

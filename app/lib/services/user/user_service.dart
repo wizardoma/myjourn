@@ -22,14 +22,13 @@ class UserService with ResponseUtil {
     };
     var response = await userRepository.getCurrentUser(headers);
 
-    if (ResponseUtil.isOk(response.statusCode)) {
-      print("did it fetch user? ${response.data}");
+    if (isOk(response.statusCode)) {
       var user = User.fromMap(response.data);
       _userPreferences.setUser(user);
       return user;
     }
     // authentication
-    else if (ResponseUtil.isAuthorizationError(response.statusCode)) {
+    else if (isAuthorizationError(response.statusCode)) {
       return null;
     }
   }
