@@ -34,10 +34,10 @@ class AuthenticationService {
     return response;
   }
 
-    Future<bool> getToken() async {
+    Future<String> getToken() async {
     String token = await _accessTokenPreferences.getToken();
-    if (token == null || token.isEmpty) return false;
-    return true;
+    if (token == null || token.isEmpty) return null;
+    return token;
   }
 
   Future<JsonResponse> verifyUniqueEmail(VerifyEmailRequest request) async{

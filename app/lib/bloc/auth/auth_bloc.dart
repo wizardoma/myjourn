@@ -20,7 +20,7 @@ class AuthenticationBloc
     if (event is AppStartedEvent) {
       print("app started");
       var token = await authenticationService.getToken();
-      if (token) {
+      if (token == null) {
         yield IsAuthenticated();
       } else {
         yield NotAuthenticated();
