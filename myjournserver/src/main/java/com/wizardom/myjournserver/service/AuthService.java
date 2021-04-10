@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import static com.wizardom.myjournserver.security.SecurityConstants.HEADER_STRING;
 import static com.wizardom.myjournserver.security.SecurityConstants.TOKEN_PREFIX;
-
+/**
+ * @author Ibekason Alexander Onyebuchi
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

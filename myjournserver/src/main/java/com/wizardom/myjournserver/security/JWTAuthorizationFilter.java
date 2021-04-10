@@ -1,7 +1,5 @@
 package com.wizardom.myjournserver.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,8 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.wizardom.myjournserver.security.SecurityConstants.*;
-
+import static com.wizardom.myjournserver.security.SecurityConstants.HEADER_STRING;
+import static com.wizardom.myjournserver.security.SecurityConstants.TOKEN_PREFIX;
+/**
+ * @author Ibekason Alexander Onyebuchi
+ */
 @Slf4j
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 

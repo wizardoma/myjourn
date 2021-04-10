@@ -7,7 +7,9 @@ import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.wizardom.myjournserver.security.SecurityConstants.*;
-
+/**
+ * @author Ibekason Alexander Onyebuchi
+ */
 
 public class TokenProvider {
     private TokenProvider() throws IllegalAccessException {

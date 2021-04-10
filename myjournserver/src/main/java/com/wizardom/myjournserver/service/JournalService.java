@@ -14,6 +14,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Ibekason Alexander Onyebuchi
+ */
+
 @RequiredArgsConstructor
 @Service
 public class JournalService {

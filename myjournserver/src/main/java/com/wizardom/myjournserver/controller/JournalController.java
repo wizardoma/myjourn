@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.ParseException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
-
+/**
+ * @author Ibekason Alexander Onyebuchi
+ */
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -27,11 +31,14 @@ public class JournalController {
 
     @GetMapping
     public ResponseEntity<JsonResponse<?>> getJournals() {
-        return ResponseEntity.ok(new JsonResponse<>(OK, journalService.getUserJournals()));
+        List<JournalDto> journalDtos = journalService.getUserJournals().stream()
+                .map(JournalMapper::toDto).collect(Collectors.toList());
+        return ResponseEntity.ok(new JsonResponse<>(OK, journalDtos));
     }
 
     @PostMapping
     public ResponseEntity<JsonResponse<?>> saveJournal(@Valid @ModelAttribute CreateJournalRequest request) throws ParseException {
+        log.info("Journal from app "+request.toString());
         Journal journal = journalService.save(request);
         return new ResponseEntity<>(new JsonResponse<>(CREATED, JournalMapper.toDto(journal)),
                 CREATED);

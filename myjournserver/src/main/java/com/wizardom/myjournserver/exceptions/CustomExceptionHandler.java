@@ -19,7 +19,9 @@ import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * @author Ibekason Alexander Onyebuchi
+ */
 @ControllerAdvice
 @Slf4j
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
@@ -61,10 +63,10 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> handleUserNotFound(UserNotFoundException exception){
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFound(ResourceNotFoundException exception){
         String error = exception.getMessage();
-        return respondToException(HttpStatus.NOT_FOUND,Collections.singletonMap("user.notfound", error));
+        return respondToException(HttpStatus.NOT_FOUND,Collections.singletonMap("resource.notfound", error));
     }
 
     ResponseEntity<?> respondToException(HttpStatus status, Map<String, String> errors){

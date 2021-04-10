@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 
-public class UserNotFoundException extends RuntimeException{
+public class UserNotFoundException extends ResourceNotFoundException {
     private final String message;
 
     public UserNotFoundException(String message) {

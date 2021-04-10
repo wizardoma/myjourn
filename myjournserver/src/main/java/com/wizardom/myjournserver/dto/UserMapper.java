@@ -1,7 +1,9 @@
 package com.wizardom.myjournserver.dto;
 
 import com.wizardom.myjournserver.model.User;
-
+/**
+ * @author Ibekason Alexander Onyebuchi
+ */
 public class UserMapper {
     public static User fromDto(UserDto userDto) {
         return new User().setEmail(userDto.getEmail()).setUsername(userDto.getUsername());
