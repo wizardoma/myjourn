@@ -20,11 +20,4 @@ class JsonResponse<T> {
 
   }
 
-  factory JsonResponse.withData(Response response) {
-    return JsonResponse(int.parse(response.data["status"]), response.data["body"], null, response.headers);
-  }
-
-  factory JsonResponse.withError(Response response) {
-    return JsonResponse(int.parse(response.data["status"]), null, response.data["errors"],  response.headers);
-  }
 }
