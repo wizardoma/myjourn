@@ -16,7 +16,6 @@ class UserPreferences {
     var instance = await SharedPreferences.getInstance();
     var userObj = instance.get(prefName);
     if (userObj == null || (userObj as String).isEmpty) return null;
-    print("$userObj");
     var user = User.fromMap(jsonDecode(userObj));
     return user;
   }
