@@ -30,7 +30,7 @@ class JournalRepository {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, _dbName);
     return await openDatabase(path,
-        version: _dbVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
+        version: _dbVersion, onCreate: _onCreate);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -44,7 +44,8 @@ class JournalRepository {
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (2 > oldVersion) {
+    if (newVersion > oldVersion) {
+      print("2 is greater than db version");
       await db.execute('''
       ALTER TABLE $_table ADD COLUMN $_columnServerId INTEGER
       ''');
@@ -57,16 +58,20 @@ class JournalRepository {
   }
 
   Future<List<Map<String, dynamic>>> getById(int id) async {
+    print("Getting journal by id ");
     Database db = await instance.database;
     return await db.query(_table, where: '$_columnId= ?', whereArgs: [id]);
   }
 
   Future<List<Map<String, dynamic>>> all() async {
     Database db = await instance.database;
-    return await db.query(_table, orderBy: "date desc");
+    var allJournals = await db.query(_table, orderBy: "date desc");
+    print(allJournals);
+    return allJournals;
   }
 
   Future<int> update(Map<String, dynamic> row) async {
+    print("updating journal with info $row");
     Database db = await instance.database;
     int id = row[_columnId];
     return await db

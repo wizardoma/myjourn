@@ -24,7 +24,7 @@ class CreateServerJournalRequest {
       return new CreateServerJournalRequest(
         dbId: dbID,
         body: journalBody,
-        images: (images as String).split("|"),
+        images: null,
         date: journalDate,
       );
     }

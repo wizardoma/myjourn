@@ -4,6 +4,7 @@ import 'package:flutterfrontend/bloc/journal/journal_bloc.dart';
 import 'package:flutterfrontend/bloc/journal/journal_events.dart';
 import 'package:flutterfrontend/bloc/journal/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
+import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/screens/journal/image_carousel.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
 import 'package:intl/intl.dart';
@@ -38,19 +39,16 @@ class ViewJournalScreen extends StatelessWidget {
             },
             listener: (BuildContext context, state) {
               if (state is DeleteSuccess) {
-                Navigator.pop(context, true);
+                Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (Route<dynamic> router) => false);
               }
               if (state is DeleteFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("An error occurred deleting this journal")));
+                Navigator.pop(context,false);
               }
             },
           );
-        }).then((value) {
-      if (value) {
-        Navigator.pop(context);
-      }
-    });
+        });
   }
 
   @override

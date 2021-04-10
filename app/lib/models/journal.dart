@@ -45,6 +45,7 @@ class Journal {
   static Journal fromMap(Map<String, dynamic> data) {
     var id = data["id"];
     var body = data["body"];
+    var serverId = data["serverId"];
     var date = DateTime.fromMillisecondsSinceEpoch(data["date"]);
     if (data["images"] != null) {
       return Journal(
@@ -53,10 +54,10 @@ class Journal {
           date,
           (data["images"] as String).split("|").map((e) {
             return base64Decode(e);
-          }).toList());
+          }).toList(),serverId);
     }
 
-    return Journal(id, body, date);
+    return Journal(id, body, date, null, serverId);
   }
 
 
@@ -79,6 +80,7 @@ class Journal {
   }
 
   factory Journal.fromServer(Map<String, dynamic> data) {
-    return new Journal(data["dbId"], data["body"], data["date"], data["images"], data["id"]);
+    var dateTime = DateTime.fromMillisecondsSinceEpoch(int.parse(data["date"]));
+    return new Journal(data["dbId"], data["body"], dateTime, null, data["id"]);
   }
 }

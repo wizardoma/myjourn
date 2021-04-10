@@ -218,8 +218,9 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     int id = journal.id;
     String body = bodyController.text;
     DateTime time = journal.time;
+    int serverId = journal.serverId;
 
-    Journal savedJournal = Journal(id, body, time, images ?? images);
+    Journal savedJournal = Journal(id, body, time, images ?? images, serverId);
 
     if (isNewJournal) {
       context.read<JournalBloc>()

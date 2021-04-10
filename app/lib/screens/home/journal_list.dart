@@ -23,7 +23,6 @@ class _JournalListState extends State<JournalList> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       floatingActionButton: FloatingActionButton(

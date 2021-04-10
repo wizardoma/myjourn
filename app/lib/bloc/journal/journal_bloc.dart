@@ -1,16 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/models/journal.dart';
+import 'package:flutterfrontend/services/journals/journal_service.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';
 
 import 'journal_events.dart';
 import 'journal_state.dart';
 
 class JournalBloc extends Bloc<JournalEvents, JournalState> {
-  final JournalRepository _repository;
+  final JournalService _service;
 
   List<Journal> _journals = [];
 
-  JournalBloc(this._repository) : super(InitialJournalState());
+  JournalBloc(this._service) : super(InitialJournalState());
 
   @override
   Stream<JournalState> mapEventToState(JournalEvents event) async* {
@@ -42,70 +43,44 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
   }
 
   Future<JournalState> fetchJournals() async {
-    try {
-      var journals =
-          (await _repository.all()).map((e) => Journal.fromMap(e)).toList();
+    var journals = await _service.fetchJournals();
+    if (journals != null) {
       _journals = journals;
       return FetchJournalsSuccess([..._journals]);
-    } catch (e) {
+    } else
       return FetchJournalsFailure();
-    }
   }
 
   Future<JournalState> editJournal(EditJournalEvent event) async {
-    try {
-      var result = await _repository.update(event.journal.toMap());
-      if (databaseOpWasSuccessful(result)) {
-        return EditSuccess(event.journal);
-      }
-      return EditFailure();
-    } catch (e) {
-      return EditFailure();
+    var journal = await _service.editJournal(event.journal);
+    if (journal != null) {
+      return EditSuccess(event.journal);
     }
+    return EditFailure();
   }
 
   Future<JournalState> insertJournal(AddJournalEvent event) async {
-    try {
-      var result = await _repository.insert(event.journal.toMap());
-      if (databaseOpWasSuccessful(result)) {
-        return AddJournalSuccess(event.journal);
-      } else
-        return AddJournalFailure();
-    } catch (e) {
+    var journal = await _service.insertJournal(event.journal);
+    if (journal != null) {
+      return AddJournalSuccess(event.journal);
+    } else
       return AddJournalFailure();
-    }
-  }
-
-  bool databaseOpWasSuccessful(int result) {
-    return result != 0;
   }
 
   Future<JournalState> deleteJournal(DeleteJournalEvent event) async {
-    try {
-      var result = await _repository.delete(event.id);
-      if (databaseOpWasSuccessful(result)) {
-//        fetchJournals();
-        return DeleteSuccess();
-      } else
-        return DeleteFailure();
-    } catch (e) {
+    var result = await _service.deleteJournal(event.id);
+    if (result) {
+      return DeleteSuccess();
+    } else
       return DeleteFailure();
-    }
   }
 
   Future<JournalState> fetchJournalByID(FetchJournalEvent event) async {
-    try {
-      var result = await _repository.getById(event.id);
-      if (result.length > 0) {
-        return FetchJournalSuccess(Journal.fromMap(result[0]));
-      }
-      if (result.length == 0) {
-        return FetchJournalEmpty();
-      }
-    } catch (e) {
-      print(e);
-      return FetchJournalEmpty();
+    var journal = await _service.fetchJournalById(event.id);
+    if (journal != null) {
+      return FetchJournalSuccess(journal);
     }
+    return FetchJournalEmpty();
   }
 
   Journal getJournalById(int id) {

@@ -11,16 +11,19 @@ class JournalService with ResponseUtil {
   final JournalRepository localRepository;
   final JournalServerRepository serverRepository;
   final AuthenticationService authenticationService;
+  var _token;
 
-  JournalService(
-      {this.localRepository,
-      this.serverRepository,
-      this.authenticationService});
+  JournalService({this.localRepository,
+    this.serverRepository,
+    this.authenticationService});
 
   Future<Journal> insertJournal(Journal journal) async {
+    print("Trying to insert journal");
     try {
       var result = await _saveToDb(journal);
       if (_databaseOpWasSuccessful(result)) {
+        print("inserted to database $result");
+
         // send a future request to create journal in the backend
         _saveToServer(journal);
         return journal;
@@ -35,6 +38,7 @@ class JournalService with ResponseUtil {
     try {
       var result = await _updateToDb(journal);
       if (_databaseOpWasSuccessful(result)) {
+        print("journal serverId ${journal.serverId}");
         if (journal.serverId == null) {
           _saveToServer(journal);
         } else {
@@ -66,9 +70,27 @@ class JournalService with ResponseUtil {
     try {
       var journals =
       (await localRepository.all()).map((e) => Journal.fromMap(e)).toList();
-
+      if (journals.length > 0){
+        _attemptToSyncWithServer([...journals]);
+      }
+      print("${journals.map((e) => e.serverId).toList()}");
       return journals;
     } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Journal> fetchJournalById(int id) async{
+    try {
+      var result = await localRepository.getById(id);
+      if (result.length > 0) {
+        return Journal.fromMap(result[0]);
+      }
+      if (result.length == 0) {
+        return null;
+      }
+    } catch (e) {
+      print(e);
       return null;
     }
   }
@@ -86,7 +108,6 @@ class JournalService with ResponseUtil {
   Future<void> _updateToServer(Journal journal) async {
     var headers = await _getHeaders();
     var request = CreateServerJournalRequest.fromJournalMap(journal.toMap());
-    if (journal.serverId != null) {
       serverRepository
           .edit(journal.id, FormData.fromMap(request.toMap()), headers)
           .then((response) {
@@ -94,10 +115,11 @@ class JournalService with ResponseUtil {
           _updateToDb(Journal.fromServer(response.data));
         }
       });
-    }
+
   }
 
   Future<void> _saveToServer(Journal journal) async {
+    print("Trying to save to server");
     var headers = await _getHeaders();
     var request = CreateServerJournalRequest.fromJournalMap(journal.toMap());
     print("journal request to server ${request.toMap()}");
@@ -105,8 +127,12 @@ class JournalService with ResponseUtil {
     serverRepository
         .save(FormData.fromMap(request.toMap()), headers)
         .then((response) {
+      print("response gotten from server ${response.data}" );
+
       // When response, if successful, update local journal with server id, else do nothing, fetching journal event retries this operation
       if (isCreated(response.statusCode)) {
+        print("journal was successfully creaed ");
+
         _updateToDb(Journal.fromServer(response.data));
       }
     });
@@ -118,18 +144,43 @@ class JournalService with ResponseUtil {
   }
 
   Future<int> _updateToDb(Journal journal) async {
-    return await localRepository.update(journal.toMap());
+
+    var result = await localRepository.update(journal.toMap());
+    print("updating data to database $result");
+
+    return result;
+
   }
 
   Future<Map<String, dynamic>> _getHeaders() async {
     var token = await authenticationService.getToken();
     return {
       "${ServerConstants.authHeaderName}":
-          "${ServerConstants.tokenPrefix}$token"
+      "${ServerConstants.tokenPrefix}$token"
     };
   }
+
 
   bool _databaseOpWasSuccessful(int result) {
     return result != 0;
   }
+
+  Future<void> _attemptToSyncWithServer(List<Journal> journals) async {
+    // if the server id is null, then sync with server
+    journals.where((journal) => journal.serverId == null).forEach((journal) {
+      _saveToServer(journal);
+    });
+  }
+  Future<List<Journal>> _fetchServerJournals() async{
+    var headers = await _getHeaders();
+    var response = await serverRepository.getAll(headers);
+    if (response.statusCode == 200){
+      var journals = (response.data["body"] as List).map((e) => Journal.fromServer(e)).toList();
+      print("the journals from server $journals");
+      return journals;
+    }
+    return null;
+  }
+
+
 }

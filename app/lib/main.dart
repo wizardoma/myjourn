@@ -16,8 +16,10 @@ import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
 import 'package:flutterfrontend/screens/search/search_screen.dart';
 import 'package:flutterfrontend/screens/settings/settings_screen.dart';
 import 'package:flutterfrontend/services/auth/authentication_service.dart';
+import 'package:flutterfrontend/services/journals/journal_service.dart';
 import 'package:flutterfrontend/services/repository/auth_repository.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';
+import 'package:flutterfrontend/services/repository/journal_server_repository.dart';
 import 'package:flutterfrontend/services/repository/user_repository.dart';
 import 'package:flutterfrontend/services/user/user_service.dart';
 import 'package:provider/provider.dart';
@@ -25,15 +27,22 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var journalRepository = JournalRepository.instance;
+  var journalServerRepository = JournalServerRepository();
   var userRepository = UserRepository();
   var authRepository = AuthenticationRepository();
   var userService = UserService(userRepository: userRepository);
+
   var authenticationService =
       AuthenticationService(authenticationRepository: authRepository);
   var authenticationBloc =
       AuthenticationBloc(authenticationService: authenticationService)
         ..add(AppStartedEvent());
-  var journalBloc = JournalBloc(journalRepository)..add(FetchJournalsEvent());
+  var journalService = JournalService(
+    localRepository: journalRepository,
+    serverRepository: journalServerRepository,
+    authenticationService: authenticationService,
+  );
+  var journalBloc = JournalBloc(journalService)..add(FetchJournalsEvent());
   var userBloc = UserBloc(
       authenticationBloc: authenticationBloc, userService: userService);
   var themesBloc = ThemesBloc("green");
