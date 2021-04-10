@@ -16,11 +16,23 @@ class CreateServerJournalRequest {
   }
 
   factory CreateServerJournalRequest.fromJournalMap(Map<String, dynamic> journalMap){
+    var images = journalMap["images"];
+    var dbID = journalMap["id"] as int;
+    var journalBody = journalMap["body"] as String;
+    var journalDate = journalMap["date"].toString();
+    if (images != null) {
+      return new CreateServerJournalRequest(
+        dbId: dbID,
+        body: journalBody,
+        images: (images as String).split("|"),
+        date: journalDate,
+      );
+    }
     return new CreateServerJournalRequest(
-      dbId: journalMap["id"] as int,
-      body: journalMap["body"] as String,
+      dbId: dbID,
+      body: journalBody,
       images: journalMap["images"] as List<String>,
-      date: journalMap["date"] as String,
+      date: journalDate,
     );
   }
 
