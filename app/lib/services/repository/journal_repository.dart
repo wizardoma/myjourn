@@ -29,8 +29,7 @@ class JournalRepository {
   _initDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, _dbName);
-    return await openDatabase(path,
-        version: _dbVersion, onCreate: _onCreate);
+    return await openDatabase(path, version: _dbVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -77,5 +76,15 @@ class JournalRepository {
   Future<int> delete(int id) async {
     Database db = await instance.database;
     return await db.delete(_table, where: '$_columnId = ?', whereArgs: [id]);
+  }
+
+  Future<void> purge() async {
+    Database db = await instance.database;
+    await db.transaction((txn) async {
+      var batch = txn.batch();
+      batch.delete(_table);
+      await batch.commit();
+    });
+    print("Database purged");
   }
 }
