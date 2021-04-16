@@ -1,8 +1,11 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
+import 'package:flutterfrontend/bloc/settings/internet_bloc.dart';
+import 'package:flutterfrontend/bloc/settings/internet_state.dart';
 import 'package:flutterfrontend/bloc/settings/themes_bloc.dart';
 import 'package:flutterfrontend/bloc/user/user_bloc.dart';
 import 'package:flutterfrontend/models/user.dart';
@@ -22,111 +25,118 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: FutureBuilder(
         future: user.fetchCachedUser(),
-        builder: (context, AsyncSnapshot<User> snapshot) => SettingsList(
-          contentPadding: EdgeInsets.symmetric(vertical: 15),
-          sections: [
-            SettingsSection(
-              title: "Premium",
-              tiles: [
-                SettingsTile(
-                  title: "MyJourn Premium",
+        builder: (context, AsyncSnapshot<User> snapshot) {
+          return BlocBuilder<InternetBloc, InternetState>(
+            builder: (context,state) {
+              print("Internet state $state");
+              return SettingsList(
+              contentPadding: EdgeInsets.symmetric(vertical: 15),
+              sections: [
+                SettingsSection(
+                  title: "Premium",
+                  tiles: [
+                    SettingsTile(
+                      title: "MyJourn Premium",
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            SettingsSection(
-              subtitlePadding: EdgeInsets.only(bottom: 20),
-              title: "Security",
-              tiles: [
-                SettingsTile.switchTile(
-                  title: "Security Code",
-                  onToggle: (bool value) {},
-                  switchValue: false,
-                  subtitle: "Set security code to lock this app",
+                SettingsSection(
+                  subtitlePadding: EdgeInsets.only(bottom: 20),
+                  title: "Security",
+                  tiles: [
+                    SettingsTile.switchTile(
+                      title: "Security Code",
+                      onToggle: (bool value) {},
+                      switchValue: false,
+                      subtitle: "Set security code to lock this app",
+                    ),
+                    SettingsTile(
+                      title: "Security Code Timeout",
+                      subtitle: "After 5 minutes",
+                    ),
+                  ],
                 ),
-                SettingsTile(
-                  title: "Security Code Timeout",
-                  subtitle: "After 5 minutes",
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: "Daily Reminder",
-              tiles: [
-                SettingsTile.switchTile(
+                SettingsSection(
                   title: "Daily Reminder",
-                  onToggle: (bool value) {},
-                  switchValue: true,
-                  subtitle: "Set daily journaling MyJourn reminder",
+                  tiles: [
+                    SettingsTile.switchTile(
+                      title: "Daily Reminder",
+                      onToggle: (bool value) {},
+                      switchValue: true,
+                      subtitle: "Set daily journaling MyJourn reminder",
+                    ),
+                    SettingsTile(
+                      title: "Daily Reminder Timeout",
+                      subtitle: "20 : 30",
+                    ),
+                    SettingsTile.switchTile(
+                      title: "Inspiring quote",
+                      onToggle: (bool value) {},
+                      switchValue: true,
+                      subtitle: "Receive Inspiring quote with the reminder",
+                    ),
+                  ],
                 ),
-                SettingsTile(
-                  title: "Daily Reminder Timeout",
-                  subtitle: "20 : 30",
+                SettingsSection(
+                  title: "Color Theme",
+                  tiles: [
+                    SettingsTile(
+                      title: "Theme",
+                      subtitle: "Change themes (Includes Dark theme)",
+                      onPressed: changeTheme,
+                    ),
+                  ],
                 ),
-                SettingsTile.switchTile(
-                  title: "Inspiring quote",
-                  onToggle: (bool value) {},
-                  switchValue: true,
-                  subtitle: "Receive Inspiring quote with the reminder",
+                SettingsSection(
+                  title: "Font and Size",
+                  tiles: [
+                    SettingsTile(
+                      title: "Font",
+                      subtitle: "Roboto-Regular",
+                    ),
+                    SettingsTile(
+                      title: "Size",
+                      subtitle: "Normal",
+                    ),
+                  ],
+                ),
+                SettingsSection(
+                  title: "Login",
+                  tiles: [
+                    SettingsTile(
+                      leading: Image.asset(
+                        "assets/logos/google.png",
+                        height: 30,
+                        width: 30,
+                      ),
+                      title: snapshot.connectionState == ConnectionState.done
+                          ? snapshot.data.email
+                          : "Loading email",
+                    ),
+                    if (state is InternetAvailableState)SettingsTile(
+                      title: "Logout",
+                      onPressed: logout,
+                    )
+                  ],
+                ),
+                SettingsSection(
+                  title: "Privacy",
+                  tiles: [
+                    SettingsTile(
+                      leading: Icon(Icons.file_download),
+                      title: "Data Download",
+                    ),
+                    SettingsTile(
+                      leading: Icon(Icons.delete_forever),
+                      title: "Delete my account",
+                    )
+                  ],
                 ),
               ],
-            ),
-            SettingsSection(
-              title: "Color Theme",
-              tiles: [
-                SettingsTile(
-                  title: "Theme",
-                  subtitle: "Change themes (Includes Dark theme)",
-                  onPressed: changeTheme,
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: "Font and Size",
-              tiles: [
-                SettingsTile(
-                  title: "Font",
-                  subtitle: "Roboto-Regular",
-                ),
-                SettingsTile(
-                  title: "Size",
-                  subtitle: "Normal",
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: "Login",
-              tiles: [
-                SettingsTile(
-                  leading: Image.asset(
-                    "assets/logos/google.png",
-                    height: 30,
-                    width: 30,
-                  ),
-                  title: snapshot.connectionState == ConnectionState.done
-                      ? snapshot.data.email
-                      : "Loading email",
-                ),
-                SettingsTile(
-                  title: "Logout",
-                  onPressed: logout,
-                )
-              ],
-            ),
-            SettingsSection(
-              title: "Privacy",
-              tiles: [
-                SettingsTile(
-                  leading: Icon(Icons.file_download),
-                  title: "Data Download",
-                ),
-                SettingsTile(
-                  leading: Icon(Icons.delete_forever),
-                  title: "Delete my account",
-                )
-              ],
-            ),
-          ],
-        ),
+            );
+            },
+          );
+        },
       ),
     );
   }
