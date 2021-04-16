@@ -11,7 +11,6 @@ class JournalService with ResponseUtil {
   final JournalRepository localRepository;
   final JournalServerRepository serverRepository;
   final AuthenticationService authenticationService;
-  var _token;
 
   JournalService({this.localRepository,
     this.serverRepository,
@@ -131,7 +130,6 @@ class JournalService with ResponseUtil {
 
       // When response, if successful, update local journal with server id, else do nothing, fetching journal event retries this operation
       if (isCreated(response.statusCode)) {
-        print("journal was successfully creaed ");
 
         _updateToDb(Journal.fromServer(response.data));
       }
