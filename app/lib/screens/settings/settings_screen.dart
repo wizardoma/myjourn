@@ -1,4 +1,3 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
@@ -17,8 +16,8 @@ class SettingsScreen extends StatelessWidget {
   static const routeName = "/settings";
 
   @override
-  Widget build(BuildContext context) {
-    var user = BlocProvider.of<UserBloc>(context);
+  Widget build(BuildContext mainContext) {
+    var user = BlocProvider.of<UserBloc>(mainContext);
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
@@ -27,113 +26,114 @@ class SettingsScreen extends StatelessWidget {
         future: user.fetchCachedUser(),
         builder: (context, AsyncSnapshot<User> snapshot) {
           return BlocBuilder<InternetBloc, InternetState>(
-            builder: (context,state) {
+            builder: (context, state) {
               print("Internet state $state");
               return SettingsList(
-              contentPadding: EdgeInsets.symmetric(vertical: 15),
-              sections: [
-                SettingsSection(
-                  title: "Premium",
-                  tiles: [
-                    SettingsTile(
-                      title: "MyJourn Premium",
-                    ),
-                  ],
-                ),
-                SettingsSection(
-                  subtitlePadding: EdgeInsets.only(bottom: 20),
-                  title: "Security",
-                  tiles: [
-                    SettingsTile.switchTile(
-                      title: "Security Code",
-                      onToggle: (bool value) {},
-                      switchValue: false,
-                      subtitle: "Set security code to lock this app",
-                    ),
-                    SettingsTile(
-                      title: "Security Code Timeout",
-                      subtitle: "After 5 minutes",
-                    ),
-                  ],
-                ),
-                SettingsSection(
-                  title: "Daily Reminder",
-                  tiles: [
-                    SettingsTile.switchTile(
-                      title: "Daily Reminder",
-                      onToggle: (bool value) {},
-                      switchValue: true,
-                      subtitle: "Set daily journaling MyJourn reminder",
-                    ),
-                    SettingsTile(
-                      title: "Daily Reminder Timeout",
-                      subtitle: "20 : 30",
-                    ),
-                    SettingsTile.switchTile(
-                      title: "Inspiring quote",
-                      onToggle: (bool value) {},
-                      switchValue: true,
-                      subtitle: "Receive Inspiring quote with the reminder",
-                    ),
-                  ],
-                ),
-                SettingsSection(
-                  title: "Color Theme",
-                  tiles: [
-                    SettingsTile(
-                      title: "Theme",
-                      subtitle: "Change themes (Includes Dark theme)",
-                      onPressed: changeTheme,
-                    ),
-                  ],
-                ),
-                SettingsSection(
-                  title: "Font and Size",
-                  tiles: [
-                    SettingsTile(
-                      title: "Font",
-                      subtitle: "Roboto-Regular",
-                    ),
-                    SettingsTile(
-                      title: "Size",
-                      subtitle: "Normal",
-                    ),
-                  ],
-                ),
-                SettingsSection(
-                  title: "Login",
-                  tiles: [
-                    SettingsTile(
-                      leading: Image.asset(
-                        "assets/logos/google.png",
-                        height: 30,
-                        width: 30,
+                contentPadding: EdgeInsets.symmetric(vertical: 15),
+                sections: [
+                  SettingsSection(
+                    title: "Premium",
+                    tiles: [
+                      SettingsTile(
+                        title: "MyJourn Premium",
                       ),
-                      title: snapshot.connectionState == ConnectionState.done
-                          ? snapshot.data.email
-                          : "Loading email",
-                    ),
-                    if (state is InternetAvailableState)SettingsTile(
-                      title: "Logout",
-                      onPressed: logout,
-                    )
-                  ],
-                ),
-                SettingsSection(
-                  title: "Privacy",
-                  tiles: [
-                    SettingsTile(
-                      leading: Icon(Icons.file_download),
-                      title: "Data Download",
-                    ),
-                    SettingsTile(
-                      leading: Icon(Icons.delete_forever),
-                      title: "Delete my account",
-                    )
-                  ],
-                ),
-              ],
-            );
+                    ],
+                  ),
+                  SettingsSection(
+                    subtitlePadding: EdgeInsets.only(bottom: 20),
+                    title: "Security",
+                    tiles: [
+                      SettingsTile.switchTile(
+                        title: "Security Code",
+                        onToggle: (bool value) {},
+                        switchValue: false,
+                        subtitle: "Set security code to lock this app",
+                      ),
+                      SettingsTile(
+                        title: "Security Code Timeout",
+                        subtitle: "After 5 minutes",
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    title: "Daily Reminder",
+                    tiles: [
+                      SettingsTile.switchTile(
+                        title: "Daily Reminder",
+                        onToggle: (bool value) {},
+                        switchValue: true,
+                        subtitle: "Set daily journaling MyJourn reminder",
+                      ),
+                      SettingsTile(
+                        title: "Daily Reminder Timeout",
+                        subtitle: "20 : 30",
+                      ),
+                      SettingsTile.switchTile(
+                        title: "Inspiring quote",
+                        onToggle: (bool value) {},
+                        switchValue: true,
+                        subtitle: "Receive Inspiring quote with the reminder",
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    title: "Color Theme",
+                    tiles: [
+                      SettingsTile(
+                        title: "Theme",
+                        subtitle: "Change themes (Includes Dark theme)",
+                        onPressed: changeTheme,
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    title: "Font and Size",
+                    tiles: [
+                      SettingsTile(
+                        title: "Font",
+                        subtitle: "Roboto-Regular",
+                      ),
+                      SettingsTile(
+                        title: "Size",
+                        subtitle: "Normal",
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    title: "Login",
+                    tiles: [
+                      SettingsTile(
+                        leading: Image.asset(
+                          "assets/logos/google.png",
+                          height: 30,
+                          width: 30,
+                        ),
+                        title: snapshot.connectionState == ConnectionState.done
+                            ? snapshot.data.email
+                            : "Loading email",
+                      ),
+                      if (state is InternetAvailableState)
+                        SettingsTile(
+                          title: "Logout",
+                          onPressed: (_) => logout(mainContext),
+                        )
+                    ],
+                  ),
+                  SettingsSection(
+                    title: "Privacy",
+                    tiles: [
+                      SettingsTile(
+                        leading: Icon(Icons.file_download),
+                        title: "Data Download",
+                      ),
+                      SettingsTile(
+                        leading: Icon(Icons.delete_forever),
+                        title: "Delete my account",
+                      )
+                    ],
+                  ),
+                ],
+              );
             },
           );
         },
@@ -226,30 +226,57 @@ class SettingsScreen extends StatelessWidget {
   void logout(BuildContext uiContext) async {
     showDialog(
         context: uiContext,
-        builder: (context) {
-          return BlocListener<AuthenticationBloc, AuthenticationState>(
-            listener: (BuildContext context, state) {
-              if (state is NotAuthenticated) {
-                Navigator.pushReplacementNamed(
-                    uiContext, AuthenticationScreen.routeName);
-              }
-            },
-            child: AlertDialog(
-              title: Text("Logout"),
-              content: Text("Are you sure you want to logout"),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text("CANCEL"),
-                ),
-                TextButton(
-                    onPressed: () {
-                      context.read<AuthenticationBloc>().add(LogoutEvent());
-                    },
-                    child: Text("LOGOUT"))
-              ],
-            ),
-          );
+        builder: (_) {
+          return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+              listener: (BuildContext context, state) {
+            if (state is NotAuthenticated) {
+              print("State is authenticated");
+              Navigator.pushNamedAndRemoveUntil(
+                  uiContext,
+                  AuthenticationScreen.routeName,
+                  (Route<dynamic> router) => false);
+            }
+          }, builder: (context, state) {
+            if (state is AuthenticatingState) {
+              return logoutLoadingDialogue(uiContext);
+            }
+            return logoutPromptDialogue(uiContext);
+          });
         });
+  }
+
+  Widget logoutLoadingDialogue(BuildContext uiContext) {
+    return AlertDialog(
+      content: Container(
+        height: 100,
+        child: Column(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(
+              height: 10,
+            ),
+            Text("Logging Out"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget logoutPromptDialogue(BuildContext uiContext) {
+    return AlertDialog(
+      title: Text("Logout"),
+      content: Text("Are you sure you want to logout"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(uiContext),
+          child: Text("CANCEL"),
+        ),
+        TextButton(
+            onPressed: () {
+              uiContext.read<AuthenticationBloc>().add(LogoutEvent());
+            },
+            child: Text("LOGOUT"))
+      ],
+    );
   }
 }
