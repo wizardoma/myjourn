@@ -55,7 +55,7 @@ class _SignInScreenState extends State<SignInScreen> {
             margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
             child: BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, state) {
-                if (state is FetchingDataState) {
+                if (state is AuthenticatingState) {
                   if (isVerifyEmail()) {
                     showLoadingState(
                         context, "Checking for Existing accounts", "verify");

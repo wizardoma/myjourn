@@ -1,17 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/services/journals/journal_service.dart';
-import 'package:flutterfrontend/services/repository/journal_repository.dart';
 
 import 'journal_events.dart';
 import 'journal_state.dart';
 
 class JournalBloc extends Bloc<JournalEvents, JournalState> {
   final JournalService _service;
+  final AuthenticationBloc _authenticationBloc;
+  StreamSubscription _streamSubscription;
 
   List<Journal> _journals = [];
 
-  JournalBloc(this._service) : super(InitialJournalState());
+  JournalBloc(this._service, this._authenticationBloc)
+      : super(InitialJournalState()) {
+    _streamSubscription = _authenticationBloc.stream.listen((state) {
+      if (state is NotAuthenticated) {
+        _service.syncDbOnLogout();
+      }
+    });
+  }
 
   @override
   Stream<JournalState> mapEventToState(JournalEvents event) async* {
@@ -88,4 +100,10 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
   }
 
   List<Journal> get journals => [..._journals];
+
+  @override
+  Future<void> close() {
+    _streamSubscription.cancel();
+    return super.close();
+  }
 }

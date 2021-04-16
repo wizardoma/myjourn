@@ -12,15 +12,15 @@ class JournalService with ResponseUtil {
   final JournalServerRepository serverRepository;
   final AuthenticationService authenticationService;
 
-  JournalService({this.localRepository,
-    this.serverRepository,
-    this.authenticationService});
+  JournalService(
+      {this.localRepository,
+      this.serverRepository,
+      this.authenticationService});
 
   Future<Journal> insertJournal(Journal journal) async {
     try {
       var result = await _saveToDb(journal);
       if (_databaseOpWasSuccessful(result)) {
-
         // send a future request to create journal in the backend
         _saveToServer(journal);
         return journal;
@@ -64,18 +64,20 @@ class JournalService with ResponseUtil {
 
   Future<List<Journal>> fetchJournals() async {
     try {
+      _attemptToSyncDbWithPhone();
       var journals =
-      (await localRepository.all()).map((e) => Journal.fromMap(e)).toList();
-      if (journals.length > 0){
+          (await localRepository.all()).map((e) => Journal.fromMap(e)).toList();
+      if (journals.length > 0) {
         _attemptToSyncWithServer([...journals]);
       }
+
       return journals;
     } catch (e) {
       return null;
     }
   }
 
-  Future<Journal> fetchJournalById(int id) async{
+  Future<Journal> fetchJournalById(int id) async {
     try {
       var result = await localRepository.getById(id);
       if (result.length > 0) {
@@ -91,25 +93,31 @@ class JournalService with ResponseUtil {
   }
 
 
+  Future<void> syncDbOnLogout() async {
+    // get all journals from local, sync with the server and then delete all from the phone
+    var allJournals = await localRepository.all();
+    var localJournals = allJournals.map((e) => Journal.fromMap(e)).toList();
+    await _attemptToSyncWithServer(localJournals);
+    await localRepository.purge();
+  }
+
   Future<void> _deleteFromServer(int id) async {
     var headers = await _getHeaders();
     serverRepository.delete(id, headers).then((response) {
-      if (!isOk(response.statusCode)) {
-      }
+      if (!isOk(response.statusCode)) {}
     });
   }
 
   Future<void> _updateToServer(Journal journal) async {
     var headers = await _getHeaders();
     var request = CreateServerJournalRequest.fromJournalMap(journal.toMap());
-      serverRepository
-          .edit(journal.id, FormData.fromMap(request.toMap()), headers)
-          .then((response) {
-        if (isOk(response.statusCode)) {
-          _updateToDb(Journal.fromServer(response.data));
-        }
-      });
-
+    serverRepository
+        .edit(journal.id, FormData.fromMap(request.toMap()), headers)
+        .then((response) {
+      if (isOk(response.statusCode)) {
+        _updateToDb(Journal.fromServer(response.data));
+      }
+    });
   }
 
   Future<void> _saveToServer(Journal journal) async {
@@ -119,36 +127,30 @@ class JournalService with ResponseUtil {
     serverRepository
         .save(FormData.fromMap(request.toMap()), headers)
         .then((response) {
-
       // When response, if successful, update local journal with server id, else do nothing, fetching journal event retries this operation
       if (isCreated(response.statusCode)) {
-
         _updateToDb(Journal.fromServer(response.data));
       }
     });
   }
-
 
   Future<int> _saveToDb(Journal journal) async {
     return await localRepository.insert(journal.toMap());
   }
 
   Future<int> _updateToDb(Journal journal) async {
-
     var result = await localRepository.update(journal.toMap());
 
     return result;
-
   }
 
   Future<Map<String, dynamic>> _getHeaders() async {
     var token = await authenticationService.getToken();
     return {
       "${ServerConstants.authHeaderName}":
-      "${ServerConstants.tokenPrefix}$token"
+          "${ServerConstants.tokenPrefix}$token"
     };
   }
-
 
   bool _databaseOpWasSuccessful(int result) {
     return result != 0;
@@ -160,15 +162,27 @@ class JournalService with ResponseUtil {
       _saveToServer(journal);
     });
   }
-  Future<List<Journal>> _fetchServerJournals() async{
+
+  Future<List<Journal>> _fetchServerJournals() async {
     var headers = await _getHeaders();
     var response = await serverRepository.getAll(headers);
-    if (response.statusCode == 200){
-      var journals = (response.data["body"] as List).map((e) => Journal.fromServer(e)).toList();
+    if (response.statusCode == 200) {
+      print(response.data);
+      var journals = (response.data as List)
+          .map((e) => Journal.fromServer(e))
+          .toList();
       return journals;
     }
     return null;
   }
 
-
+  Future<void> _attemptToSyncDbWithPhone() async{
+    var serverJournals = await _fetchServerJournals();
+    serverJournals.forEach((journal) async{
+      var journalDb = await fetchJournalById(journal.id);
+      if (journalDb == null){
+        _saveToDb(journal);
+      }
+    });
+  }
 }

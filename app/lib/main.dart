@@ -45,7 +45,7 @@ void main() async {
     serverRepository: journalServerRepository,
     authenticationService: authenticationService,
   );
-  var journalBloc = JournalBloc(journalService)..add(FetchJournalsEvent());
+  var journalBloc = JournalBloc(journalService, authenticationBloc)..add(FetchJournalsEvent());
   var userBloc = UserBloc(
       authenticationBloc: authenticationBloc, userService: userService);
   var themesBloc = ThemesBloc("green");
