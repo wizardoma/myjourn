@@ -18,6 +18,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
     if (event is AppStartedEvent) {
+      yield AuthenticatingState();
       var token = await authenticationService.getToken();
       if (token != null) {
         yield IsAuthenticated();
@@ -26,22 +27,24 @@ class AuthenticationBloc
       }
     }
     if (event is LoginEvent) {
-      yield FetchingDataState();
+      yield AuthenticatingState();
       yield await login(event.request);
     }
 
     if (event is SignUpEvent) {
-      yield FetchingDataState();
+      yield AuthenticatingState();
       yield await signUp(event.request);
     }
 
     if (event is LogoutEvent) {
-      yield FetchingDataState();
+      yield AuthenticatingState();
+
+      await Future.delayed(Duration(seconds: 5));
       yield await logout();
     }
 
     if (event is VerifyUniqueEmailEvent) {
-      yield FetchingDataState();
+      yield AuthenticatingState();
       yield await verifyUniqueEmail(event.request);
     }
   }
