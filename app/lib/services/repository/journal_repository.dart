@@ -45,7 +45,6 @@ class JournalRepository {
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (newVersion > oldVersion) {
-      print("2 is greater than db version");
       await db.execute('''
       ALTER TABLE $_table ADD COLUMN $_columnServerId INTEGER
       ''');
@@ -58,7 +57,6 @@ class JournalRepository {
   }
 
   Future<List<Map<String, dynamic>>> getById(int id) async {
-    print("Getting journal by id ");
     Database db = await instance.database;
     return await db.query(_table, where: '$_columnId= ?', whereArgs: [id]);
   }
@@ -66,12 +64,10 @@ class JournalRepository {
   Future<List<Map<String, dynamic>>> all() async {
     Database db = await instance.database;
     var allJournals = await db.query(_table, orderBy: "date desc");
-    print(allJournals);
     return allJournals;
   }
 
   Future<int> update(Map<String, dynamic> row) async {
-    print("updating journal with info $row");
     Database db = await instance.database;
     int id = row[_columnId];
     return await db

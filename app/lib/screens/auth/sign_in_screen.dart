@@ -75,7 +75,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   }
 
                   if (state is EmailNotAvailableState) {
-                    print("from ui: email is not available");
                     setState(() {
                       isSignIn = true;
                       willRegister = false;
@@ -84,7 +83,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 }
 
                 if (state is NotAuthenticated) {
-                  print("Not authenticated");
                   print(state.errors.toString());
                   setState(() {
                     serverErrors = state.errors;
@@ -95,7 +93,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 }
 
                 if (state is IsAuthenticated) {
-                  print("successfully logged in");
                   Navigator.pushNamedAndRemoveUntil(
                       mainContext, HomeScreen.routeName, (Route<dynamic> route) => false);
                 }
@@ -203,7 +200,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void submit() {
     if (_formKey.currentState.validate()) {
-      print("it is validated");
       if (isSignIn) {
         login(LoginRequest(
             _emailEditingController.text, _passwordEditingController.text));
@@ -214,7 +210,6 @@ class _SignInScreenState extends State<SignInScreen> {
         verifyEmail(VerifyEmailRequest(_emailEditingController.text));
       }
     } else {
-      print("it is not validated");
     }
   }
 

@@ -17,11 +17,9 @@ class JournalService with ResponseUtil {
     this.authenticationService});
 
   Future<Journal> insertJournal(Journal journal) async {
-    print("Trying to insert journal");
     try {
       var result = await _saveToDb(journal);
       if (_databaseOpWasSuccessful(result)) {
-        print("inserted to database $result");
 
         // send a future request to create journal in the backend
         _saveToServer(journal);
@@ -37,7 +35,6 @@ class JournalService with ResponseUtil {
     try {
       var result = await _updateToDb(journal);
       if (_databaseOpWasSuccessful(result)) {
-        print("journal serverId ${journal.serverId}");
         if (journal.serverId == null) {
           _saveToServer(journal);
         } else {
@@ -72,7 +69,6 @@ class JournalService with ResponseUtil {
       if (journals.length > 0){
         _attemptToSyncWithServer([...journals]);
       }
-      print("${journals.map((e) => e.serverId).toList()}");
       return journals;
     } catch (e) {
       return null;
@@ -99,7 +95,6 @@ class JournalService with ResponseUtil {
     var headers = await _getHeaders();
     serverRepository.delete(id, headers).then((response) {
       if (!isOk(response.statusCode)) {
-        print(response.errors);
       }
     });
   }
@@ -118,15 +113,12 @@ class JournalService with ResponseUtil {
   }
 
   Future<void> _saveToServer(Journal journal) async {
-    print("Trying to save to server");
     var headers = await _getHeaders();
     var request = CreateServerJournalRequest.fromJournalMap(journal.toMap());
-    print("journal request to server ${request.toMap()}");
 
     serverRepository
         .save(FormData.fromMap(request.toMap()), headers)
         .then((response) {
-      print("response gotten from server ${response.data}" );
 
       // When response, if successful, update local journal with server id, else do nothing, fetching journal event retries this operation
       if (isCreated(response.statusCode)) {
@@ -144,7 +136,6 @@ class JournalService with ResponseUtil {
   Future<int> _updateToDb(Journal journal) async {
 
     var result = await localRepository.update(journal.toMap());
-    print("updating data to database $result");
 
     return result;
 
@@ -174,7 +165,6 @@ class JournalService with ResponseUtil {
     var response = await serverRepository.getAll(headers);
     if (response.statusCode == 200){
       var journals = (response.data["body"] as List).map((e) => Journal.fromServer(e)).toList();
-      print("the journals from server $journals");
       return journals;
     }
     return null;

@@ -12,7 +12,6 @@ class JournalServerRepository {
           data: data, options: Options(headers: headers));
       return JsonResponse.fromResponse(response);
     } on DioError catch (e) {
-      print("Status code ${e.response.statusCode} body ${e.response}");
 
       return JsonResponse.fromResponse(e.response);
     }
@@ -25,7 +24,6 @@ class JournalServerRepository {
           options: Options(headers: headers));
       return JsonResponse.fromResponse(response);
     } on DioError catch (e) {
-      print("Status code ${e.response.statusCode} body ${e.response}");
 
       return JsonResponse.fromResponse(e.response);
     }
@@ -40,7 +38,6 @@ class JournalServerRepository {
 
       return JsonResponse.fromResponse(response);
     } on DioError catch (e) {
-      print("Status code ${e.response.statusCode} body ${e.response}");
 
       return JsonResponse.fromResponse(e.response);
     }
@@ -54,7 +51,6 @@ class JournalServerRepository {
           options: Options(headers: headers));
       return JsonResponse.fromResponse(response);
     } on DioError catch (e) {
-      print("Status code ${e.response.statusCode} body ${e.response}");
 
       return JsonResponse.fromResponse(e.response);
     }

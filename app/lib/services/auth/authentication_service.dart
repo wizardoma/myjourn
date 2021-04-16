@@ -20,7 +20,6 @@ class AuthenticationService {
     if (response.statusCode == 200){
       var token = _extractToken(response);
       _storeToken(token);
-      print("The token is: "+token);
     }
     return response;
   }

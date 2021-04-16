@@ -15,7 +15,6 @@ class UserService with ResponseUtil {
   UserService({@required this.userRepository});
 
   Future<User> getCurrentUser() async {
-    print("Trying to fetch user online");
     var token = await _accessTokenPreferences.getToken();
     Map<String, dynamic> headers = {
       "${ServerConstants.authHeaderName}":

@@ -9,7 +9,6 @@ class JsonResponse<T> {
   JsonResponse(this.statusCode, this.data, this.errors, this.headers);
 
   factory JsonResponse.fromResponse(Response response) {
-//    print("response from map ${response.data["body"].toString()}");
     JsonResponse jsonResponse;
     try {
       jsonResponse = JsonResponse(response.data["status"], response.data["body"], response.data["errors"], response.headers);

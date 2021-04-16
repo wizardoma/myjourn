@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
@@ -23,6 +24,8 @@ import 'package:flutterfrontend/services/repository/journal_server_repository.da
 import 'package:flutterfrontend/services/repository/user_repository.dart';
 import 'package:flutterfrontend/services/user/user_service.dart';
 import 'package:provider/provider.dart';
+
+import 'bloc/settings/internet_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +67,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => InternetBloc(Connectivity())),
         BlocProvider.value(value: _authenticationBloc),
         BlocProvider.value(
           value: _journalBloc,
