@@ -225,11 +225,11 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     if (isNewJournal) {
       context.read<JournalBloc>()
         ..add(AddJournalEvent(savedJournal))
-        ..add(FetchJournalsEvent());
+      ;
     } else {
       context.read<JournalBloc>()
         ..add(EditJournalEvent(savedJournal))
-        ..add(FetchJournalsEvent());
+      ;
     }
   }
 

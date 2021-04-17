@@ -52,7 +52,11 @@ class JournalRepository {
 
   Future<int> insert(Map<String, dynamic> row) async {
     var database = await instance.database;
-    return await database.insert(_table, row);
+    try {await database.insert(_table, row); }
+
+    on DatabaseException catch (e) {
+      print(e);
+    }
   }
 
   Future<List<Map<String, dynamic>>> getById(int id) async {

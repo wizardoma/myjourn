@@ -13,7 +13,6 @@ class JournalList extends StatefulWidget {
 }
 
 class _JournalListState extends State<JournalList> {
-  var bloc ;
 
   @override
   void initState() {

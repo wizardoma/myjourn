@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/services/auth/authentication_service.dart';
+import 'package:flutterfrontend/services/preferences/journal_preferences.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';
 import 'package:flutterfrontend/services/repository/journal_server_repository.dart';
 import 'package:flutterfrontend/services/repository/server_const.dart';
@@ -11,6 +12,7 @@ class JournalService with ResponseUtil {
   final JournalRepository localRepository;
   final JournalServerRepository serverRepository;
   final AuthenticationService authenticationService;
+  JournalPreferences _journalPreferences = JournalPreferences();
 
   JournalService(
       {this.localRepository,
@@ -40,7 +42,6 @@ class JournalService with ResponseUtil {
         } else {
           _updateToServer(journal);
         }
-
         return journal;
       } else
         return null;
@@ -63,8 +64,13 @@ class JournalService with ResponseUtil {
   }
 
   Future<List<Journal>> fetchJournals() async {
+    dynamic hasSynced = await _journalPreferences.getServerSync();
+    print("Have journal Synced $hasSynced");
+    if (hasSynced == null || !hasSynced) {
+      await attemptToSyncDbWithPhone();
+      _journalPreferences.setServerSync(true);
+    }
     try {
-      _attemptToSyncDbWithPhone();
       var journals =
           (await localRepository.all()).map((e) => Journal.fromMap(e)).toList();
       if (journals.length > 0) {
@@ -92,12 +98,12 @@ class JournalService with ResponseUtil {
     }
   }
 
-
   Future<void> syncDbOnLogout() async {
     // get all journals from local, sync with the server and then delete all from the phone
     var allJournals = await localRepository.all();
     var localJournals = allJournals.map((e) => Journal.fromMap(e)).toList();
     await _attemptToSyncWithServer(localJournals);
+    await _journalPreferences.setServerSync(false);
     await localRepository.purge();
   }
 
@@ -168,20 +174,19 @@ class JournalService with ResponseUtil {
     var response = await serverRepository.getAll(headers);
     if (response.statusCode == 200) {
       print(response.data);
-      var journals = (response.data as List)
-          .map((e) => Journal.fromServer(e))
-          .toList();
+      var journals =
+          (response.data as List).map((e) => Journal.fromServer(e)).toList();
       return journals;
     }
     return null;
   }
 
-  Future<void> _attemptToSyncDbWithPhone() async{
+  Future<void> attemptToSyncDbWithPhone() async {
     var serverJournals = await _fetchServerJournals();
-    serverJournals.forEach((journal) async{
+    serverJournals.forEach((journal) async {
       var journalDb = await fetchJournalById(journal.id);
-      if (journalDb == null){
-        _saveToDb(journal);
+      if (journalDb == null) {
+        await _saveToDb(journal);
       }
     });
   }

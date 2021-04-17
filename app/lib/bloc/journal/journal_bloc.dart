@@ -21,6 +21,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
     _streamSubscription = _authenticationBloc.stream.listen((state) {
       if (state is NotAuthenticated) {
         _service.syncDbOnLogout();
+        this._journals = [];
       }
     });
   }
@@ -31,16 +32,19 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
     if (event is AddJournalEvent) {
       yield LoadingState();
       yield await insertJournal(event);
+      this.add(FetchJournalsEvent());
     }
 
     if (event is DeleteJournalEvent) {
       yield LoadingState();
       yield await deleteJournal(event);
+      this.add(FetchJournalsEvent());
     }
 
     if (event is EditJournalEvent) {
       yield LoadingState();
       yield await editJournal(event);
+      this.add(FetchJournalsEvent());
     }
 
     if (event is FetchJournalsEvent) {
@@ -58,7 +62,7 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
     var journals = await _service.fetchJournals();
     if (journals != null) {
       _journals = journals;
-      return FetchJournalsSuccess([..._journals]);
+      return FetchJournalsSuccess([...journals]);
     } else
       return FetchJournalsFailure();
   }

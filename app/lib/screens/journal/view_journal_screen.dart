@@ -31,7 +31,7 @@ class ViewJournalScreen extends StatelessWidget {
                       onPressed: () {
                         context.read<JournalBloc>()
                           ..add(DeleteJournalEvent(id))
-                          ..add(FetchJournalsEvent());
+                        ;
                       },
                       child: Text("DELETE"))
                 ],
