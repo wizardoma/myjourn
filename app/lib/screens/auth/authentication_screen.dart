@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterfrontend/screens/auth/sign_in_screen.dart';
+import 'package:flutterfrontend/widgets/guest_sign_in_prompt.dart';
 import 'package:flutterfrontend/widgets/signin_container.dart';
 
 import '../../themes.dart';
 
 class AuthenticationScreen extends StatelessWidget {
   static const routeName = "/auth";
+
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
@@ -33,7 +35,9 @@ class AuthenticationScreen extends StatelessWidget {
                           .headline2
                           .copyWith(fontSize: 15, fontWeight: FontWeight.w500),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(context: context, builder: (context) => GuestSignInPrompt(signInWithGuest));
+                    },
                   ),
                 ),
                 Center(
@@ -100,5 +104,9 @@ class AuthenticationScreen extends StatelessWidget {
 
   void signInWithEmail(context){
     Navigator.pushNamed(context, SignInScreen.routeName);
+  }
+
+  void signInWithGuest(BuildContext context) {
+
   }
 }

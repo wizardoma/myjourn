@@ -183,7 +183,7 @@ class JournalService with ResponseUtil {
 
   Future<void> attemptToSyncDbWithPhone() async {
     var serverJournals = await _fetchServerJournals();
-    serverJournals.forEach((journal) async {
+    if (serverJournals!=null || serverJournals.length>0) serverJournals.forEach((journal) async {
       var journalDb = await fetchJournalById(journal.id);
       if (journalDb == null) {
         await _saveToDb(journal);
