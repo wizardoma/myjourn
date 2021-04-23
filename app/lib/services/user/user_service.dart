@@ -24,13 +24,17 @@ class UserService with ResponseUtil {
 
     if (isOk(response.statusCode)) {
       var user = User.fromMap(response.data);
-      _userPreferences.setUser(user);
+      setCachedUser(user);
       return user;
     }
     // authentication
     else if (isAuthorizationError(response.statusCode)) {
       return null;
     }
+  }
+
+  Future<void> setCachedUser(User user) async {
+    _userPreferences.setUser(user);
   }
 
   Future<User> getCachedUser() async {

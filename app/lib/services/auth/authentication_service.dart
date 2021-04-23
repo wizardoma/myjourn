@@ -24,6 +24,10 @@ class AuthenticationService {
     return response;
   }
 
+  Future<void> loginWithGuest() async{
+    _storeToken("guest");
+  }
+
   Future<JsonResponse> signUp(SignUpRequest signUpRequest) async {
     var response = await authenticationRepository.signUp(FormData.fromMap(SignUpRequest.toMap(signUpRequest)));
     if (response.statusCode == 201) {

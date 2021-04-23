@@ -1,30 +1,34 @@
 import 'package:dio/dio.dart';
 import 'package:flutterfrontend/models/journal.dart';
+import 'package:flutterfrontend/models/user.dart';
 import 'package:flutterfrontend/services/auth/authentication_service.dart';
 import 'package:flutterfrontend/services/preferences/journal_preferences.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';
 import 'package:flutterfrontend/services/repository/journal_server_repository.dart';
 import 'package:flutterfrontend/services/repository/server_const.dart';
 import 'package:flutterfrontend/services/requests/save_journal_request.dart';
+import 'package:flutterfrontend/services/user/user_service.dart';
 import 'package:flutterfrontend/util/response_utils.dart';
 
 class JournalService with ResponseUtil {
   final JournalRepository localRepository;
   final JournalServerRepository serverRepository;
   final AuthenticationService authenticationService;
+  final UserService userService;
   JournalPreferences _journalPreferences = JournalPreferences();
 
   JournalService(
       {this.localRepository,
       this.serverRepository,
-      this.authenticationService});
+      this.authenticationService,this.userService});
 
   Future<Journal> insertJournal(Journal journal) async {
     try {
       var result = await _saveToDb(journal);
+      bool isGuest = await isGuestUser();
       if (_databaseOpWasSuccessful(result)) {
         // send a future request to create journal in the backend
-        _saveToServer(journal);
+        if (!isGuest) _saveToServer(journal);
         return journal;
       } else
         return null;
@@ -36,7 +40,9 @@ class JournalService with ResponseUtil {
   Future<Journal> editJournal(Journal journal) async {
     try {
       var result = await _updateToDb(journal);
-      if (_databaseOpWasSuccessful(result)) {
+      bool isGuest = await isGuestUser();
+
+      if (_databaseOpWasSuccessful(result) && !isGuest) {
         if (journal.serverId == null) {
           _saveToServer(journal);
         } else {
@@ -53,7 +59,8 @@ class JournalService with ResponseUtil {
   Future<bool> deleteJournal(int id) async {
     try {
       var result = await localRepository.delete(id);
-      if (_databaseOpWasSuccessful(result)) {
+      bool isGuest = await isGuestUser();
+      if (_databaseOpWasSuccessful(result) && !isGuest) {
         _deleteFromServer(id);
         return true;
       } else
@@ -66,14 +73,16 @@ class JournalService with ResponseUtil {
   Future<List<Journal>> fetchJournals() async {
     dynamic hasSynced = await _journalPreferences.getServerSync();
     print("Have journal Synced $hasSynced");
-    if (hasSynced == null || !hasSynced) {
+    bool isGuest = await isGuestUser();
+
+    if ((hasSynced == null || !hasSynced) && !isGuest) {
       await attemptToSyncDbWithPhone();
       _journalPreferences.setServerSync(true);
     }
     try {
       var journals =
           (await localRepository.all()).map((e) => Journal.fromMap(e)).toList();
-      if (journals.length > 0) {
+      if (journals.length > 0 && !isGuest) {
         _attemptToSyncWithServer([...journals]);
       }
 
@@ -102,7 +111,8 @@ class JournalService with ResponseUtil {
     // get all journals from local, sync with the server and then delete all from the phone
     var allJournals = await localRepository.all();
     var localJournals = allJournals.map((e) => Journal.fromMap(e)).toList();
-    await _attemptToSyncWithServer(localJournals);
+    bool isGuest = await isGuestUser();
+    if (!isGuest) await _attemptToSyncWithServer(localJournals);
     await _journalPreferences.setServerSync(false);
     await localRepository.purge();
   }
@@ -189,5 +199,11 @@ class JournalService with ResponseUtil {
         await _saveToDb(journal);
       }
     });
+  }
+
+  Future<bool> isGuestUser() async{
+    var user = await userService.getCachedUser();
+    if (user == null) return true;
+    return user.id == 0;
   }
 }

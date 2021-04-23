@@ -17,6 +17,8 @@ class SignUpEvent extends AuthenticationEvent {
 
 }
 
+class GuestLoginEvent extends AuthenticationEvent{}
+
 class LogoutEvent extends AuthenticationEvent {}
 
 class VerifyUniqueEmailEvent extends AuthenticationEvent {

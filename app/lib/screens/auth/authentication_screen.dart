@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
+import 'package:flutterfrontend/bloc/auth/authentication_event.dart';
+import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
 import 'package:flutterfrontend/screens/auth/sign_in_screen.dart';
+import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/widgets/guest_sign_in_prompt.dart';
 import 'package:flutterfrontend/widgets/signin_container.dart';
+import '../../bloc/auth/auth_bloc.dart';
 
 import '../../themes.dart';
 
@@ -12,89 +18,96 @@ class AuthenticationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Themes.authBackGroundColor,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state){
+        if (state is IsAuthenticated){
+          Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Themes.authBackGroundColor,
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
 //          width: mediaQuery.width,
-            alignment: Alignment.topCenter,
-            child: Column(
+              alignment: Alignment.topCenter,
+              child: Column(
 //              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  width: mediaQuery.width,
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    child: Text(
-                      "Skip Login",
-                      textAlign: TextAlign.right,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(fontSize: 15, fontWeight: FontWeight.w500),
+                children: [
+                  Container(
+                    width: mediaQuery.width,
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      child: Text(
+                        "Skip Login",
+                        textAlign: TextAlign.right,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2
+                            .copyWith(fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
+                      onPressed: () {
+                        showDialog(context: context, builder: (context) => GuestSignInPrompt(signInWithGuest));
+                      },
                     ),
-                    onPressed: () {
-                      showDialog(context: context, builder: (context) => GuestSignInPrompt(signInWithGuest));
-                    },
                   ),
-                ),
-                Center(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.all(10),
-                          child: Text(
-                            "MYJOURN",
-                            style: Theme.of(context).textTheme.headline2.copyWith(
-                                fontSize: 25, fontWeight: FontWeight.bold),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            child: Text(
+                              "MYJOURN",
+                              style: Theme.of(context).textTheme.headline2.copyWith(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
 //                      width: width * 0.3,
-                              child: Container(
-                                width: 170,
-                                height: 170,
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle,
+                                child: Container(
+                                  width: 170,
+                                  height: 170,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                                bottom: -8,
-                                right: 10,
-                                child: Image.asset(
-                                  "assets/logos/compose.png",
-                                  fit: BoxFit.cover,
-                                  height: 140,
-                                  width: 140,
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        SignInContainer("assets/logos/google.png", Colors.white,
-                            "Sign in with Google", null),
-                        SignInContainer("assets/logos/facebook.png",
-                            Colors.blue.shade900, "Sign in with Facebook", null),
-                        SignInContainer("assets/logos/mail.png",
-                            Colors.red.shade900, "Sign in with Email", signInWithEmail),
-                      ],
+                              Positioned(
+                                  bottom: -8,
+                                  right: 10,
+                                  child: Image.asset(
+                                    "assets/logos/compose.png",
+                                    fit: BoxFit.cover,
+                                    height: 140,
+                                    width: 140,
+                                  )),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SignInContainer("assets/logos/google.png", Colors.white,
+                              "Sign in with Google", null),
+                          SignInContainer("assets/logos/facebook.png",
+                              Colors.blue.shade900, "Sign in with Facebook", null),
+                          SignInContainer("assets/logos/mail.png",
+                              Colors.red.shade900, "Sign in with Email", signInWithEmail),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -107,6 +120,6 @@ class AuthenticationScreen extends StatelessWidget {
   }
 
   void signInWithGuest(BuildContext context) {
-
+    BlocProvider.of<AuthenticationBloc>(context,listen: false).add(GuestLoginEvent());
   }
 }

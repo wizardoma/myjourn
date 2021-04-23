@@ -21,7 +21,7 @@ class AuthenticationBloc
       yield AuthenticatingState();
       var token = await authenticationService.getToken();
       if (token != null) {
-        yield IsAuthenticated();
+        yield IsAuthenticated(AuthenticationType.user);
       } else {
         yield NotAuthenticated();
       }
@@ -29,6 +29,12 @@ class AuthenticationBloc
     if (event is LoginEvent) {
       yield AuthenticatingState();
       yield await login(event.request);
+    }
+
+    if (event is GuestLoginEvent) {
+      yield AuthenticatingState();
+      authenticationService.loginWithGuest();
+      yield IsAuthenticated(AuthenticationType.guest);
     }
 
     if (event is SignUpEvent) {
@@ -61,14 +67,14 @@ class AuthenticationBloc
   Future<AuthenticationState> signUp(SignUpRequest request) async {
     var response = await authenticationService.signUp(request);
     return response.statusCode == 201
-        ? IsAuthenticated()
+        ? IsAuthenticated(AuthenticationType.user)
         : NotAuthenticated.withErrors(response.errors);
   }
 
   Future<AuthenticationState> login(LoginRequest request) async {
     var response = await authenticationService.login(request);
     return response.statusCode == 200
-        ? IsAuthenticated()
+        ? IsAuthenticated(AuthenticationType.user)
         : NotAuthenticated.withErrors(response.errors);
   }
 

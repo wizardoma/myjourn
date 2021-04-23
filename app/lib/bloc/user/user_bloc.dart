@@ -16,8 +16,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   StreamSubscription _streamSubscription;
   UserBloc({this.authenticationBloc, this.userService}) : super(UserNotInitializedState()){
     _streamSubscription = authenticationBloc.stream.listen((state) {
-      if (state is IsAuthenticated){
-        this.add(FetchUserEvent());
+      if (state is IsAuthenticated ){
+        if (state.authenticationType == AuthenticationType.user) {
+          this.add(FetchUserEvent());
+        }
+        if (state.authenticationType == AuthenticationType.guest){
+          this.add(GuestUserEvent());
+        }
       }
       if (state is NotAuthenticated){
         deleteCachedUser();
@@ -35,9 +40,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield await fetchUser();
     }
 
+    if (event is GuestUserEvent){
+      yield await storeGuestUser();
+    }
+
 //    if (event is ClearUserEvent){
 //      yield await
 //    }
+  }
+
+  Future<UserState> storeGuestUser() async{
+    var guestUser = User(id: 0, email: "guest", username: "guest");
+    await userService.setCachedUser(guestUser);
+    return UserFetchedState(guestUser);
   }
 
   Future<UserState> fetchUser() async {

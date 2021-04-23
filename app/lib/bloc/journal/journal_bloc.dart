@@ -23,6 +23,9 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
         _service.syncDbOnLogout();
         this._journals = [];
       }
+      if (state is IsAuthenticated){
+        this.add(FetchJournalsEvent());
+      }
     });
   }
 
