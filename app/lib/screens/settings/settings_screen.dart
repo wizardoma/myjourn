@@ -27,7 +27,6 @@ class SettingsScreen extends StatelessWidget {
         builder: (context, AsyncSnapshot<User> snapshot) {
           return BlocBuilder<InternetBloc, InternetState>(
             builder: (context, state) {
-              print("Internet state $state");
               return SettingsList(
                 contentPadding: EdgeInsets.symmetric(vertical: 15),
                 sections: [
@@ -230,7 +229,6 @@ class SettingsScreen extends StatelessWidget {
           return BlocConsumer<AuthenticationBloc, AuthenticationState>(
               listener: (BuildContext context, state) {
             if (state is NotAuthenticated) {
-              print("State is authenticated");
               Navigator.pushNamedAndRemoveUntil(
                   uiContext,
                   AuthenticationScreen.routeName,

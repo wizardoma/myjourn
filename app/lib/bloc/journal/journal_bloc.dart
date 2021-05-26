@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/auth_bloc.dart';
 import 'package:flutterfrontend/bloc/auth/authentication_state.dart';
+import 'package:flutterfrontend/bloc/user/user_bloc.dart';
+import 'package:flutterfrontend/bloc/user/user_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/services/journals/journal_service.dart';
 
@@ -12,18 +14,23 @@ import 'journal_state.dart';
 class JournalBloc extends Bloc<JournalEvents, JournalState> {
   final JournalService _service;
   final AuthenticationBloc _authenticationBloc;
-  StreamSubscription _streamSubscription;
+  final UserBloc _userBloc;
+  StreamSubscription _journalStreamSubscription;
+  StreamSubscription _userStreamSubscription;
 
   List<Journal> _journals = [];
 
-  JournalBloc(this._service, this._authenticationBloc)
+  JournalBloc(this._service, this._authenticationBloc, this._userBloc)
       : super(InitialJournalState()) {
-    _streamSubscription = _authenticationBloc.stream.listen((state) {
+    _journalStreamSubscription = _authenticationBloc.stream.listen((state) {
       if (state is NotAuthenticated) {
         _service.syncDbOnLogout();
         this._journals = [];
       }
-      if (state is IsAuthenticated){
+    });
+
+    _userStreamSubscription = _userBloc.stream.listen((state) {
+      if (state is UserFetchedState) {
         this.add(FetchJournalsEvent());
       }
     });
@@ -31,7 +38,6 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
 
   @override
   Stream<JournalState> mapEventToState(JournalEvents event) async* {
-    yield InitialJournalState();
     if (event is AddJournalEvent) {
       yield LoadingState();
       yield await insertJournal(event);
@@ -110,7 +116,8 @@ class JournalBloc extends Bloc<JournalEvents, JournalState> {
 
   @override
   Future<void> close() {
-    _streamSubscription.cancel();
+    _userStreamSubscription.cancel();
+    _journalStreamSubscription.cancel();
     return super.close();
   }
 }

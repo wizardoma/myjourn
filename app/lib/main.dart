@@ -47,9 +47,9 @@ void main() async {
     userService: userService,
   );
 
-  var journalBloc = JournalBloc(journalService, authenticationBloc);
   var userBloc = UserBloc(
       authenticationBloc: authenticationBloc, userService: userService);
+  var journalBloc = JournalBloc(journalService, authenticationBloc, userBloc);
   var themesBloc = ThemesBloc("green");
   await themesBloc.loadTheme();
 

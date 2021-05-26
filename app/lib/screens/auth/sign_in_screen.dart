@@ -93,6 +93,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 }
 
                 if (state is IsAuthenticated) {
+
                   Navigator.pushNamedAndRemoveUntil(
                       mainContext, HomeScreen.routeName, (Route<dynamic> route) => false);
                 }

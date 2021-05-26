@@ -10,7 +10,6 @@ class InternetBloc extends Cubit<InternetState> {
 
   InternetBloc(Connectivity connectivity) : super(InternetUnAvailableState()) {
     _streamSubscription = connectivity.onConnectivityChanged.listen((event) {
-      print("Internet changed $event");
       if (event == ConnectivityResult.mobile ||
           event == ConnectivityResult.wifi) {
         emit(InternetAvailableState());

@@ -38,7 +38,8 @@ class UserService with ResponseUtil {
   }
 
   Future<User> getCachedUser() async {
-    return _userPreferences.getUser();
+    var user = await _userPreferences.getUser();
+    return user;
   }
 
   void deleteCachedUser() async{

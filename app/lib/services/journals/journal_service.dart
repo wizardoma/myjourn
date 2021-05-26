@@ -19,7 +19,8 @@ class JournalService with ResponseUtil {
   JournalService(
       {this.localRepository,
       this.serverRepository,
-      this.authenticationService,this.userService});
+      this.authenticationService,
+      this.userService});
 
   Future<Journal> insertJournal(Journal journal) async {
     try {
@@ -72,14 +73,15 @@ class JournalService with ResponseUtil {
 
   Future<List<Journal>> fetchJournals() async {
     dynamic hasSynced = await _journalPreferences.getServerSync();
-    print("Have journal Synced $hasSynced");
     bool isGuest = await isGuestUser();
 
+
     if ((hasSynced == null || !hasSynced) && !isGuest) {
-      await attemptToSyncDbWithPhone();
-      _journalPreferences.setServerSync(true);
+      var hasSynced = await _attemptToSyncDbWithPhone();
+      if (hasSynced) _journalPreferences.setServerSync(true);
     }
     try {
+
       var journals =
           (await localRepository.all()).map((e) => Journal.fromMap(e)).toList();
       if (journals.length > 0 && !isGuest) {
@@ -143,7 +145,7 @@ class JournalService with ResponseUtil {
     serverRepository
         .save(FormData.fromMap(request.toMap()), headers)
         .then((response) {
-      // When response, if successful, update local journal with server id, else do nothing, fetching journal event retries this operation
+      //  if successful response, update local journal with server id, else do nothing, fetching journal event retries this operation
       if (isCreated(response.statusCode)) {
         _updateToDb(Journal.fromServer(response.data));
       }
@@ -155,9 +157,7 @@ class JournalService with ResponseUtil {
   }
 
   Future<int> _updateToDb(Journal journal) async {
-    var result = await localRepository.update(journal.toMap());
-
-    return result;
+    return await localRepository.update(journal.toMap());
   }
 
   Future<Map<String, dynamic>> _getHeaders() async {
@@ -191,17 +191,27 @@ class JournalService with ResponseUtil {
     return null;
   }
 
-  Future<void> attemptToSyncDbWithPhone() async {
+  Future<bool> _attemptToSyncDbWithPhone() async {
     var serverJournals = await _fetchServerJournals();
-    if (serverJournals!=null || serverJournals.length>0) serverJournals.forEach((journal) async {
-      var journalDb = await fetchJournalById(journal.id);
-      if (journalDb == null) {
-        await _saveToDb(journal);
+
+    int counter = 0;
+    if (serverJournals != null || serverJournals.length > 0) {
+      serverJournals.forEach((journal) async {
+        ++counter;
+        var journalDb = await fetchJournalById(journal.id);
+        if (journalDb == null) {
+          await _saveToDb(journal);
+        }
+      });
+      while (counter != serverJournals.length) {
+        await Future.delayed(Duration(milliseconds: 100));
       }
-    });
+    }
+
+    return counter == serverJournals.length;
   }
 
-  Future<bool> isGuestUser() async{
+  Future<bool> isGuestUser() async {
     var user = await userService.getCachedUser();
     if (user == null) return true;
     return user.id == 0;

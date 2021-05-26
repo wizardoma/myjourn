@@ -40,7 +40,7 @@ class _JournalListState extends State<JournalList> {
               )
                   : JournalListItems(state.journals);
             }
-            if (state is LoadingState) {
+            if (state is LoadingState || state is InitialJournalState) {
               return Center(child: CircularProgressIndicator());
             }
           }),
