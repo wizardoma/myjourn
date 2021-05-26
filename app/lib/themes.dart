@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Themes {
   static const Color authBackGroundColor = Colors.brown;
@@ -60,8 +61,18 @@ class Themes {
   static ThemeData _getThemeData(primaryColor, accentColor,
       [bool isDarkTheme = false]) {
     return ThemeData(
+
       primarySwatch: primaryColor,
       primaryColor: primaryColor,
+      appBarTheme: AppBarTheme(
+        color: isDarkTheme ? Colors.black38 : primaryColor,
+        brightness: Brightness.light,
+        backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: primaryColor,
+          statusBarIconBrightness: Brightness.light
+        ),
+      ),
       cardColor: isDarkTheme ? Colors.black : Colors.white,
       accentColor: accentColor,
       dividerColor: isDarkTheme ? Colors.white : Colors.grey.shade200,

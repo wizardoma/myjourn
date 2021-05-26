@@ -15,6 +15,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Theme.of(context).cardColor,
         appBar: AppBar(
+
           title: Center(
             child: Text("MYJOURN"),
           ),

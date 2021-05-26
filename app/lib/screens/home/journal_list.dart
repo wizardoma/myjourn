@@ -23,7 +23,9 @@ class _JournalListState extends State<JournalList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: Theme
+          .of(context)
+          .cardColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushNamed(NewJournalScreen.routeName,
@@ -32,19 +34,19 @@ class _JournalListState extends State<JournalList> {
         child: Icon(Icons.add),
       ),
       body: BlocBuilder<JournalBloc, JournalState>(
-          // ignore: missing_return
+        // ignore: missing_return
           builder: (BuildContext context, state) {
-        if (state is FetchJournalsSuccess) {
-          return state.journals.length == 0
-              ? Center(
-                  child: Text("No Journals"),
-                )
-              : JournalListItems(state.journals);
-        }
-        if (state is LoadingState) {
-          return Center(child: CircularProgressIndicator());
-        }
-      }),
+            if (state is FetchJournalsSuccess) {
+              return state.journals.length == 0
+                  ? Center(
+                child: Text("No Journals"),
+              )
+                  : JournalListItems(state.journals);
+            }
+            if (state is LoadingState) {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 }

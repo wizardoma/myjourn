@@ -71,7 +71,6 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
           "Write",
           style: TextStyle(color: Colors.grey),
         ),
-        backgroundColor: Theme.of(context).cardColor,
         actions: [
           IconButton(
             icon: Icon(

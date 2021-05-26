@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutterfrontend/models/journal.dart';
-import 'package:flutterfrontend/models/user.dart';
 import 'package:flutterfrontend/services/auth/authentication_service.dart';
 import 'package:flutterfrontend/services/preferences/journal_preferences.dart';
 import 'package:flutterfrontend/services/repository/journal_repository.dart';

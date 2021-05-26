@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfrontend/bloc/journal/journal_bloc.dart';
 import 'package:flutterfrontend/bloc/journal/journal_events.dart';
@@ -12,45 +13,6 @@ import 'package:intl/intl.dart';
 class ViewJournalScreen extends StatelessWidget {
   static const routeName = "/viewJournal";
 
-  void deleteJournal(int id, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return BlocConsumer<JournalBloc, JournalState>(
-            builder: (BuildContext context, state) {
-              return AlertDialog(
-                contentPadding: EdgeInsets.all(15),
-                content: Text("Do you want to delete this note?"),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                      child: Text("CANCEL")),
-                  TextButton(
-                      onPressed: () {
-                        context.read<JournalBloc>()
-                          ..add(DeleteJournalEvent(id))
-                        ;
-                      },
-                      child: Text("DELETE"))
-                ],
-              );
-            },
-            listener: (BuildContext context, state) {
-              if (state is DeleteSuccess) {
-                Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (Route<dynamic> router) => false);
-              }
-              if (state is DeleteFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("An error occurred deleting this journal")));
-                Navigator.pop(context,false);
-              }
-            },
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     var pageRoute =
@@ -58,8 +20,10 @@ class ViewJournalScreen extends StatelessWidget {
     final journal = pageRoute["journal"] as Journal;
 
     return Scaffold(
+
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
+
         title: Text("MyJourn"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -203,5 +167,44 @@ class ViewJournalScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void deleteJournal(int id, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return BlocConsumer<JournalBloc, JournalState>(
+            builder: (BuildContext context, state) {
+              return AlertDialog(
+                contentPadding: EdgeInsets.all(15),
+                content: Text("Do you want to delete this note?"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Text("CANCEL")),
+                  TextButton(
+                      onPressed: () {
+                        context.read<JournalBloc>()
+                          ..add(DeleteJournalEvent(id));
+                      },
+                      child: Text("DELETE"))
+                ],
+              );
+            },
+            listener: (BuildContext context, state) {
+              if (state is DeleteSuccess) {
+                Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName,
+                    (Route<dynamic> router) => false);
+              }
+              if (state is DeleteFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("An error occurred deleting this journal")));
+                Navigator.pop(context, false);
+              }
+            },
+          );
+        });
   }
 }
