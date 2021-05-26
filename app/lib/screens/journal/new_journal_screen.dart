@@ -63,7 +63,6 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     var bottomInset = mediaQuery.viewInsets.bottom;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
         elevation: 0,
         leading: checkForLeadingAppBarContent(),

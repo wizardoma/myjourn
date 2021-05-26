@@ -73,6 +73,7 @@ class Themes {
           statusBarIconBrightness: Brightness.light
         ),
       ),
+      scaffoldBackgroundColor: isDarkTheme ? Colors.black : Colors.white,
       cardColor: isDarkTheme ? Colors.black : Colors.white,
       accentColor: accentColor,
       dividerColor: isDarkTheme ? Colors.white : Colors.grey.shade200,

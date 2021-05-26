@@ -20,10 +20,7 @@ class ViewJournalScreen extends StatelessWidget {
     final journal = pageRoute["journal"] as Journal;
 
     return Scaffold(
-
-      backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
-
         title: Text("MyJourn"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
