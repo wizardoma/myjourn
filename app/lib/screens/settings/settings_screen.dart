@@ -144,8 +144,8 @@ class SettingsScreen extends StatelessWidget {
     var selectedTheme = context.read<ThemesBloc>().currentTheme;
     showDialog(
         context: context,
-        builder: (context) {
-          var themes = BlocProvider.of<ThemesBloc>(context);
+        builder: (dialogContext) {
+          var themes = BlocProvider.of<ThemesBloc>(dialogContext);
 
           return StatefulBuilder(
             builder: (BuildContext context,
@@ -218,7 +218,8 @@ class SettingsScreen extends StatelessWidget {
           );
         }).then((value) {
       var theme = value as String;
-      context.read<ThemesBloc>().setTheme(theme);
+      if (value!=null){
+      context.read<ThemesBloc>().setTheme(theme);}
     });
   }
 
