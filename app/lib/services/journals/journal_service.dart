@@ -24,10 +24,9 @@ class JournalService with ResponseUtil {
   Future<Journal> insertJournal(Journal journal) async {
     try {
       var result = await _saveToDb(journal);
-
       bool isGuest = await isGuestUser();
       if (_databaseOpWasSuccessful(result)) {
-        // send a future request to create journal in the backend
+        // send a future request to create journal in the backend if its not a guest user
         if (!isGuest) _saveToServer(journal);
         return journal;
       } else
@@ -41,8 +40,9 @@ class JournalService with ResponseUtil {
     try {
       var result = await _updateToDb(journal);
       bool isGuest = await isGuestUser();
-
+      // do not update to the server if its guest user
       if (_databaseOpWasSuccessful(result) && !isGuest) {
+        // if journal is not synced with server, then sync
         if (journal.serverId == null) {
           _saveToServer(journal);
         } else {

@@ -52,12 +52,14 @@ class JournalRepository {
     }
   }
 
-  Future<int> insert(Map<String, dynamic> row) async {
+  Future<int> insert(Map<String, dynamic> data) async {
     var database = await instance.database;
-    try {await database.insert(_table, row); }
+    try {
+      return await database.insert(_table, data); }
 
     on DatabaseException catch (e) {
       print(e);
+      return 0;
     }
   }
 
