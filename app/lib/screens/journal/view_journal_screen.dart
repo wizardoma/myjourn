@@ -54,17 +54,16 @@ class ViewJournalScreen extends StatelessWidget {
         ],
       ),
       body: Container(
-        constraints: BoxConstraints(
-            minHeight: 260,
-            maxHeight: MediaQuery.of(context).size.height * 0.8),
+
         margin: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
-                color: Colors.grey,
-                spreadRadius: 1,
-                blurRadius: 1,
+                color: Colors.grey.shade300,
+                spreadRadius: 0.8,
+                blurRadius: 0.8,
                 offset: Offset(0, 0))
           ],
         ),
@@ -83,6 +82,7 @@ class ViewJournalScreen extends StatelessWidget {
                     height: 70,
                     padding: EdgeInsets.symmetric(vertical: 5),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Row(

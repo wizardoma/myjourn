@@ -88,7 +88,7 @@ class Themes {
         bodyText1: TextStyle(color: isDarkTheme ? Colors.white : Colors.black),
         headline1: TextStyle(
             fontSize: 16,
-            color: isDarkTheme ? Colors.white : Colors.black,
+            color: isDarkTheme ? Colors.white : Colors.black87.withOpacity(0.7),
             fontWeight: FontWeight.w400),
         headline2: TextStyle(color: Colors.grey),
 // For textStyles that emulates the primarySwatch Color

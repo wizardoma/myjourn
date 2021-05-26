@@ -77,8 +77,12 @@ class JournalService with ResponseUtil {
 
 
     if ((hasSynced == null || !hasSynced) && !isGuest) {
-      var hasSynced = await _attemptToSyncDbWithPhone();
-      if (hasSynced) _journalPreferences.setServerSync(true);
+      var hasSyncedToLocal = await _attemptToSyncDbWithPhone();
+      if (hasSyncedToLocal) _journalPreferences.setServerSync(true);
+    }
+
+    else {
+      _attemptToSyncDbWithPhone();
     }
     try {
 

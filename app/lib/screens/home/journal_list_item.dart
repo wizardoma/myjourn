@@ -95,11 +95,8 @@ class JournalListItem extends StatelessWidget {
                                 child: Container(
                                   child: Text(
                                     journals[index]
-                                        .body
-                                        .toString()
-                                        .characters
-                                        .take(110)
-                                        .toString(),
+                                        .body,
+                                    maxLines: 3,
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline1
