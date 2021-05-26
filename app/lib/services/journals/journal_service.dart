@@ -24,6 +24,7 @@ class JournalService with ResponseUtil {
   Future<Journal> insertJournal(Journal journal) async {
     try {
       var result = await _saveToDb(journal);
+
       bool isGuest = await isGuestUser();
       if (_databaseOpWasSuccessful(result)) {
         // send a future request to create journal in the backend

@@ -64,6 +64,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         leading: checkForLeadingAppBarContent(),
         title: Text(

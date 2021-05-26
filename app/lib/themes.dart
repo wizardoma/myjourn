@@ -50,7 +50,7 @@ class Themes {
   );
   static const int _whitePrimaryValue = 0xFFFFFFFF;
 
-  static final darkTheme = _getThemeData(primaryBlack, primaryWhite, true);
+  static final darkTheme = _getThemeData(primaryBlack, _greenColor, true);
 
   static final purpleTheme = _getThemeData(_purpleColor, _purpleAccent);
 
@@ -64,12 +64,17 @@ class Themes {
 
       primarySwatch: primaryColor,
       primaryColor: primaryColor,
+      popupMenuTheme: PopupMenuThemeData(
+        elevation: 1,
+        color: Colors.white,
+        textStyle: TextStyle(color: Colors.black87,)
+      ),
       appBarTheme: AppBarTheme(
         color: isDarkTheme ? Colors.black38 : primaryColor,
         brightness: Brightness.light,
         backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: primaryColor,
+            statusBarColor: (primaryColor as MaterialColor).withOpacity(0.4),
           statusBarIconBrightness: Brightness.light
         ),
       ),

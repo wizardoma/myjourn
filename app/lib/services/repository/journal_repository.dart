@@ -38,11 +38,13 @@ class JournalRepository {
     $_columnId INTEGER PRIMARY KEY,
     $_columnBody TEXT NOT NULL,
     $_columnDate INTEGER NOT NULL,
-    $_columnImages STRING )
+    $_columnImages STRING,
+    $_columnServerId INTEGER )
     ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+
     if (newVersion > oldVersion) {
       await db.execute('''
       ALTER TABLE $_table ADD COLUMN $_columnServerId INTEGER

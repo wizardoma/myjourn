@@ -26,14 +26,15 @@ class HomeScreen extends StatelessWidget {
           ),
           actions: [
             PopupMenuButton(
-                padding: EdgeInsets.all(0),
+
+                padding: const EdgeInsets.all(0),
                 onSelected: (_) {
                   Navigator.pushNamed(context, SettingsScreen.routeName);
                 },
                 itemBuilder: (context) {
                   return {"Setting"}.map((e) {
                     return PopupMenuItem(
-                      textStyle: Theme.of(context).textTheme.headline1,
+
                       child: Text(e),
                       value: e,
                     );
