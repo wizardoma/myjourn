@@ -13,8 +13,8 @@ class Themes {
   static const _greenAccent = Colors.greenAccent;
 
   // Red Theme
-  static const _orangeColor = Colors.orange;
-  static const _orangeAccent = Colors.orangeAccent;
+  static const _redColor = Colors.red;
+  static const _redAccent = Colors.redAccent;
 
   // DarkTheme
   static const MaterialColor primaryBlack = MaterialColor(
@@ -56,7 +56,7 @@ class Themes {
 
   static final greenTheme = _getThemeData(_greenColor, _greenAccent);
 
-  static final orangeTheme = _getThemeData(_orangeColor, _orangeAccent);
+  static final redTheme = _getThemeData(_redColor, _redAccent);
 
   static ThemeData _getThemeData(primaryColor, accentColor,
       [bool isDarkTheme = false]) {
@@ -73,6 +73,7 @@ class Themes {
         color: isDarkTheme ? Colors.black38 : primaryColor,
         brightness: Brightness.light,
         backwardsCompatibility: false,
+
         systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: (primaryColor as MaterialColor).withOpacity(0.4),
           statusBarIconBrightness: Brightness.light
@@ -106,7 +107,7 @@ class Themes {
     return {
       "purple": purpleTheme,
       "green": greenTheme,
-      "orange": orangeTheme,
+      "red": redTheme,
       "dark": darkTheme,
     };
   }
