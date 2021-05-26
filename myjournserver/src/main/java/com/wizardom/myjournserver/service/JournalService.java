@@ -1,5 +1,6 @@
 package com.wizardom.myjournserver.service;
 
+import com.wizardom.myjournserver.controller.request.BatchCreateJournalRequest;
 import com.wizardom.myjournserver.controller.request.CreateJournalRequest;
 import com.wizardom.myjournserver.exceptions.JournalNotFoundException;
 import com.wizardom.myjournserver.model.Journal;
@@ -60,4 +61,9 @@ public class JournalService {
     }
 
 
+    public void syncJournalsToServer(BatchCreateJournalRequest journalList) {
+        journalList.getJournalList().forEach(
+                this::save
+        );
+    }
 }

@@ -14,7 +14,7 @@ class Themes {
 
   // Red Theme
   static const _redColor = Colors.red;
-  static const _redAccent = Colors.redAccent;
+  static const _redAccent = Colors.pinkAccent;
 
   // DarkTheme
   static const MaterialColor primaryBlack = MaterialColor(
@@ -61,23 +61,21 @@ class Themes {
   static ThemeData _getThemeData(primaryColor, accentColor,
       [bool isDarkTheme = false]) {
     return ThemeData(
-
       primarySwatch: primaryColor,
       primaryColor: primaryColor,
       popupMenuTheme: PopupMenuThemeData(
-        elevation: 1,
-        color: Colors.white,
-        textStyle: TextStyle(color: Colors.black87,)
-      ),
+          elevation: 1,
+          color: Colors.white,
+          textStyle: TextStyle(
+            color: Colors.black87,
+          )),
       appBarTheme: AppBarTheme(
         color: isDarkTheme ? Colors.black38 : primaryColor,
         brightness: Brightness.light,
         backwardsCompatibility: false,
-
         systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: (primaryColor as MaterialColor).withOpacity(0.4),
-          statusBarIconBrightness: Brightness.light
-        ),
+            statusBarIconBrightness: Brightness.light),
       ),
       scaffoldBackgroundColor: isDarkTheme ? Colors.black : Colors.white,
       cardColor: isDarkTheme ? Colors.black : Colors.white,
