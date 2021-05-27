@@ -56,7 +56,6 @@ class ViewJournalScreen extends StatelessWidget {
       body: Container(
 
         margin: EdgeInsets.all(10),
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           boxShadow: [
@@ -73,7 +72,7 @@ class ViewJournalScreen extends StatelessWidget {
           children: [
             if (journal.images != null) JournalImageCarousel(journal.images),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
