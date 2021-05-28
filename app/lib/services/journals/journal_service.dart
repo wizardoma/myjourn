@@ -132,7 +132,7 @@ class JournalService with ResponseUtil {
     var headers = await _getHeaders();
     var request = CreateServerJournalRequest.fromJournal(journal.toMap());
     serverRepository
-        .edit(journal.id, FormData.fromMap(request.toMap()), headers)
+        .edit(journal.serverId, FormData.fromMap(request.toMap()), headers)
         .then((response) {
       if (isOk(response.statusCode)) {
         _updateToDb(Journal.fromServer(response.data));
