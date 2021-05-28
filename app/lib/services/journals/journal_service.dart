@@ -75,17 +75,13 @@ class JournalService with ResponseUtil {
     dynamic hasSynced = await _journalPreferences.getServerSync();
     bool isGuest = await isGuestUser();
 
-
     if ((hasSynced == null || !hasSynced) && !isGuest) {
       var hasSyncedToLocal = await _attemptToSyncDbWithPhone();
       if (hasSyncedToLocal) _journalPreferences.setServerSync(true);
-    }
-
-    else {
+    } else {
       _attemptToSyncDbWithPhone();
     }
     try {
-
       var journals =
           (await localRepository.all()).map((e) => Journal.fromMap(e)).toList();
       if (journals.length > 0 && !isGuest) {
