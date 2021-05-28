@@ -109,8 +109,8 @@ class JournalService with ResponseUtil {
     }
   }
 
-  Future<void> syncDbOnLogout() async {
-    // get all journals from local, sync with the server and then delete all from the phone
+  void syncDbOnLogout() async {
+    // get all journals from local, sync with the server, then delete all from the phone
     var allJournals = await localRepository.all();
     var localJournals = allJournals.map((e) => Journal.fromMap(e)).toList();
     bool isGuest = await isGuestUser();
@@ -122,13 +122,15 @@ class JournalService with ResponseUtil {
   Future<void> _deleteFromServer(int id) async {
     var headers = await _getHeaders();
     serverRepository.delete(id, headers).then((response) {
-      if (!isOk(response.statusCode)) {}
+      if (!isOk(response.statusCode)) {
+        print(response.errors);
+      }
     });
   }
 
   Future<void> _updateToServer(Journal journal) async {
     var headers = await _getHeaders();
-    var request = CreateServerJournalRequest.fromJournalMap(journal.toMap());
+    var request = CreateServerJournalRequest.fromJournal(journal.toMap());
     serverRepository
         .edit(journal.id, FormData.fromMap(request.toMap()), headers)
         .then((response) {
@@ -140,7 +142,7 @@ class JournalService with ResponseUtil {
 
   Future<void> _saveToServer(Journal journal) async {
     var headers = await _getHeaders();
-    var request = CreateServerJournalRequest.fromJournalMap(journal.toMap());
+    var request = CreateServerJournalRequest.fromJournal(journal.toMap());
 
     serverRepository
         .save(FormData.fromMap(request.toMap()), headers)

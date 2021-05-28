@@ -15,7 +15,7 @@ class CreateServerJournalRequest {
     );
   }
 
-  factory CreateServerJournalRequest.fromJournalMap(Map<String, dynamic> journalMap){
+  factory CreateServerJournalRequest.fromJournal(Map<String, dynamic> journalMap){
     var images = journalMap["images"];
     var dbID = journalMap["id"] as int;
     var journalBody = journalMap["body"] as String;

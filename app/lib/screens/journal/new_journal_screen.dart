@@ -7,9 +7,9 @@ import 'package:flutterfrontend/bloc/journal/journal_events.dart';
 import 'package:flutterfrontend/bloc/journal/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
-import 'package:flutterfrontend/screens/journal/image_carousel.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_date_section.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
+import 'package:flutterfrontend/widgets/image_carousel.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'new_journal_bottom_section.dart';
