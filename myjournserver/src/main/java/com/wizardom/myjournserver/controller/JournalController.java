@@ -1,6 +1,5 @@
 package com.wizardom.myjournserver.controller;
 
-import com.wizardom.myjournserver.controller.request.BatchCreateJournalRequest;
 import com.wizardom.myjournserver.controller.request.CreateJournalRequest;
 import com.wizardom.myjournserver.controller.response.JsonResponse;
 import com.wizardom.myjournserver.dto.JournalDto;
@@ -32,7 +31,7 @@ public class JournalController {
 
     @GetMapping
     public ResponseEntity<JsonResponse<?>> getJournals() {
-        List<JournalDto> journalDtos = journalService.getUserJournals().stream()
+        List<JournalDto> journalDtos = journalService.getJournalsByUser().stream()
                 .map(JournalMapper::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(new JsonResponse<>(OK, journalDtos));
     }
@@ -59,14 +58,9 @@ public class JournalController {
     
     @PatchMapping("{id}")
     public ResponseEntity<JsonResponse<?>> editJournal(@PathVariable("id") long id, @ModelAttribute @Valid CreateJournalRequest request){
-        JournalDto journalDto = JournalMapper.toDto(journalService.edit(request));
+        JournalDto journalDto = JournalMapper.toDto(journalService.edit(id, request));
         return ResponseEntity.ok(new JsonResponse<>(OK,journalDto));
     }
-
-    @PostMapping("sync")
-    public ResponseEntity<JsonResponse<?>> syncJournalToServer(@ModelAttribute BatchCreateJournalRequest journalList){
-        journalService.syncJournalsToServer(journalList);
-        return ResponseEntity.ok(new JsonResponse<>(OK,null));
-    }
+    
 
 }

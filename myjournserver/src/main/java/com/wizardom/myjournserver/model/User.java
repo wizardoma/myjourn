@@ -3,6 +3,7 @@ package com.wizardom.myjournserver.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Entity;
 import javax.persistence.*;
 import java.util.List;
 /**
