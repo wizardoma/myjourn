@@ -180,7 +180,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (!val.contains("@")) {
       return "The email address isn't correct";
     }
-    if (serverErrors["field.email"]!=null){return serverErrors["field.email"].toString();}
+    if ( serverErrors!=null && serverErrors["field.email"]!=null){return serverErrors["field.email"].toString();}
     return null;
   }
 
@@ -188,14 +188,14 @@ class _SignInScreenState extends State<SignInScreen> {
     if (val.isEmpty) {
       return "Password not strong enough. Use at least 6 characters and a mix of letters nd numbers";
     }
-    if (serverErrors["field.password"]!=null){return serverErrors["field.password"].toString();}
+    if (serverErrors!=null && serverErrors["field.password"]!=null){return serverErrors["field.password"].toString();}
 
     return null;
   }
 
   String validateUsername(String val) {
     if (val.isEmpty) return "You can't leave this empty";
-    if (serverErrors["field.username"]!=null){return serverErrors["field.username"].toString();}
+    if (serverErrors!=null && serverErrors["field.username"]!=null){return serverErrors["field.username"].toString();}
 
     return null;
   }
