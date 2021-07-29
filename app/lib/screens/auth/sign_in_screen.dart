@@ -9,6 +9,7 @@ import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/services/auth/login_request.dart';
 import 'package:flutterfrontend/services/auth/signup_request.dart';
 import 'package:flutterfrontend/services/auth/verify_email_request.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 
 import '../../themes.dart';
 
@@ -49,10 +50,10 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext mainContext) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Themes.authBackGroundColor,
+        backgroundColor: Themes.authBackGroundColor.withOpacity(0.5),
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+            padding: EdgeInsets.symmetric(vertical: defaultSpacing * 1.5, horizontal: defaultSpacing),
             child: BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, state) {
                 if (state is AuthenticatingState) {
@@ -271,10 +272,7 @@ class _SignInScreenState extends State<SignInScreen> {
             SnackBar(content: Text(serverErrors["authentication.error"].toString())));
         return;
       }
-//
-//      if (serverErrors.keys.firstWhere((element) => element.contains("field"))!=null){
-//        if (serverErrors[])
-//      }
+
     }
   }
 }

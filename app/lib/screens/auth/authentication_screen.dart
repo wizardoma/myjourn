@@ -26,7 +26,7 @@ class AuthenticationScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: Themes.authBackGroundColor,
+        backgroundColor: Themes.authBackGroundColor.withOpacity(0.5),
         body: SingleChildScrollView(
           child: SafeArea(
             child: Container(
