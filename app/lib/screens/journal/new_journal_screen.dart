@@ -9,6 +9,7 @@ import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_date_section.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:flutterfrontend/widgets/image_carousel.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -116,7 +117,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                     left: 0,
                     right: 0,
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 15),
+                      margin: EdgeInsets.only(bottom: defaultSpacing),
                       child: ListView(
                         physics: ScrollPhysics(),
                         shrinkWrap: true,
@@ -124,7 +125,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                           if (images != null) JournalImageCarousel(images),
                           Container(
                             padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
+                                vertical: defaultSpacing * 0.5, horizontal: defaultSpacing),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -297,7 +298,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
             builder: (BuildContext context,
                 void Function(void Function()) setState) {
               return Dialog(
-                insetPadding: EdgeInsets.all(10),
+                insetPadding: EdgeInsets.all(defaultSpacing * 0.5),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: 280,
@@ -310,8 +311,8 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                     children: [
                       Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        margin: EdgeInsets.symmetric(horizontal: 20),
+                            EdgeInsets.symmetric(vertical: defaultSpacing, horizontal: defaultSpacing),
+                        margin: EdgeInsets.symmetric(horizontal: defaultSpacing),
                         child: Text(
                           "Add Pictures",
                           style: Theme.of(context).textTheme.headline1.copyWith(
@@ -319,7 +320,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin: EdgeInsets.symmetric(vertical: defaultSpacing * 0.5),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -389,11 +390,11 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                           child: Container(
                             alignment: Alignment.topCenter,
                             padding: EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 20),
+                                vertical: defaultSpacing, horizontal: defaultSpacing),
                             child: Wrap(
 
-                                spacing: 20,
-                                runSpacing: 20,
+                                spacing: defaultSpacing,
+                                runSpacing: defaultSpacing,
                                 clipBehavior: Clip.none,
                                 children: images.map((image) {
                                   return Container(
@@ -418,7 +419,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                                             child: Container(
                                               height: 25,
                                               width: 25,
-                                              padding: EdgeInsets.all(3),
+                                              padding: EdgeInsets.all(defaultSpacing * 0.3),
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -446,7 +447,7 @@ class _NewJournalScreenState extends State<NewJournalScreen> {
                         height: 10,
                       ),
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(defaultSpacing * 0.3),
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () => Navigator.pop(context),

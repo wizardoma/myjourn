@@ -5,6 +5,7 @@ import 'package:flutterfrontend/bloc/journal/journal_events.dart';
 import 'package:flutterfrontend/bloc/journal/journal_state.dart';
 import 'package:flutterfrontend/screens/home/journal_list_items.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:shimmer/shimmer.dart';
 
 class JournalList extends StatefulWidget {
@@ -57,7 +58,7 @@ class _JournalListState extends State<JournalList> {
             (index) => Flexible(
               child: Container(
                 height: 250,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: defaultSpacing , vertical: defaultSpacing * 0.5),
                 width: mQ.width,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

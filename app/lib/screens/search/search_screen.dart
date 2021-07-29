@@ -5,6 +5,7 @@ import 'package:flutterfrontend/bloc/journal/journal_state.dart';
 import 'package:flutterfrontend/bloc/search/search_journal_bloc.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/screens/home/journal_list_items.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -67,7 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           cursorColor: Theme.of(context).accentColor,
           decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(8),
+              contentPadding: EdgeInsets.all(defaultSpacing * 0.5),
               focusColor: Colors.white,
               border: InputBorder.none,
               hintText: "Search",

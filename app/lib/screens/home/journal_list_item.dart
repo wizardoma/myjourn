@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/screens/journal/view_journal_screen.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:intl/intl.dart';
 
 class JournalListItem extends StatelessWidget {
@@ -14,7 +15,7 @@ class JournalListItem extends StatelessWidget {
     return Container(
 //      height: 200,
       color: Theme.of(context).cardColor,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: defaultSpacing, vertical: defaultSpacing * 0.5),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

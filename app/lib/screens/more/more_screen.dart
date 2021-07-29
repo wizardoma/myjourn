@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 
 class MoreScreen extends StatelessWidget {
   final navs = [
@@ -46,12 +47,12 @@ class MoreScreen extends StatelessWidget {
               Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
-                margin: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+                margin: EdgeInsets.symmetric(vertical: defaultSpacing * 2.5, horizontal: defaultSpacing),
                 elevation: 1,
                 color: Theme.of(context).primaryColor,
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 35),
+                      const EdgeInsets.symmetric(horizontal: defaultSpacing, vertical: defaultSpacing * 2),
                   child: Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,7 +105,7 @@ class MoreScreen extends StatelessWidget {
                 }).toList(),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
+                margin: EdgeInsets.symmetric(vertical: defaultSpacing * 1.5),
                 child: Center(
                   child: Column(
                     children: [

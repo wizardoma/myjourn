@@ -4,6 +4,7 @@ import 'package:flutterfrontend/screens/home/journal_list.dart';
 import 'package:flutterfrontend/screens/more/more_screen.dart';
 import 'package:flutterfrontend/screens/search/search_screen.dart';
 import 'package:flutterfrontend/screens/settings/settings_screen.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = "/home";
@@ -41,14 +42,14 @@ class HomeScreen extends StatelessWidget {
           bottom: TabBar(
             tabs: [
               Padding(
-                  padding: EdgeInsets.symmetric(vertical: 13),
+                  padding: EdgeInsets.symmetric(vertical: defaultSpacing),
                   child: Text("HOME")),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 13),
+                padding: EdgeInsets.symmetric(vertical: defaultSpacing),
                 child: Text("CALENDER"),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 13),
+                padding: EdgeInsets.symmetric(vertical: defaultSpacing),
                 child: Text("MORE"),
               ),
             ],

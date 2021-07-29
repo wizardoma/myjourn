@@ -9,6 +9,7 @@ import 'package:flutterfrontend/bloc/settings/themes_bloc.dart';
 import 'package:flutterfrontend/bloc/user/user_bloc.dart';
 import 'package:flutterfrontend/models/user.dart';
 import 'package:flutterfrontend/screens/auth/authentication_screen.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -28,7 +29,7 @@ class SettingsScreen extends StatelessWidget {
           return BlocBuilder<InternetBloc, InternetState>(
             builder: (context, state) {
               return SettingsList(
-                contentPadding: EdgeInsets.symmetric(vertical: 15),
+                contentPadding: EdgeInsets.symmetric(vertical: defaultSpacing,),
                 sections: [
                   SettingsSection(
                     title: "Premium",
@@ -39,7 +40,7 @@ class SettingsScreen extends StatelessWidget {
                     ],
                   ),
                   SettingsSection(
-                    subtitlePadding: EdgeInsets.only(bottom: 20),
+                    subtitlePadding: EdgeInsets.only(bottom: defaultSpacing),
                     title: "Security",
                     tiles: [
                       SettingsTile.switchTile(
@@ -156,7 +157,7 @@ class SettingsScreen extends StatelessWidget {
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.all(20),
+                      padding: EdgeInsets.all(defaultSpacing),
                       child: Text(
                         "Theme",
                       ),
@@ -165,7 +166,7 @@ class SettingsScreen extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: GridView.builder(
                             itemCount: themes.themes.length,
-                            padding: EdgeInsets.all(15),
+                            padding: EdgeInsets.all(defaultSpacing),
                             shrinkWrap: true,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -202,7 +203,7 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(defaultSpacing * 0.5),
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         child: Text("Choose"),

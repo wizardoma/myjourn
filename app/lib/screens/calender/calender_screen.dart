@@ -4,6 +4,7 @@ import 'package:flutterfrontend/bloc/journal/journal_bloc.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/screens/home/journal_list_items.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -60,7 +61,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(defaultSpacing * 0.5),
         child: Column(
           children: [
             Stack(
@@ -113,7 +114,7 @@ class _CalenderScreenState extends State<CalenderScreen> {
               Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(defaultSpacing * 0.3),
                     child: Text(
                         "${dayJournals.length} ${dayJournals.length == 1 ? 'Story' : 'Stories'} Found",
                         style: TextStyle(
@@ -128,8 +129,8 @@ class _CalenderScreenState extends State<CalenderScreen> {
                   vertical: 40,
                 ),
                 padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 15,
+                  vertical: defaultSpacing * 0.5,
+                  horizontal: defaultSpacing,
                 ),
                 decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,

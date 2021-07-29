@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 
 class SignInTextField extends StatefulWidget {
   final String labelText;
@@ -26,7 +27,7 @@ class _SignInTextFieldState extends State<SignInTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15),
+      margin: EdgeInsets.symmetric(vertical: defaultSpacing),
       child: TextFormField(
         style: Theme.of(context).textTheme.headline4.copyWith(fontSize: 15),
         keyboardType: widget.labelText == "Email"

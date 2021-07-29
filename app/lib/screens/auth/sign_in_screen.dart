@@ -149,7 +149,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                     Container(
-                      margin: EdgeInsets.only(top: 10),
+                      margin: EdgeInsets.only(top: defaultSpacing * 0.5),
                       alignment: Alignment.centerRight,
                       child: MaterialButton(
                         color: Theme.of(mainContext).accentColor,

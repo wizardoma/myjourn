@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfrontend/models/journal.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:intl/intl.dart';
 
 class DateSection extends StatelessWidget {
@@ -13,7 +14,7 @@ class DateSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70,
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.symmetric(vertical: defaultSpacing * 0.3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

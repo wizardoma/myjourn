@@ -6,6 +6,7 @@ import 'package:flutterfrontend/bloc/journal/journal_state.dart';
 import 'package:flutterfrontend/models/journal.dart';
 import 'package:flutterfrontend/screens/home/home_screen.dart';
 import 'package:flutterfrontend/screens/journal/new_journal_screen.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:flutterfrontend/widgets/image_carousel.dart';
 import 'package:intl/intl.dart';
 
@@ -53,7 +54,7 @@ class ViewJournalScreen extends StatelessWidget {
         ],
       ),
       body: Container(
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.all(defaultSpacing * 0.5),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           boxShadow: [
@@ -70,14 +71,14 @@ class ViewJournalScreen extends StatelessWidget {
           children: [
             if (journal.images != null) JournalImageCarousel(journal.images),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+              padding: EdgeInsets.symmetric(vertical: defaultSpacing * 2, horizontal: defaultSpacing),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     height: 70,
-                    padding: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.symmetric(vertical: defaultSpacing * 0.3),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -170,7 +171,7 @@ class ViewJournalScreen extends StatelessWidget {
           return BlocConsumer<JournalBloc, JournalState>(
             builder: (BuildContext context, state) {
               return AlertDialog(
-                contentPadding: EdgeInsets.all(15),
+                contentPadding: EdgeInsets.all(defaultSpacing),
                 content: Text("Do you want to delete this note?"),
                 actions: [
                   TextButton(

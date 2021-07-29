@@ -29,12 +29,13 @@ class GuestSignInPrompt extends StatelessWidget {
                   child: Container(
                     child: Center(
                       child: Text(
-                        " Skip login is only for guest users to try out MyJourn. "
+                        "Skip login is only for guest users to try out MyJourn. "
                         "If you are an existing user, please login to ensure your entries are saved.",
                         style: Theme.of(context)
                             .textTheme
                             .headline4
                             .copyWith(fontSize: 16),
+                        textAlign: TextAlign.left,
                       ),
                     ),
                   ),

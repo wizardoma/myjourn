@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterfrontend/ui_helpers.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -34,7 +35,7 @@ class _BottomSectionState extends State<BottomSection> {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(defaultSpacing * 0.3),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         boxShadow: [
