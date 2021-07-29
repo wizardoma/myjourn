@@ -14,7 +14,6 @@ class HomeScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-
           title: Center(
             child: Text("MYJOURN"),
           ),
@@ -26,7 +25,6 @@ class HomeScreen extends StatelessWidget {
           ),
           actions: [
             PopupMenuButton(
-
                 padding: const EdgeInsets.all(0),
                 onSelected: (_) {
                   Navigator.pushNamed(context, SettingsScreen.routeName);
@@ -34,7 +32,6 @@ class HomeScreen extends StatelessWidget {
                 itemBuilder: (context) {
                   return {"Setting"}.map((e) {
                     return PopupMenuItem(
-
                       child: Text(e),
                       value: e,
                     );

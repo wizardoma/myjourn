@@ -10,7 +10,7 @@
 
     <application
             android:usesCleartextTraffic="true"
-            android:label="flutterfrontend"
+            android:label="MyJourn"
             android:icon="@mipmap/launcher_icon">
         <activity
                 android:name=".MainActivity"
