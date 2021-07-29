@@ -29,7 +29,8 @@ class JournalRepository {
   _initDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, _dbName);
-    return await openDatabase(path, version: _dbVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    return await openDatabase(path,
+        version: _dbVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -44,7 +45,6 @@ class JournalRepository {
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-
     if (newVersion > oldVersion) {
       await db.execute('''
       ALTER TABLE $_table ADD COLUMN $_columnServerId INTEGER
@@ -55,9 +55,8 @@ class JournalRepository {
   Future<int> insert(Map<String, dynamic> data) async {
     var database = await instance.database;
     try {
-      return await database.insert(_table, data); }
-
-    on DatabaseException catch (e) {
+      return await database.insert(_table, data);
+    } on DatabaseException catch (e) {
       print(e);
       return 0;
     }

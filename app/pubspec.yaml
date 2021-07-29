@@ -26,7 +26,6 @@ dependencies:
   connectivity: ^3.0.3
   flutter_bloc: ^7.0.0
   rxdart: ^0.26.0
-
   cupertino_icons: ^1.0.2
   shimmer: ^2.0.0
 
