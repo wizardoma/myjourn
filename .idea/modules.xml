@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/server/.mvn/.mvn.iml" filepath="$PROJECT_DIR$/server/.mvn/.mvn.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MyJournDiary.iml" filepath="$PROJECT_DIR$/MyJournDiary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/build/sqflite/intermediates/aapt_friendly_merged_manifests/debug/aapt/aapt.iml" filepath="$PROJECT_DIR$/app/build/sqflite/intermediates/aapt_friendly_merged_manifests/debug/aapt/aapt.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/android/android.iml" filepath="$PROJECT_DIR$/app/android/android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/build/app/app.iml" filepath="$PROJECT_DIR$/app/build/app/app.iml" />
