@@ -22,13 +22,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<JsonResponse<?>> getCurrentUser(){
+    public ResponseEntity<JsonResponse<UserDto>> getCurrentUser(){
         UserDto userDto = UserMapper.toDto(userService.getCurrentUser());
         return ResponseEntity.ok(new JsonResponse<>(OK,userDto));
     }
 
     @GetMapping("all")
-    public ResponseEntity<JsonResponse<?>> getUsers(){
+    public ResponseEntity<JsonResponse<List<UserDto>>> getUsers(){
         List<UserDto> users = userService.getAllUsers().stream()
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());
@@ -38,7 +38,7 @@ public class UserController {
     } 
     
     @GetMapping("{id}")
-    public ResponseEntity<JsonResponse<?>> getUser(@PathVariable("id") long id){
+    public ResponseEntity<JsonResponse<UserDto>> getUser(@PathVariable("id") long id){
         UserDto user = UserMapper.toDto(userService.getById(id));
         return ResponseEntity.ok(new JsonResponse<>(OK,user));
     }

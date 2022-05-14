@@ -1,6 +1,7 @@
 package com.wizardom.myjournserver.controller;
 
 import com.wizardom.myjournserver.controller.request.CreateJournalRequest;
+import com.wizardom.myjournserver.controller.request.EditJournalRequest;
 import com.wizardom.myjournserver.controller.response.JsonResponse;
 import com.wizardom.myjournserver.dto.JournalDto;
 import com.wizardom.myjournserver.dto.JournalMapper;
@@ -30,14 +31,14 @@ public class JournalController {
     private final JournalService journalService;
 
     @GetMapping
-    public ResponseEntity<JsonResponse<?>> getJournals() {
+    public ResponseEntity<JsonResponse<List<JournalDto>>> getJournals() {
         List<JournalDto> journalDtos = journalService.getJournalsByUser().stream()
                 .map(JournalMapper::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(new JsonResponse<>(OK, journalDtos));
     }
 
     @PostMapping
-    public ResponseEntity<JsonResponse<?>> saveJournal(@Valid @ModelAttribute CreateJournalRequest request) throws ParseException {
+    public ResponseEntity<JsonResponse<JournalDto>> saveJournal(@Valid @ModelAttribute CreateJournalRequest request) throws ParseException {
         log.info("Journal from app "+request.toString());
         Journal journal = journalService.save(request);
         return new ResponseEntity<>(new JsonResponse<>(CREATED, JournalMapper.toDto(journal)),
@@ -51,13 +52,13 @@ public class JournalController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<JsonResponse<?>> getJournalByID(@PathVariable("id") long id) {
+    public ResponseEntity<JsonResponse<JournalDto>> getJournalByID(@PathVariable("id") long id) {
         JournalDto journalDto = JournalMapper.toDto(journalService.getById(id));
         return ResponseEntity.ok(new JsonResponse<>(OK, journalDto));
     }
     
     @PatchMapping("{id}")
-    public ResponseEntity<JsonResponse<?>> editJournal(@PathVariable("id") long id, @ModelAttribute @Valid CreateJournalRequest request){
+    public ResponseEntity<JsonResponse<JournalDto>> editJournal(@PathVariable("id") long id, @ModelAttribute @Valid EditJournalRequest request){
         JournalDto journalDto = JournalMapper.toDto(journalService.edit(id, request));
         return ResponseEntity.ok(new JsonResponse<>(OK,journalDto));
     }
