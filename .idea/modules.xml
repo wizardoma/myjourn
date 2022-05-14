@@ -10,7 +10,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/build/flutter_plugin_android_lifecycle/flutter_plugin_android_lifecycle.iml" filepath="$PROJECT_DIR$/app/build/flutter_plugin_android_lifecycle/flutter_plugin_android_lifecycle.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/build/image_picker/image_picker.iml" filepath="$PROJECT_DIR$/app/build/image_picker/image_picker.iml" />
       <module fileurl="file://$PROJECT_DIR$/server/src/main/main.iml" filepath="$PROJECT_DIR$/server/src/main/main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/myjournserver/myjournserver.iml" filepath="$PROJECT_DIR$/myjournserver/myjournserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/build/app/intermediates/merged_manifest/debug/out/out.iml" filepath="$PROJECT_DIR$/app/build/app/intermediates/merged_manifest/debug/out/out.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/build/path_provider/path_provider.iml" filepath="$PROJECT_DIR$/app/build/path_provider/path_provider.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/android/app/src/profile/profile.iml" filepath="$PROJECT_DIR$/app/android/app/src/profile/profile.iml" />
